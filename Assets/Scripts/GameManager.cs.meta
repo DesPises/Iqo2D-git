@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 82e047204c50b3f46b273b99014579e0
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - riflerGO: {fileID: 4953513212933644286, guid: 65d3e872577715a4983487c608b4cf4b, type: 3}
+  - sniperGO: {fileID: 3842550831645073410, guid: bb8789bf657fbba41b3e6060ca1ae393, type: 3}
+  - sicklerGO: {fileID: 302309867331756264, guid: 81254caa5e958374e9ff16f6fb68b1f9, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
