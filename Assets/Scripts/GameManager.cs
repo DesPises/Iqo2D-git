@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
+
     //Objects
     [SerializeField] private GameObject bulletRGO;
     [SerializeField] private GameObject bulletRBackGO;
@@ -19,19 +21,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject playerSiGO;
     [SerializeField] private GameObject cloneGO;
     [SerializeField] private GameObject bcloneGO;
-    [SerializeField] private GameObject HUDrMagGO;
-    [SerializeField] private GameObject HUDsMagGO;
-    [SerializeField] private GameObject HUDrAmmoGO;
-    [SerializeField] private GameObject HUDsAmmoGO;
-    [SerializeField] private GameObject rIconGO;
-    [SerializeField] private GameObject sIconGO;
-    [SerializeField] private GameObject siIconGO;
-    [SerializeField] private GameObject sAnimGO;
-    [SerializeField] private GameObject rAnimGO;
-    [SerializeField] private GameObject siAnimGO;
-    [SerializeField] private GameObject soundContrGO;
+
+    [SerializeField] private GameObject[] riflerElements;
+    [SerializeField] private GameObject[] sniperElements;
+    [SerializeField] private GameObject[] sicklerElements;
+
     [SerializeField] private GameObject DeathMenu;
+
+    [SerializeField] private GameObject soundContrGO;
     [SerializeField] private GameObject ostGO;
+
     [SerializeField] private SpriteRenderer rFireBigSR;
     [SerializeField] private SpriteRenderer rFireMedSR;
     [SerializeField] private SpriteRenderer rFireSmallSR;
@@ -44,10 +43,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SpriteRenderer sFireBigSRCrouch;
     [SerializeField] private SpriteRenderer sFireMedSRCrouch;
     [SerializeField] private SpriteRenderer sFireSmallSRCrouch;
+
     [SerializeField] private Rigidbody2D rb;
 
-    //HP
+    // HP
     [SerializeField] private Image HPbarImage;
+    // Bullets HUD
     [SerializeField] private Text brtext;
     [SerializeField] private Text bstext;
     [SerializeField] private Text bralltext; 
@@ -63,7 +64,7 @@ public class GameManager : MonoBehaviour
     public static int HPSInt;
     public static int HPSiInt;
 
-    //KeyCodes
+    // KeyCodes
     private KeyCode reloadKey;
     private KeyCode attackKey;
     private KeyCode crouchKey;
@@ -108,6 +109,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Instance = this;
+
         reloadKey = InputManager.IM.reloadKey;
         attackKey = InputManager.IM.attackKey;
         crouchKey = InputManager.IM.crouchKey;
@@ -142,13 +145,13 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        //Damage sound
+        // Damage sound
         if (Enemy.doesHitPlayer)
         {
             dmgSound();
             alienHitSound();
         }
-        //Death
+        // Death
         if (HPRInt <= 0)
         {
             rIsDead = true;
@@ -174,25 +177,16 @@ public class GameManager : MonoBehaviour
             StartCoroutine(TimeStop());
         }
 
-        //Rifler
+        // Rifler
         if (plMovement.character == "Rifler")
         {
-            //HUD, HP and Bullets
+            // HUD, HP and Bullets
             HPbarImage.fillAmount = HPRInt * 0.01f;
             brtext.text = inMagRInt.ToString();
             bralltext.text = "/" + bulletsRAtAllInt.ToString();
-            HUDrMagGO.gameObject.SetActive(true);
-            HUDsMagGO.gameObject.SetActive(false);
-            HUDrAmmoGO.gameObject.SetActive(true);
-            HUDsAmmoGO.gameObject.SetActive(false);
-            rIconGO.gameObject.SetActive(true);
-            sIconGO.gameObject.SetActive(false);
-            siIconGO.gameObject.SetActive(false);
-            rAnimGO.gameObject.SetActive(true);
-            sAnimGO.gameObject.SetActive(false);
-            siAnimGO.gameObject.SetActive(false);
 
-            //Reload
+
+            // Reload
             if (Input.GetKeyDown(reloadKey) && rCanReload && !rReloadCooldown && !PauseMenu.isPaused)
             {
                 StartCoroutine(magFadeRifler());
@@ -214,7 +208,7 @@ public class GameManager : MonoBehaviour
             if (inMagRInt <= 0 && bulletsRAtAllInt <= 0)
                 canAttackR = false;
 
-            //Attack
+            // Attack
 
             if (Input.GetKey(attackKey) && canAttackR && canRAttackAfterReload && !PauseMenu.isPaused)
             {
@@ -259,7 +253,7 @@ public class GameManager : MonoBehaviour
                 Destroy(bcloneGO);
             }
 
-            //Empty
+            // Empty
             if (Input.GetKey(attackKey) && bulletsRAtAllInt == 0 && inMagRInt == 0 && !emptySoundCooldown && !PauseMenu.isPaused)
             {
                 StartCoroutine(emptyMagSound());
@@ -269,25 +263,15 @@ public class GameManager : MonoBehaviour
 
 
 
-        //Sniper
+        // Sniper
         if (plMovement.character == "Sniper")
         {
-            //HUD, HP and Bullets
+            // HUD, HP and Bullets
             HPbarImage.fillAmount = HPSInt * 0.0167f;
             bstext.text = inMagSInt.ToString();
             bsalltext.text = "/" + bulletsSAtAllInt.ToString();
-            HUDrMagGO.gameObject.SetActive(false);
-            HUDsMagGO.gameObject.SetActive(true);
-            HUDrAmmoGO.gameObject.SetActive(false);
-            HUDsAmmoGO.gameObject.SetActive(true);
-            rIconGO.gameObject.SetActive(false);
-            sIconGO.gameObject.SetActive(true);
-            siIconGO.gameObject.SetActive(false);
-            rAnimGO.gameObject.SetActive(false);
-            sAnimGO.gameObject.SetActive(true);
-            siAnimGO.gameObject.SetActive(false);
 
-            //Reload
+            // Reload
             if (Input.GetKeyDown(reloadKey) && sCanReload && !sReloadCooldown && bulletsSAtAllInt > 0 && !PauseMenu.isPaused)
             {
                 StartCoroutine(magFadeSniper());
@@ -310,7 +294,7 @@ public class GameManager : MonoBehaviour
             if (inMagSInt <= 0 && bulletsSAtAllInt <= 0)
                 canAttackS = false;
 
-            //Attack
+            // Attack
 
             if (Input.GetKeyDown(attackKey) && canAttackS && canSAttackAfterReload && !PauseMenu.isPaused)
             {
@@ -341,7 +325,7 @@ public class GameManager : MonoBehaviour
                 BulletBack.doesBulletHit = false;
                 Destroy(bcloneGO);
             }
-            //Empty
+            // Empty
 
             if (Input.GetKey(attackKey) && bulletsSAtAllInt == 0 && inMagSInt == 0 && !emptySoundCooldown && !PauseMenu.isPaused)
             {
@@ -352,24 +336,13 @@ public class GameManager : MonoBehaviour
 
 
 
-        //Sickler
+        // Sickler
         if (plMovement.character == "Sickler")
         {
-            //HUD and HP
+            // HUD and HP
             HPbarImage.fillAmount = HPSiInt * 0.007f;
-            HUDrMagGO.gameObject.SetActive(false);
-            HUDsMagGO.gameObject.SetActive(false);
-            HUDrAmmoGO.gameObject.SetActive(false);
-            HUDsAmmoGO.gameObject.SetActive(false);
-            rIconGO.gameObject.SetActive(false);
-            sIconGO.gameObject.SetActive(false);
-            siIconGO.gameObject.SetActive(true);
-            rAnimGO.gameObject.SetActive(false);
-            sAnimGO.gameObject.SetActive(false);
-            siAnimGO.gameObject.SetActive(true);
 
-
-            //Attack
+            // Attack
             
             if (Input.GetKeyDown(attackKey) && canAttackSi && !PauseMenu.isPaused)
             {
@@ -381,7 +354,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //Sounds functions
+    // Sounds functions
     IEnumerator emptyMagSound()
     {
         emptySoundCooldown = true;
@@ -409,7 +382,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    //Rifler coroutines
+    // Rifler coroutines
     IEnumerator BulletRCounter()
     {
         canAttackR = false;
@@ -516,7 +489,7 @@ public class GameManager : MonoBehaviour
 
 
 
-    //Sniper coroutines
+    // Sniper coroutines
     IEnumerator BulletSCounter()
     {
         yield return new WaitForSeconds(0.01f);
@@ -632,7 +605,7 @@ public class GameManager : MonoBehaviour
 
 
 
-    //Sickler coroutines
+    // Sickler coroutines
     IEnumerator siAttack()
     {
         plMovement.secJump = false;
@@ -684,5 +657,61 @@ public class GameManager : MonoBehaviour
             ostGO.GetComponent<OST>().WhenPaused();
         yield return null;
         Time.timeScale = 0;
+    }
+
+    // Characters elements control
+
+    public void SwitchToRifler()
+    {
+        foreach (GameObject go in riflerElements)
+        {
+            go.SetActive(true);
+        }
+
+        foreach (GameObject go in sniperElements)
+        {
+            go.SetActive(false);
+        }
+
+        foreach (GameObject go in sicklerElements)
+        {
+            go.SetActive(false);
+        }
+    }
+
+    public void SwitchToSniper()
+    {
+        foreach (GameObject go in riflerElements)
+        {
+            go.SetActive(false);
+        }
+
+        foreach (GameObject go in sniperElements)
+        {
+            go.SetActive(true);
+        }
+
+        foreach (GameObject go in sicklerElements)
+        {
+            go.SetActive(false);
+        }
+    }
+
+    public void SwitchToSickler()
+    {
+        foreach (GameObject go in riflerElements)
+        {
+            go.SetActive(false);
+        }
+
+        foreach (GameObject go in sniperElements)
+        {
+            go.SetActive(false);
+        }
+
+        foreach (GameObject go in sicklerElements)
+        {
+            go.SetActive(true);
+        }
     }
 }

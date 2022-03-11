@@ -386,7 +386,6 @@ MonoBehaviour:
   bwKey: 97
   crouchKey: 115
   attackKey: 108
-  damageKey: 102
   reloadKey: 114
   rPickKey: 50
   sPickKey: 49
@@ -588,7 +587,6 @@ MonoBehaviour:
   bwKey: 97
   crouchKey: 115
   attackKey: 108
-  damageKey: 102
   reloadKey: 114
   rPickKey: 50
   sPickKey: 49
@@ -901,18 +899,22 @@ MonoBehaviour:
   playerSiGO: {fileID: 0}
   cloneGO: {fileID: 0}
   bcloneGO: {fileID: 0}
-  HUDrMagGO: {fileID: 0}
-  HUDsMagGO: {fileID: 0}
-  HUDrAmmoGO: {fileID: 0}
-  HUDsAmmoGO: {fileID: 0}
-  rIconGO: {fileID: 0}
-  sIconGO: {fileID: 0}
-  siIconGO: {fileID: 0}
-  sAnimGO: {fileID: 3527345561230838857}
-  rAnimGO: {fileID: 3527345560485637752}
-  siAnimGO: {fileID: 3527345559954436887}
-  soundContrGO: {fileID: 0}
+  riflerElements:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 3527345560485637752}
+  sniperElements:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 3527345561230838857}
+  sicklerElements:
+  - {fileID: 0}
+  - {fileID: 3527345559954436887}
   DeathMenu: {fileID: 0}
+  soundContrGO: {fileID: 0}
+  ostGO: {fileID: 0}
   rFireBigSR: {fileID: 0}
   rFireMedSR: {fileID: 0}
   rFireSmallSR: {fileID: 0}
@@ -931,9 +933,6 @@ MonoBehaviour:
   bstext: {fileID: 0}
   bralltext: {fileID: 0}
   bsalltext: {fileID: 0}
-  reloadKey: 114
-  attackKey: 108
-  crouchKey: 115
 --- !u!114 &3527345561220430103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1171,7 +1170,6 @@ MonoBehaviour:
   bwKey: 97
   crouchKey: 115
   attackKey: 108
-  damageKey: 102
   reloadKey: 114
   rPickKey: 50
   sPickKey: 49

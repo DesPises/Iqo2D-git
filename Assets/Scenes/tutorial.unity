@@ -1161,6 +1161,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ost: {fileID: 392218716}
   doesContinueFromPreviousScene: 1
+  notPlayableScene: 0
+  bossScene: 0
 --- !u!82 &392218716
 AudioSource:
   m_ObjectHideFlags: 0
@@ -8361,18 +8363,22 @@ MonoBehaviour:
   playerSiGO: {fileID: 569652436778977282}
   cloneGO: {fileID: 0}
   bcloneGO: {fileID: 0}
-  HUDrMagGO: {fileID: 7634247353770739865}
-  HUDsMagGO: {fileID: 7634247353003133302}
-  HUDrAmmoGO: {fileID: 7634247354901610864}
-  HUDsAmmoGO: {fileID: 7634247353047462741}
-  rIconGO: {fileID: 7634247353595618648}
-  sIconGO: {fileID: 7634247354757253681}
-  siIconGO: {fileID: 7634247354130678184}
-  sAnimGO: {fileID: 2008504304}
-  rAnimGO: {fileID: 575436225}
-  siAnimGO: {fileID: 61008046}
-  soundContrGO: {fileID: 1007541659}
+  riflerElements:
+  - {fileID: 7634247353770739865}
+  - {fileID: 7634247354901610864}
+  - {fileID: 7634247353595618648}
+  - {fileID: 575436225}
+  sniperElements:
+  - {fileID: 7634247353003133302}
+  - {fileID: 7634247353047462741}
+  - {fileID: 7634247354757253681}
+  - {fileID: 2008504304}
+  sicklerElements:
+  - {fileID: 7634247354130678184}
+  - {fileID: 61008046}
   DeathMenu: {fileID: 1984921190}
+  soundContrGO: {fileID: 1007541659}
+  ostGO: {fileID: 0}
   rFireBigSR: {fileID: 1540192421}
   rFireMedSR: {fileID: 740544126}
   rFireSmallSR: {fileID: 700139350}
@@ -8391,9 +8397,6 @@ MonoBehaviour:
   bstext: {fileID: 7634247353003133296}
   bralltext: {fileID: 7634247354901610866}
   bsalltext: {fileID: 7634247353047462743}
-  reloadKey: 114
-  attackKey: 108
-  crouchKey: 115
 --- !u!4 &1981309612
 Transform:
   m_ObjectHideFlags: 0
@@ -8667,7 +8670,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2008504305
 Transform:
   m_ObjectHideFlags: 0
@@ -11872,7 +11875,11 @@ MonoBehaviour:
   enemyHead:
     serializedVersion: 2
     m_Bits: 4096
+  BossLayer:
+    serializedVersion: 2
+    m_Bits: 0
   attackKey: 0
+  BossGO: {fileID: 0}
 --- !u!4 &1670789331395744741
 Transform:
   m_ObjectHideFlags: 0

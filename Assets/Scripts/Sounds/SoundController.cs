@@ -5,6 +5,8 @@ using UnityEngine.Audio;
 
 public class SoundController : MonoBehaviour
 {
+    public static SoundController Instance { get; private set; }
+
     [Header("Player")]
     public AudioSource bulletHit;
     public AudioSource akReload;
@@ -33,6 +35,8 @@ public class SoundController : MonoBehaviour
 
     private void Start()
     {
+        Instance = this;
+
         if (!PlayerPrefs.HasKey("volume"))
         {
             bulletHit.volume = 0.2f;

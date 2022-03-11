@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class siAttack : MonoBehaviour
 {
-    public float cooldownF, defCooldownF, rangeF;
+    private float cooldownF;
+    private readonly float defCooldownF = 0.27f;
+    private readonly float rangeF = 2.3f;
     public static float cdsi;
+
     public Transform attackPos;
-    public LayerMask enemy, enemyHead, BossLayer;
-    public KeyCode attackKey;
+    private LayerMask enemy;
+    private LayerMask enemyHead;
+    private LayerMask BossLayer;
     public GameObject BossGO;
 
     void Start()
     {
-        attackKey = InputManager.IM.attackKey;
+        enemy = LayerMask.GetMask("Enemy");
+        enemyHead = LayerMask.GetMask("EnemyHead");
+        BossLayer = LayerMask.GetMask("Boss");
     }
 
     public void SicklerAttack()
@@ -26,25 +32,26 @@ public class siAttack : MonoBehaviour
                 enemies[i].GetComponent<Enemy>().TakeDamage();
             }
             cooldownF = defCooldownF;
-            cdsi = cooldownF;
         }
     }
 
     void Update()
     {
+        // Decrease cooldown by time
         if (cooldownF > 0)
         {
             cooldownF -= Time.deltaTime;
             cdsi = cooldownF;
         }
 
-
-        if (BossGO != null && Physics2D.OverlapCircle(attackPos.position, rangeF, BossLayer) && Input.GetKeyDown(attackKey) && cooldownF <= 0)
+        // Attack Boss
+        if (BossGO != null && Physics2D.OverlapCircle(attackPos.position, rangeF, BossLayer) && Input.GetKeyDown(InputManager.IM.attackKey) && cooldownF <= 0)
         {
             BossGO.GetComponent<Boss>().DamageFromSickler();
         }
     }
 
+    // Draw circle of attack range
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

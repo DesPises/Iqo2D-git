@@ -4,192 +4,111 @@ using UnityEngine;
 
 public class plMovement : MonoBehaviour
 {
-    //Objects
-    public Rigidbody2D plRB;
-    public GameObject plGO, soundContrGO;
-    public static Transform plPos;
+    private Rigidbody2D plRB;
+    private LayerMask floorLayer;
 
-    //Variables
-    public float moveSpeed, jumpForce, floorDist, gizmosY, gizmosX;
-    [SerializeField] public static bool secJump = false, isMovingFW = true, onGround = false, isNearEnemy = false;
-    [SerializeField] public static string character;
+    [SerializeField] private float gizmosY;
+    [SerializeField] private float gizmosX;
+
+    private readonly float jumpForce = 200;
+    private readonly float floorDist = 1;
+
+    public static bool secJump = false;
+    public static bool isMovingFW = true;
+    public static bool onGround = false;
+    public static bool isNearEnemy = false;
+    public static string character;
     public static float plCoordinateX;
 
-    public KeyCode jumpKey, fwKey, bwKey, crouchKey;
-
-    //Raycast
-    public Vector3 colliderOffset;
-    public LayerMask floorLayer;
-
-    void Awake()
+    private void Start()
     {
-        floorDist = 1;
-        jumpForce = 200;
-    }
+        plRB = GetComponent<Rigidbody2D>();
+        floorLayer = LayerMask.GetMask("Floor");
 
-    void Start()
-    {
         isMovingFW = true;
-        fwKey = InputManager.IM.fwKey;
-        bwKey = InputManager.IM.bwKey;
-        crouchKey = InputManager.IM.crouchKey;
-        jumpKey = InputManager.IM.jumpKey;
     }
 
 
     void Update()
     {
-        plPos = plGO.transform;
-        plCoordinateX = plPos.position.x;
-
-        //Input and Animations
-
-        //Move
-        if (character != "Sickler" && (!GameManager.rIsDead || !GameManager.sIsDead) && !PauseMenu.isPaused)
+        if (!PauseMenu.isPaused)
         {
-            if (Input.GetKey(fwKey) && !Input.GetKey(bwKey))
+            // Link player's pos to variable
+            plCoordinateX = transform.position.x;
+
+            // Ground check
+            onGround = Physics2D.Raycast(transform.position + Vector3.up * gizmosY + Vector3.right * gizmosX, Vector2.down, floorDist, floorLayer);
+
+            // Rotate player towards moving direction
+            RotationControl();
+
+            // Jump
+            if (Input.GetKeyDown(InputManager.IM.jumpKey) && onGround)
             {
-                isMovingFW = true;
-                if (!Input.GetKey(crouchKey))
-                    plRB.velocity = new Vector2(moveSpeed, plRB.velocity.y);
+                Jump();
             }
-            if (Input.GetKey(bwKey) && !Input.GetKey(fwKey))
+            // Second jump
+            if (Input.GetKeyDown(InputManager.IM.jumpKey) && secJump && !onGround)
             {
-                isMovingFW = false;
-                if (!Input.GetKey(crouchKey))
-                    plRB.velocity = new Vector2(-moveSpeed, plRB.velocity.y);
-            }
-            if (Input.GetKey(fwKey) && isMovingFW && !Input.GetKey(crouchKey))
-            {
-                if (Input.GetKey(bwKey))
-                {
-                    plRB.velocity = new Vector2(moveSpeed, plRB.velocity.y);
-                }
-            }
-            if (Input.GetKey(bwKey) && !isMovingFW && !Input.GetKey(crouchKey))
-            {
-                if (Input.GetKey(fwKey))
-                {
-                    plRB.velocity = new Vector2(-moveSpeed, plRB.velocity.y);
-                }
-            }
-        }
-
-
-
-
-
-        //Jump
-        if (Input.GetKeyDown(jumpKey) && onGround)
-        {
-            Jump();
-        }
-        if (Input.GetKeyDown(jumpKey) && secJump && !onGround)
-        {
-            SecJump();
-        }
-
-
-        //Crouch
-        if (Input.GetKey(crouchKey) && onGround)
-        {
-            Crouch();
-
-        }
-
-
-        //Characters specifications
-
-        if (character == "Rifler")
-        {
-            moveSpeed = 5;
-
-            onGround = Physics2D.Raycast(transform.position + colliderOffset + Vector3.up * gizmosY + Vector3.right * gizmosX, Vector2.down, floorDist, floorLayer) ||
-                Physics2D.Raycast(transform.position - colliderOffset * 2 + Vector3.up * gizmosY + Vector3.right * gizmosX, Vector2.down, floorDist, floorLayer) ||
-                Physics2D.Raycast(transform.position - colliderOffset * 0.5f + Vector3.up * gizmosY + Vector3.right * gizmosX, Vector2.down, floorDist, floorLayer);
-            if (!isMovingFW)
-            {
-                plGO.gameObject.transform.eulerAngles = new Vector3(0, 180, 0);
-            }
-            if (isMovingFW)
-            {
-                plGO.gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
-            }
-        }
-
-        if (character == "Sniper")
-        {
-            moveSpeed = 4;
-
-            onGround = Physics2D.Raycast(transform.position - colliderOffset * 2 + Vector3.up * gizmosY + Vector3.right * gizmosX, Vector2.down, floorDist, floorLayer) ||
-                Physics2D.Raycast(transform.position + colliderOffset * 2 + Vector3.up * gizmosY + Vector3.right * gizmosX, Vector2.down, floorDist, floorLayer) ||
-                Physics2D.Raycast(transform.position + Vector3.up * gizmosY + Vector3.right * gizmosX, Vector2.down, floorDist, floorLayer);
-
-            if (!isMovingFW)
-            {
-                plGO.gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
-            }
-            if (isMovingFW)
-            {
-                plGO.gameObject.transform.eulerAngles = new Vector3(0, 180, 0);
-            }
-        }
-
-        if (character == "Sickler")
-        {
-            //Move
-            moveSpeed = 6;
-            if (!GameManager.siIsDead && !PauseMenu.isPaused)
-            {
-                if (Input.GetKey(fwKey) && !Input.GetKey(bwKey) && GameManager.canWalkSi)
-                {
-                    isMovingFW = true;
-                    if (!Input.GetKey(crouchKey))
-                        plRB.velocity = new Vector2(moveSpeed, plRB.velocity.y);
-                }
-                if (Input.GetKey(bwKey) && !Input.GetKey(fwKey) && GameManager.canWalkSi)
-                {
-                    isMovingFW = false;
-                    if (!Input.GetKey(crouchKey))
-                        plRB.velocity = new Vector2(-moveSpeed, plRB.velocity.y);
-                }
-                if (Input.GetKey(fwKey) && isMovingFW && GameManager.canWalkSi && !Input.GetKey(crouchKey))
-                {
-                    if (Input.GetKey(bwKey))
-                    {
-                        plRB.velocity = new Vector2(moveSpeed, plRB.velocity.y);
-                    }
-                }
-                if (Input.GetKey(bwKey) && !isMovingFW && GameManager.canWalkSi && !Input.GetKey(crouchKey))
-                {
-                    if (Input.GetKey(fwKey))
-                    {
-                        plRB.velocity = new Vector2(-moveSpeed, plRB.velocity.y);
-                    }
-                }
-            }
-            if (!isMovingFW)
-            {
-                plGO.gameObject.transform.eulerAngles = new Vector3(0, 180, 0);
-            }
-            if (isMovingFW)
-            {
-                plGO.gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
+                SecJump();
             }
 
+            // Crouch
+            if (Input.GetKey(InputManager.IM.crouchKey) && onGround)
+            {
+                Crouch();
+            }
 
-            //Raycast
+            // Characters specifications
 
-            onGround = Physics2D.Raycast(transform.position + colliderOffset + Vector3.up * gizmosY + Vector3.right * gizmosX, Vector2.down, floorDist, floorLayer) ||
-Physics2D.Raycast(transform.position + colliderOffset * 3.4f + Vector3.up * gizmosY + Vector3.right * gizmosX, Vector2.down, floorDist, floorLayer) ||
-Physics2D.Raycast(transform.position - colliderOffset * 1.5f + Vector3.up * gizmosY + Vector3.right * gizmosX, Vector2.down, floorDist, floorLayer);
+            if (character == "Rifler" && !GameManager.rIsDead)
+            {
+                    Move(5);
+            }
 
+            if (character == "Sniper" && !GameManager.sIsDead)
+            {
+                    Move(4);
+            }
+
+            if (character == "Sickler" && !GameManager.siIsDead && GameManager.canWalkSi)
+            {
+                    Move(6);
+            }
         }
     }
 
 
 
-    //Movement functions
+    //Movement methods
+
+    private void Move(int moveSpeed)
+    {
+        if (!Input.GetKey(InputManager.IM.crouchKey))
+        {
+            if (Input.GetKey(InputManager.IM.fwKey) && !Input.GetKey(InputManager.IM.bwKey))
+            {
+                isMovingFW = true;
+                plRB.velocity = new Vector2(moveSpeed, plRB.velocity.y);
+            }
+            else if (Input.GetKey(InputManager.IM.bwKey) && !Input.GetKey(InputManager.IM.fwKey))
+            {
+                isMovingFW = false;
+                plRB.velocity = new Vector2(-moveSpeed, plRB.velocity.y);
+            }
+        }
+        else
+        {
+            if (Input.GetKeyDown(InputManager.IM.fwKey))
+            {
+                isMovingFW = true;
+            }
+            else if (Input.GetKeyDown(InputManager.IM.bwKey))
+            {
+                isMovingFW = false;
+            }
+        }
+    }
 
     void Jump()
     {
@@ -209,10 +128,35 @@ Physics2D.Raycast(transform.position - colliderOffset * 1.5f + Vector3.up * gizm
         plRB.velocity = new Vector2(0, 0);
 
     }
+    private void RotationControl()
+    {
+        if (character != "Sniper")
+        {
+            if (!isMovingFW)
+            {
+                gameObject.transform.eulerAngles = new Vector3(0, 180, 0);
+            }
+            if (isMovingFW)
+            {
+                gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+        }
+        else
+        {
+            if (!isMovingFW)
+            {
+                gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+            if (isMovingFW)
+            {
+                gameObject.transform.eulerAngles = new Vector3(0, 180, 0);
+            }
+        }
+    }
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Enemy")
+        if (col.gameObject.CompareTag("Enemy"))
         {
             isNearEnemy = true;
         }
@@ -220,69 +164,45 @@ Physics2D.Raycast(transform.position - colliderOffset * 1.5f + Vector3.up * gizm
 
     void OnTriggerExit2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Enemy")
+        if (col.gameObject.CompareTag("Enemy"))
         {
             isNearEnemy = false;
         }
     }
 
 
-    //Sounds functions
+    //Sounds methods
 
-    public void akReloadSound()
+    public void AkReloadSound()
     {
-        soundContrGO.GetComponent<SoundController>().akReloadS();
+        SoundController.Instance.akReloadS();
     }
 
-    public void runSound()
+    public void RunSound()
     {
-        soundContrGO.GetComponent<SoundController>().RunS();
+        SoundController.Instance.RunS();
     }
 
-    public void jumpSound()
+    public void JumpSound()
     {
-        soundContrGO.GetComponent<SoundController>().JumpS();
+        SoundController.Instance.JumpS();
     }
 
-    public void siVzmahSound()
+    public void SiVzmahSound()
     {
-        soundContrGO.GetComponent<SoundController>().siVzmahS();
+        SoundController.Instance.siVzmahS();
     }
 
-    public void siHitSound()
+    public void SiHitSound()
     {
-        soundContrGO.GetComponent<SoundController>().siHitS();
+        SoundController.Instance.siHitS();
     }
 
+    // Draw raycast of ground check
 
-
-
-
-    //Gizmos
-    //RiflerGizmos
-    //void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawLine(transform.position + colliderOffset + Vector3.up * gizmosY + Vector3.right * gizmosX, transform.position + colliderOffset + Vector3.down * floorDist + Vector3.up * gizmosY + Vector3.right * gizmosX);
-    //    Gizmos.DrawLine(transform.position - colliderOffset * 2 + Vector3.up * gizmosY + Vector3.right * gizmosX, transform.position - colliderOffset * 2 + Vector3.down * floorDist + Vector3.up * gizmosY + Vector3.right * gizmosX);
-    //    Gizmos.DrawLine(transform.position - colliderOffset * 0.5f + Vector3.up * gizmosY + Vector3.right * gizmosX, transform.position - colliderOffset * 0.5f + Vector3.down * floorDist + Vector3.up * gizmosY + Vector3.right * gizmosX);
-    //}
-
-    //SniperGizmos
-    //void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawLine(transform.position + colliderOffset * 2 + Vector3.up * gizmosY + Vector3.right * gizmosX, transform.position + colliderOffset * 2 + Vector3.down * floorDist + Vector3.up * gizmosY + Vector3.right * gizmosX);
-    //    Gizmos.DrawLine(transform.position - colliderOffset * 2 + Vector3.up * gizmosY + Vector3.right * gizmosX, transform.position - colliderOffset * 2 + Vector3.down * floorDist + Vector3.up * gizmosY + Vector3.right * gizmosX);
-    //    Gizmos.DrawLine(transform.position + Vector3.up * gizmosY + Vector3.right * gizmosX, transform.position + Vector3.down * floorDist + Vector3.up * gizmosY + Vector3.right * gizmosX);
-    //}
-
-    //SicklerGizmos
-    //void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawLine(transform.position + colliderOffset + Vector3.up * gizmosY + Vector3.right * gizmosX, transform.position + colliderOffset + Vector3.down * floorDist + Vector3.up * gizmosY + Vector3.right * gizmosX);
-    //    Gizmos.DrawLine(transform.position + colliderOffset * 3.4f + Vector3.up * gizmosY + Vector3.right * gizmosX, transform.position + colliderOffset * 3.4f + Vector3.down * floorDist + Vector3.up * gizmosY + Vector3.right * gizmosX);
-    //    Gizmos.DrawLine(transform.position - colliderOffset * 1.5f + Vector3.up * gizmosY + Vector3.right * gizmosX, transform.position - colliderOffset * 1.5f + Vector3.down * floorDist + Vector3.up * gizmosY + Vector3.right * gizmosX);
-    //}
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position + Vector3.up * gizmosY + Vector3.right * gizmosX, transform.position + Vector3.down * floorDist + Vector3.up * gizmosY + Vector3.right * gizmosX);
+    }
 }

@@ -1740,7 +1740,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1363755354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2593,29 +2593,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7652216970996725593}
     - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
-      propertyPath: rIconGO
-      value: 
-      objectReference: {fileID: 7652216970414529393}
-    - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
-      propertyPath: sIconGO
-      value: 
-      objectReference: {fileID: 7652216971400573976}
-    - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
-      propertyPath: siIconGO
-      value: 
-      objectReference: {fileID: 7652216972014436225}
-    - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
       propertyPath: DeathMenu
       value: 
       objectReference: {fileID: 998274687}
-    - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
-      propertyPath: HUDrMagGO
-      value: 
-      objectReference: {fileID: 7652216970245764784}
-    - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
-      propertyPath: HUDsMagGO
-      value: 
-      objectReference: {fileID: 7652216970996725599}
     - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
       propertyPath: bralltext
       value: 
@@ -2636,14 +2616,6 @@ PrefabInstance:
       propertyPath: HPbarImage
       value: 
       objectReference: {fileID: 7652216971867799178}
-    - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
-      propertyPath: HUDrAmmoGO
-      value: 
-      objectReference: {fileID: 7652216971243437913}
-    - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
-      propertyPath: HUDsAmmoGO
-      value: 
-      objectReference: {fileID: 7652216970964782460}
     - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
       propertyPath: playerSiGO
       value: 
@@ -2700,6 +2672,34 @@ PrefabInstance:
       propertyPath: sFireSmallSRCrouch
       value: 
       objectReference: {fileID: 2104597356158243097}
+    - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
+      propertyPath: riflerElements.Array.data[0]
+      value: 
+      objectReference: {fileID: 7652216970245764784}
+    - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
+      propertyPath: riflerElements.Array.data[1]
+      value: 
+      objectReference: {fileID: 7652216971243437913}
+    - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
+      propertyPath: riflerElements.Array.data[2]
+      value: 
+      objectReference: {fileID: 7652216970414529393}
+    - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
+      propertyPath: sniperElements.Array.data[0]
+      value: 
+      objectReference: {fileID: 7652216970996725599}
+    - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
+      propertyPath: sniperElements.Array.data[1]
+      value: 
+      objectReference: {fileID: 7652216970964782460}
+    - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
+      propertyPath: sniperElements.Array.data[2]
+      value: 
+      objectReference: {fileID: 7652216971400573976}
+    - target: {fileID: 3527345561220430098, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
+      propertyPath: sicklerElements.Array.data[0]
+      value: 
+      objectReference: {fileID: 7652216972014436225}
     - target: {fileID: 3527345561220430099, guid: b7ef955152a690c498bd4a393e175dc0, type: 3}
       propertyPath: m_Name
       value: GameManager
@@ -15489,6 +15489,10 @@ PrefabInstance:
     - target: {fileID: 812879073572025619, guid: b995b6c0935826948be0c699ce4eaf65, type: 3}
       propertyPath: m_Name
       value: SniperObj
+      objectReference: {fileID: 0}
+    - target: {fileID: 812879073572025619, guid: b995b6c0935826948be0c699ce4eaf65, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 812879073572025620, guid: b995b6c0935826948be0c699ce4eaf65, type: 3}
       propertyPath: m_RootOrder
