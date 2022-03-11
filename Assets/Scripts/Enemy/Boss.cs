@@ -14,7 +14,10 @@ public class Boss : MonoBehaviour
     public Image HPbar;
     public GameObject enemyClone;
 
-    private int HPfull, HP, attackNumber;
+    private int HPfull;
+    private int HP;
+    private int attackNumber;
+
     private bool cooldown, immunity;
     public static bool playerInFarAttackZone, playerInUpAttackZone, playerInCloseAttackZone;
     public Vector3 farpos, closepos, uppos, farsides, closesides, upsides;

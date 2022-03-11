@@ -5,7 +5,12 @@ using UnityEngine.UI;
 
 public class STAR : MonoBehaviour
 {
-    public GameObject InfAmmoGO, InfHPGO, DDGO, timerGO, STARGO, soundContrGO;
+    public GameObject InfAmmoGO;
+    public GameObject InfHPGO;
+    public GameObject DDGO;
+    public GameObject timerGO;
+    public GameObject STARGO;
+    public GameObject soundContrGO;
     public Text timeText;
     public BoxCollider2D boxcollider;
     public SpriteRenderer sr;

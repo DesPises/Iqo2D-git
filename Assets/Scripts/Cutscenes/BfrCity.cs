@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class BfrCity : MonoBehaviour
 {
     public GameObject s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, space, sr1, sr2, sr3, sr4, sr5, sr6, sr7, sr8, sr9, sr10, sr11, spacer, scream, screamr, cameraGO;
-    public int i = 0;
+    private int i = 0;
     public Animator rAnim, sAnim, siAnim;
     public Camera cam;
     private bool cooldown;

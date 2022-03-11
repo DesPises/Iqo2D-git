@@ -7,29 +7,112 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    public GameObject menu, settings, PerehodGO, bindings, bindingsr;
-    public Slider slideVolume;
-    public float oldVolume;
-    public Text buttonText, fwKeyText, bwKeyText, jumpKeyText, attackKeyText, crouchKeyText, reloadKeyText, torKeyText, tosKeyText, tosiKeyText;
+    [Header("MenuElements")]
+    [SerializeField] private GameObject menuButtons;
+    [SerializeField] private GameObject settings;
+    [SerializeField] private GameObject transition;
+    [SerializeField] private GameObject bindings;
+    [SerializeField] private GameObject bindingsRus;
+    [SerializeField] private Slider volumeSlider;
 
-    Event keyEvent;
-    KeyCode newKey;
-    bool waitingForKey;
+    [Header("ButtonTexts")]
+    [SerializeField] private Text fwKeyText;
+    [SerializeField] private Text bwKeyText;
+    [SerializeField] private Text jumpKeyText;
+    [SerializeField] private Text attackKeyText;
+    [SerializeField] private Text crouchKeyText;
+    [SerializeField] private Text reloadKeyText;
+    [SerializeField] private Text torKeyText;
+    [SerializeField] private Text tosKeyText;
+    [SerializeField] private Text tosiKeyText;
 
+    // Audio volume
+    private float oldVolume;
 
     void Start()
     {
-        menu.SetActive(true);
-        settings.SetActive(false);
-        Time.timeScale = 1;
-        
-        oldVolume = slideVolume.value;
-        if (!PlayerPrefs.HasKey("volume"))
-        {
-            slideVolume.value = 0.5f;
-        }
-        else slideVolume.value = PlayerPrefs.GetFloat("volume");
+        SettingsOKButton();
 
+        // Set volume slider value to saved volume value (or set to default if no data saved)
+        SetVolumeSliderValue();
+    }
+
+    void Update()
+    {
+        // Check if player changes slider value and then set new volume to that value
+        if (oldVolume != volumeSlider.value)
+        {
+            SetNewVolume();
+        }
+
+        // Show description near bindings in chosen language
+        bindings.SetActive(Language.eng);
+        bindingsRus.SetActive(!Language.eng);
+
+        // Set buttons text to string variables from InputManager script
+        SetButtonsText();
+    }
+
+
+    // Public methods for buttons
+
+    public void Play()
+    {
+        StartCoroutine(TransitionToPlay());
+    }
+
+    // Deactivate menu buttons and activate settings menu
+    public void Settings()
+    {
+        menuButtons.SetActive(false);
+        settings.SetActive(true);
+
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
+    }
+
+    // Activate menu buttons and deactivate settings menu
+    public void SettingsOKButton()
+    {
+        menuButtons.SetActive(true);
+        settings.SetActive(false);
+    }
+    
+    // When pressed "Play", play animation and load next scene in 0.55 sec
+    private IEnumerator TransitionToPlay()
+    {
+        transition.SetActive(true);
+        yield return new WaitForSeconds(0.55f);
+        SceneManager.LoadScene(1);
+    }
+
+    // Volume methods
+
+    private void SetVolumeSliderValue()
+    {
+        if (PlayerPrefs.HasKey("volume"))
+        {
+            volumeSlider.value = PlayerPrefs.GetFloat("volume");
+        }
+        else
+        {
+            volumeSlider.value = 0.5f;
+        }
+    }
+
+    private void SetNewVolume()
+    {
+        PlayerPrefs.SetFloat("volume", volumeSlider.value);
+        PlayerPrefs.Save();
+        oldVolume = volumeSlider.value;
+    }
+
+    // Set buttons text
+    private void SetButtonsText()
+    {
         fwKeyText.text = InputManager.IM.fwKey.ToString();
         bwKeyText.text = InputManager.IM.bwKey.ToString();
         attackKeyText.text = InputManager.IM.attackKey.ToString();
@@ -39,142 +122,5 @@ public class MainMenu : MonoBehaviour
         torKeyText.text = InputManager.IM.torKey.ToString();
         tosKeyText.text = InputManager.IM.tosKey.ToString();
         tosiKeyText.text = InputManager.IM.tosiKey.ToString();
-    }
-
-    void Update()
-    {
-        if (oldVolume != slideVolume.value)
-        {
-            PlayerPrefs.SetFloat("volume", slideVolume.value);
-            PlayerPrefs.Save();
-            oldVolume = slideVolume.value;
-        }
-        if (Language.eng)
-        {
-            bindings.SetActive(true);
-            bindingsr.SetActive(false);
-        }
-        if (!Language.eng)
-        {
-            bindings.SetActive(false);
-            bindingsr.SetActive(true);
-        }
-    }
-
-    public void Play()
-    {
-        StartCoroutine(Perehod());
-
-    }
-    public void Settings()
-    {
-        menu.SetActive(false);
-        settings.SetActive(true);
-
-    }
-    public void SettingsOKButton()
-    {
-        menu.SetActive(true);
-        settings.SetActive(false);
-    }
-    public void Exit()
-    {
-        Application.Quit();
-    }
-
-    IEnumerator Perehod()
-    {
-        PerehodGO.SetActive(true);
-        yield return new WaitForSeconds(0.55f);
-        SceneManager.LoadScene(1);
-    }
-
-    void OnGUI()
-    {
-        keyEvent = Event.current;
-
-        if (keyEvent.isKey && waitingForKey)
-        {
-            newKey = keyEvent.keyCode;
-            waitingForKey = false;
-        }
-    }
-
-    public void StartAssignment(string keyName)
-    {
-        if (!waitingForKey)
-            StartCoroutine(AssignKey(keyName));
-    }
-
-    IEnumerator WaitForKey()
-    {
-        while (!keyEvent.isKey)
-            yield return null;
-    }
-
-    public IEnumerator AssignKey(string keyName)
-    {
-        waitingForKey = true;
-
-        yield return WaitForKey();
-
-        switch (keyName)
-        {
-            case "fwKey":
-                InputManager.IM.fwKey = newKey;
-                fwKeyText.text = InputManager.IM.fwKey.ToString();
-                PlayerPrefs.SetString("fwKey", InputManager.IM.fwKey.ToString());
-                break;
-
-            case "bwKey":
-                InputManager.IM.bwKey = newKey;
-                bwKeyText.text = InputManager.IM.bwKey.ToString();
-                PlayerPrefs.SetString("bwKey", InputManager.IM.bwKey.ToString());
-                break;
-
-            case "jumpKey":
-                InputManager.IM.jumpKey = newKey;
-                jumpKeyText.text = InputManager.IM.jumpKey.ToString();
-                PlayerPrefs.SetString("jumpKey", InputManager.IM.jumpKey.ToString());
-                break;
-
-            case "attackKey":
-                InputManager.IM.attackKey = newKey;
-                attackKeyText.text = InputManager.IM.attackKey.ToString();
-                PlayerPrefs.SetString("attackKey", InputManager.IM.attackKey.ToString());
-                break;
-
-            case "crouchKey":
-                InputManager.IM.crouchKey = newKey;
-                crouchKeyText.text = InputManager.IM.crouchKey.ToString();
-                PlayerPrefs.SetString("crouchKey", InputManager.IM.crouchKey.ToString());
-                break;
-
-            case "reloadKey":
-                InputManager.IM.reloadKey = newKey;
-                reloadKeyText.text = InputManager.IM.reloadKey.ToString();
-                PlayerPrefs.SetString("reloadKey", InputManager.IM.reloadKey.ToString());
-                break;
-
-            case "torKey":
-                InputManager.IM.torKey = newKey;
-                torKeyText.text = InputManager.IM.torKey.ToString();
-                PlayerPrefs.SetString("torKey", InputManager.IM.torKey.ToString());
-                break;
-
-            case "tosKey":
-                InputManager.IM.tosKey = newKey;
-                tosKeyText.text = InputManager.IM.tosKey.ToString();
-                PlayerPrefs.SetString("tosKey", InputManager.IM.tosKey.ToString());
-                break;
-
-            case "tosiKey":
-                InputManager.IM.tosiKey = newKey;
-                tosiKeyText.text = InputManager.IM.tosiKey.ToString();
-                PlayerPrefs.SetString("tosiKey", InputManager.IM.tosiKey.ToString());
-                break;
-        }
-
-        yield return null;
     }
 }

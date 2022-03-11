@@ -7,15 +7,29 @@ public class SoundController : MonoBehaviour
 {
     [Header("Player")]
     public AudioSource bulletHit;
-    public AudioSource akReload, akShoot, svdReload, svdShoot, siVzmah, siHit, Run, Jump, Death, dmg, emptyMag;
+    public AudioSource akReload;
+    public AudioSource akShoot;
+    public AudioSource svdReload;
+    public AudioSource svdShoot;
+    public AudioSource siVzmah;
+    public AudioSource siHit;
+    public AudioSource Run;
+    public AudioSource Jump;
+    public AudioSource Death;
+    public AudioSource dmg;
+    public AudioSource emptyMag;
 
     [Header("Bonuses")]
     public AudioSource ammo;
-    public AudioSource HP, bonus;
+    public AudioSource HP;
+    public AudioSource bonus;
 
     [Header("Aliens")]
     public AudioSource alienShoot;
-    public AudioSource alienDeath, explosion, laser, alienHit;
+    public AudioSource alienDeath;
+    public AudioSource explosion;
+    public AudioSource laser;
+    public AudioSource alienHit;
 
     private void Start()
     {

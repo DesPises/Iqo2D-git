@@ -8,25 +8,103 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     //Objects
-    public GameObject bulletRGO, bulletRBackGO, bulletSGO, bulletSBackGO, magRGO, magSGO, playerRGO, playerSGO, playerSiGO, cloneGO, bcloneGO, HUDrMagGO, HUDsMagGO, HUDrAmmoGO, HUDsAmmoGO, rIconGO, sIconGO, siIconGO,
-        sAnimGO, rAnimGO, siAnimGO, soundContrGO, DeathMenu, ostGO;
-    public SpriteRenderer rFireBigSR, rFireMedSR, rFireSmallSR, rFireBigSRCrouch, rFireMedSRCrouch, rFireSmallSRCrouch, sFireBigSR, sFireMedSR, sFireSmallSR, sFireBigSRCrouch, sFireMedSRCrouch, sFireSmallSRCrouch;
-    public Rigidbody2D rb;
+    [SerializeField] private GameObject bulletRGO;
+    [SerializeField] private GameObject bulletRBackGO;
+    [SerializeField] private GameObject bulletSGO;
+    [SerializeField] private GameObject bulletSBackGO;
+    [SerializeField] private GameObject magRGO;
+    [SerializeField] private GameObject magSGO;
+    [SerializeField] private GameObject playerRGO;
+    [SerializeField] private GameObject playerSGO;
+    [SerializeField] private GameObject playerSiGO;
+    [SerializeField] private GameObject cloneGO;
+    [SerializeField] private GameObject bcloneGO;
+    [SerializeField] private GameObject HUDrMagGO;
+    [SerializeField] private GameObject HUDsMagGO;
+    [SerializeField] private GameObject HUDrAmmoGO;
+    [SerializeField] private GameObject HUDsAmmoGO;
+    [SerializeField] private GameObject rIconGO;
+    [SerializeField] private GameObject sIconGO;
+    [SerializeField] private GameObject siIconGO;
+    [SerializeField] private GameObject sAnimGO;
+    [SerializeField] private GameObject rAnimGO;
+    [SerializeField] private GameObject siAnimGO;
+    [SerializeField] private GameObject soundContrGO;
+    [SerializeField] private GameObject DeathMenu;
+    [SerializeField] private GameObject ostGO;
+    [SerializeField] private SpriteRenderer rFireBigSR;
+    [SerializeField] private SpriteRenderer rFireMedSR;
+    [SerializeField] private SpriteRenderer rFireSmallSR;
+    [SerializeField] private SpriteRenderer rFireBigSRCrouch;
+    [SerializeField] private SpriteRenderer rFireMedSRCrouch;
+    [SerializeField] private SpriteRenderer rFireSmallSRCrouch;
+    [SerializeField] private SpriteRenderer sFireBigSR;
+    [SerializeField] private SpriteRenderer sFireMedSR;
+    [SerializeField] private SpriteRenderer sFireSmallSR;
+    [SerializeField] private SpriteRenderer sFireBigSRCrouch;
+    [SerializeField] private SpriteRenderer sFireMedSRCrouch;
+    [SerializeField] private SpriteRenderer sFireSmallSRCrouch;
+    [SerializeField] private Rigidbody2D rb;
 
     //HP
     [SerializeField] private Image HPbarImage;
-    public static int riflerDamageInt, sniperDamageInt, sicklerDamageInt, sEnemyHPInt, mEnemyHPInt, bEnemyHPInt, bossHPInt, HPRInt, HPSInt, HPSiInt;
-    public Text brtext, bstext, bralltext, bsalltext;
+    [SerializeField] private Text brtext;
+    [SerializeField] private Text bstext;
+    [SerializeField] private Text bralltext; 
+    [SerializeField] private Text bsalltext;
+    public static int riflerDamageInt;
+    public static int sniperDamageInt;
+    public static int sicklerDamageInt;
+    public static int sEnemyHPInt;
+    public static int mEnemyHPInt;
+    public static int bEnemyHPInt;
+    public static int bossHPInt;
+    public static int HPRInt;
+    public static int HPSInt;
+    public static int HPSiInt;
 
     //KeyCodes
-    public KeyCode reloadKey, attackKey, crouchKey;
+    private KeyCode reloadKey;
+    private KeyCode attackKey;
+    private KeyCode crouchKey;
 
     //Variables
-    public static float x, y, z;
-    public static bool rCanReload, sCanReload, canAttackR, canAttackS, canAttackSi, canAttackSiAnim, rReloadCooldown, sReloadCooldown, canRAttackAfterReload, canSAttackAfterReload, rDavayReload, sDavayReload, canWalkSi, doesSiAttack,
-        rIsDead, sIsDead, siIsDead, emptySoundCooldown;
-    public static int inMagRInt, inMagSInt, bulletsRAtAllInt, bulletsSAtAllInt, lastRBulletsInt, lastSBulletsInt, leftInMagIntR, leftInMagIntS, comboSi, comboSiDelivery;
-    public static int damageRInt = 2, damageSInt = 18, damageSiInt = 12, damageRIntHS = 3, damageSIntHS = 25;
+    public static float x;
+    public static float y;
+    public static float z;
+    public static bool rCanReload;
+    public static bool sCanReload;
+    public static bool canAttackR;
+    public static bool canAttackS;
+    public static bool canAttackSi;
+    public static bool canAttackSiAnim;
+    public static bool rReloadCooldown;
+    public static bool sReloadCooldown;
+    public static bool canRAttackAfterReload;
+    public static bool canSAttackAfterReload;
+    public static bool rDavayReload;
+    public static bool sDavayReload;
+    public static bool canWalkSi;
+    public static bool doesSiAttack;
+    public static bool rIsDead;
+    public static bool sIsDead;
+    public static bool siIsDead;
+    public static bool emptySoundCooldown;
+    public static int inMagRInt;
+    public static int inMagSInt;
+    public static int bulletsRAtAllInt;
+    public static int bulletsSAtAllInt;
+    public static int lastRBulletsInt;
+    public static int lastSBulletsInt;
+    public static int leftInMagIntR;
+    public static int leftInMagIntS;
+    public static int comboSi;
+    public static int comboSiDelivery;
+    public static int damageRInt = 2;
+    public static int damageSInt = 18;
+    public static int damageSiInt = 12;
+    public static int damageRIntHS = 3;
+    public static int damageSIntHS = 25;
 
     void Start()
     {

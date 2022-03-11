@@ -5,8 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    public GameObject pauseGO, cGO, crGO, rGO, rrGO, mGO, mrGO, ostGO;
     public static bool isPaused;
+
+    public GameObject pauseGO;
+    public GameObject cGO;
+    public GameObject crGO;
+    public GameObject rGO;
+    public GameObject rrGO;
+    public GameObject mGO;
+    public GameObject mrGO;
+    public GameObject ostGO;
 
     void Start()
     {

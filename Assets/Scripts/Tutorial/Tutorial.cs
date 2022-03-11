@@ -34,9 +34,6 @@ public class Tutorial : MonoBehaviour
 
     void Update()
     {
-        
-            
-
         //English
         if (Language.eng)
         {
