@@ -67,18 +67,18 @@ public class PauseMenu : MonoBehaviour
 
     public void Restart()
     {
-        GameManager.rIsDead = false;
-        GameManager.sIsDead = false;
-        GameManager.siIsDead = false;
-        CharacterChangeCode.CanChange = true;
+        GameManager.instance.rIsDead = false;
+        GameManager.instance.sIsDead = false;
+        GameManager.instance.siIsDead = false;
+        CharacterChangeCode.canChange = true;
         StartCoroutine(RestartC());
     }
 
     public void MainMenu()
     {
-        GameManager.rIsDead = false;
-        GameManager.sIsDead = false;
-        GameManager.siIsDead = false;
+        GameManager.instance.rIsDead = false;
+        GameManager.instance.sIsDead = false;
+        GameManager.instance.siIsDead = false;
         StartCoroutine(MainMenuC());
     }
 

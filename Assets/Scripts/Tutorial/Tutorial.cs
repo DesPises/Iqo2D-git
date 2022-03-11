@@ -314,13 +314,13 @@ public class Tutorial : MonoBehaviour
 
         //Infinite ammo
 
-        if (GameManager.bulletsRAtAllInt <= 0)
+        if (GameManager.instance.bulletsRAtAllInt <= 0)
         {
-            GameManager.bulletsRAtAllInt = 75;
+            GameManager.instance.bulletsRAtAllInt = 75;
         }
-        if (GameManager.bulletsSAtAllInt <= 0)
+        if (GameManager.instance.bulletsSAtAllInt <= 0)
         {
-            GameManager.bulletsSAtAllInt = 15;
+            GameManager.instance.bulletsSAtAllInt = 15;
         }
     }
 

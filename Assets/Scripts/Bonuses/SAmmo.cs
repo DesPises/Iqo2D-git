@@ -12,7 +12,7 @@ public class SAmmo : MonoBehaviour
         {
             STAR.sHadAmmo += 5;
             soundContrGO.GetComponent<SoundController>().ammoS();
-            GameManager.bulletsSAtAllInt += 5;
+            GameManager.instance.bulletsSAtAllInt += 5;
             Destroy(sAmmoGO);
         }
     }

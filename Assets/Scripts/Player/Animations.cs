@@ -62,7 +62,7 @@ public class Animations : MonoBehaviour
         }
 
         //Change
-        anim.SetBool("change", CharacterChangeCode.Change);
+        anim.SetBool("change", CharacterChangeCode.change);
         anim.SetBool("changed", CharacterChangeCode.isChanged);
 
 
@@ -71,15 +71,15 @@ public class Animations : MonoBehaviour
         if (plMovement.character == "Rifler")
         {
             //Attack
-            if (Input.GetKey(attackKey) && GameManager.inMagRInt > 0 && GameManager.canRAttackAfterReload && !PauseMenu.isPaused)
+            if (Input.GetKey(attackKey) && GameManager.instance.inMagRInt > 0 && GameManager.instance.canRAttackAfterReload && !PauseMenu.isPaused)
             {
                 anim.SetBool("attack", true);
             }
             else anim.SetBool("attack", false);
 
             //Reload
-            if ((Input.GetKeyDown(reloadKey) && GameManager.rCanReload && !GameManager.rReloadCooldown && !PauseMenu.isPaused) ||
-                  GameManager.rDavayReload)
+            if ((Input.GetKeyDown(reloadKey) && GameManager.instance.rCanReload && !GameManager.instance.rReloadCooldown && !PauseMenu.isPaused) ||
+                  GameManager.instance.rDavayReload)
             {
                 StartCoroutine(Reload());
             }
@@ -91,15 +91,15 @@ public class Animations : MonoBehaviour
         if (plMovement.character == "Sniper")
         {
             //Attack
-            if (Input.GetKeyDown(attackKey) && GameManager.canAttackS && GameManager.canSAttackAfterReload && !PauseMenu.isPaused)
+            if (Input.GetKeyDown(attackKey) && GameManager.instance.canAttackS && GameManager.instance.canSAttackAfterReload && !PauseMenu.isPaused)
             {
                 anim.SetBool("attack", true);
             }
             else anim.SetBool("attack", false);
 
             //Reload
-            if ((Input.GetKeyDown(reloadKey) && GameManager.sCanReload && !GameManager.sReloadCooldown && !PauseMenu.isPaused) ||
-                  GameManager.sDavayReload)
+            if ((Input.GetKeyDown(reloadKey) && GameManager.instance.sCanReload && !GameManager.instance.sReloadCooldown && !PauseMenu.isPaused) ||
+                  GameManager.instance.sDavayReload)
             {
                 StartCoroutine(Reload());
             }
@@ -111,12 +111,12 @@ public class Animations : MonoBehaviour
         if (plMovement.character == "Sickler")
         {
             //Attack
-            anim.SetInteger("combo", GameManager.comboSi);
-            if (Input.GetKeyDown(attackKey) && GameManager.canAttackSiAnim && !PauseMenu.isPaused)
+            anim.SetInteger("combo", GameManager.instance.comboSi);
+            if (Input.GetKeyDown(attackKey) && GameManager.instance.canAttackSiAnim && !PauseMenu.isPaused)
             {
                 anim.SetBool("attack", true);
             }
-            if (!Input.GetKeyDown(attackKey) || !GameManager.canAttackSiAnim)
+            if (!Input.GetKeyDown(attackKey) || !GameManager.instance.canAttackSiAnim)
             {
                 anim.SetBool("attack", false);
             }

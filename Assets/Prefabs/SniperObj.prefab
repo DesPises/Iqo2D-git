@@ -307,22 +307,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 919f0dfbb9fbdee4fb5854608ef85d64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  plRB: {fileID: 812879073572025622}
-  plGO: {fileID: 812879073572025619}
-  soundContrGO: {fileID: 0}
-  moveSpeed: 0
-  jumpForce: 0
-  floorDist: 1
   gizmosY: 2
   gizmosX: 0
-  jumpKey: 32
-  fwKey: 100
-  bwKey: 97
-  crouchKey: 115
-  colliderOffset: {x: 0.35, y: 0, z: 0}
-  floorLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!1 &909765513371321013
 GameObject:
   m_ObjectHideFlags: 0

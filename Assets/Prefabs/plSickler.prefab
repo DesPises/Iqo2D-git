@@ -723,17 +723,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ddf0b9f73331c84da966b07d6eb8bcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldownF: 0
-  defCooldownF: 0.27
-  rangeF: 2.3
   attackPos: {fileID: 5859912493838898300}
-  enemy:
-    serializedVersion: 2
-    m_Bits: 128
-  enemyHead:
-    serializedVersion: 2
-    m_Bits: 4096
-  attackKey: 108
+  BossGO: {fileID: 0}
 --- !u!114 &1670789330973413476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -746,22 +737,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 919f0dfbb9fbdee4fb5854608ef85d64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  plRB: {fileID: 1670789330973413474}
-  plGO: {fileID: 2115955616431441427}
-  soundContrGO: {fileID: 0}
-  moveSpeed: 0
-  jumpForce: 0
-  floorDist: 1
   gizmosY: 3.8
   gizmosX: -0.45
-  jumpKey: 32
-  fwKey: 100
-  bwKey: 97
-  crouchKey: 115
-  colliderOffset: {x: 0.33, y: 0, z: 0}
-  floorLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!61 &1670789330973413475
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2371,8 +2348,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 1.4385722, y: 6.8692064}
-  m_Size: {x: 3.2793508, y: 3.700407}
+  m_Offset: {x: 1.521313, y: 7.224992}
+  m_Size: {x: 3.4448323, y: 4.411978}
   m_Direction: 0
 --- !u!114 &337280448
 MonoBehaviour:

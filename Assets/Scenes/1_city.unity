@@ -2907,33 +2907,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1670789330973413476, guid: 156d7ef705694db479bd664c9d6a29b1, type: 3}
-      propertyPath: soundContrGO
-      value: 
-      objectReference: {fileID: 2040679449}
     - target: {fileID: 2115955616431441427, guid: 156d7ef705694db479bd664c9d6a29b1, type: 3}
       propertyPath: m_Name
       value: plSickler
-      objectReference: {fileID: 0}
-    - target: {fileID: 2115955616431441427, guid: 156d7ef705694db479bd664c9d6a29b1, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6715628569605076089, guid: 156d7ef705694db479bd664c9d6a29b1, type: 3}
-      propertyPath: m_Size.x
-      value: 3.4448323
-      objectReference: {fileID: 0}
-    - target: {fileID: 6715628569605076089, guid: 156d7ef705694db479bd664c9d6a29b1, type: 3}
-      propertyPath: m_Size.y
-      value: 4.411978
-      objectReference: {fileID: 0}
-    - target: {fileID: 6715628569605076089, guid: 156d7ef705694db479bd664c9d6a29b1, type: 3}
-      propertyPath: m_Offset.x
-      value: 1.521313
-      objectReference: {fileID: 0}
-    - target: {fileID: 6715628569605076089, guid: 156d7ef705694db479bd664c9d6a29b1, type: 3}
-      propertyPath: m_Offset.y
-      value: 7.224992
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 156d7ef705694db479bd664c9d6a29b1, type: 3}
@@ -15490,10 +15466,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: SniperObj
       objectReference: {fileID: 0}
-    - target: {fileID: 812879073572025619, guid: b995b6c0935826948be0c699ce4eaf65, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 812879073572025620, guid: b995b6c0935826948be0c699ce4eaf65, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -15538,10 +15510,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 812879073572025621, guid: b995b6c0935826948be0c699ce4eaf65, type: 3}
-      propertyPath: soundContrGO
-      value: 
-      objectReference: {fileID: 2040679449}
     - target: {fileID: 2046951171425472005, guid: b995b6c0935826948be0c699ce4eaf65, type: 3}
       propertyPath: soundContrGO
       value: 
@@ -16199,10 +16167,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5877705111143314533, guid: d7d4837ad3de91949b3d4e375c8392da, type: 3}
-      propertyPath: soundContrGO
-      value: 
-      objectReference: {fileID: 2040679449}
     - target: {fileID: 6230169848650152480, guid: d7d4837ad3de91949b3d4e375c8392da, type: 3}
       propertyPath: m_Name
       value: plRifler

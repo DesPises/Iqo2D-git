@@ -61,17 +61,17 @@ public class plMovement : MonoBehaviour
 
             // Characters specifications
 
-            if (character == "Rifler" && !GameManager.rIsDead)
+            if (character == "Rifler" && !GameManager.instance.rIsDead)
             {
                     Move(5);
             }
 
-            if (character == "Sniper" && !GameManager.sIsDead)
+            if (character == "Sniper" && !GameManager.instance.sIsDead)
             {
                     Move(4);
             }
 
-            if (character == "Sickler" && !GameManager.siIsDead && GameManager.canWalkSi)
+            if (character == "Sickler" && !GameManager.instance.siIsDead && GameManager.instance.canWalkSi)
             {
                     Move(6);
             }

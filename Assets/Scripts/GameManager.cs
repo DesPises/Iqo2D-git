@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; }
+    public static GameManager instance { get; private set; }
 
     //Objects
     [SerializeField] private GameObject bulletRGO;
@@ -51,9 +51,8 @@ public class GameManager : MonoBehaviour
     // Bullets HUD
     [SerializeField] private Text brtext;
     [SerializeField] private Text bstext;
-    [SerializeField] private Text bralltext; 
+    [SerializeField] private Text bralltext;
     [SerializeField] private Text bsalltext;
-    public static int riflerDamageInt;
     public static int sniperDamageInt;
     public static int sicklerDamageInt;
     public static int sEnemyHPInt;
@@ -64,59 +63,56 @@ public class GameManager : MonoBehaviour
     public static int HPSInt;
     public static int HPSiInt;
 
-    // KeyCodes
-    private KeyCode reloadKey;
-    private KeyCode attackKey;
-    private KeyCode crouchKey;
-
     //Variables
-    public static float x;
-    public static float y;
-    public static float z;
-    public static bool rCanReload;
-    public static bool sCanReload;
-    public static bool canAttackR;
-    public static bool canAttackS;
-    public static bool canAttackSi;
-    public static bool canAttackSiAnim;
-    public static bool rReloadCooldown;
-    public static bool sReloadCooldown;
-    public static bool canRAttackAfterReload;
-    public static bool canSAttackAfterReload;
-    public static bool rDavayReload;
-    public static bool sDavayReload;
-    public static bool canWalkSi;
-    public static bool doesSiAttack;
-    public static bool rIsDead;
-    public static bool sIsDead;
-    public static bool siIsDead;
-    public static bool emptySoundCooldown;
-    public static int inMagRInt;
-    public static int inMagSInt;
-    public static int bulletsRAtAllInt;
-    public static int bulletsSAtAllInt;
-    public static int lastRBulletsInt;
-    public static int lastSBulletsInt;
-    public static int leftInMagIntR;
-    public static int leftInMagIntS;
-    public static int comboSi;
-    public static int comboSiDelivery;
-    public static int damageRInt = 2;
-    public static int damageSInt = 18;
-    public static int damageSiInt = 12;
-    public static int damageRIntHS = 3;
-    public static int damageSIntHS = 25;
+
+    private readonly float z = 8;
+
+    public bool rCanReload;
+    public bool sCanReload;
+    public bool canAttackR;
+    public bool canAttackS;
+    public bool canAttackSi;
+    public bool canAttackSiAnim;
+
+    public bool rReloadCooldown;
+    public bool sReloadCooldown;
+    public bool canRAttackAfterReload;
+    public bool canSAttackAfterReload;
+
+    public bool rDavayReload;
+    public bool sDavayReload;
+
+    public bool canWalkSi;
+    public bool doesSiAttack;
+
+    public bool rIsDead;
+    public bool sIsDead;
+    public bool siIsDead;
+
+    public bool emptySoundCooldown;
+    public int inMagRInt;
+    public int inMagSInt;
+
+    public int bulletsRAtAllInt;
+    public int bulletsSAtAllInt;
+    public int lastRBulletsInt;
+    public int lastSBulletsInt;
+    public int leftInMagIntR;
+    public int leftInMagIntS;
+
+    public int comboSi;
+    public int comboSiDelivery;
+
+    public int damageRInt = 2;
+    public int damageSInt = 18;
+    public int damageSiInt = 12;
+    public int damageRIntHS = 3;
+    public int damageSIntHS = 25;
 
     void Start()
     {
-        Instance = this;
+        instance = this;
 
-        reloadKey = InputManager.IM.reloadKey;
-        attackKey = InputManager.IM.attackKey;
-        crouchKey = InputManager.IM.crouchKey;
-        x = 0;
-        y = 0;
-        z = 8;
         HPRInt = 100;
         HPSInt = 60;
         HPSiInt = 140;
@@ -124,6 +120,7 @@ public class GameManager : MonoBehaviour
         inMagSInt = 5;
         bulletsRAtAllInt = 75;
         bulletsSAtAllInt = 17;
+
         rCanReload = false;
         sCanReload = false;
         canAttackR = true;
@@ -139,6 +136,7 @@ public class GameManager : MonoBehaviour
         comboSi = 0;
         canWalkSi = true;
         emptySoundCooldown = false;
+
         Time.timeScale = 1;
         DeathMenu.SetActive(false);
     }
@@ -155,19 +153,19 @@ public class GameManager : MonoBehaviour
         if (HPRInt <= 0)
         {
             rIsDead = true;
-            CharacterChangeCode.CanChange = true;
+            CharacterChangeCode.canChange = true;
         }
         else rIsDead = false;
         if (HPSInt <= 0)
         {
             sIsDead = true;
-            CharacterChangeCode.CanChange = true;
+            CharacterChangeCode.canChange = true;
         }
         else sIsDead = false;
         if (HPSiInt <= 0)
         {
             siIsDead = true;
-            CharacterChangeCode.CanChange = true;
+            CharacterChangeCode.canChange = true;
         }
         else siIsDead = false;
 
@@ -187,7 +185,7 @@ public class GameManager : MonoBehaviour
 
 
             // Reload
-            if (Input.GetKeyDown(reloadKey) && rCanReload && !rReloadCooldown && !PauseMenu.isPaused)
+            if (Input.GetKeyDown(InputManager.IM.reloadKey) && rCanReload && !rReloadCooldown && !PauseMenu.isPaused)
             {
                 StartCoroutine(magFadeRifler());
                 StartCoroutine(ReloadCooldownRifler());
@@ -210,34 +208,34 @@ public class GameManager : MonoBehaviour
 
             // Attack
 
-            if (Input.GetKey(attackKey) && canAttackR && canRAttackAfterReload && !PauseMenu.isPaused)
+            if (Input.GetKey(InputManager.IM.attackKey) && canAttackR && canRAttackAfterReload && !PauseMenu.isPaused)
             {
                 Enemy.DamageInt = damageRInt;
                 Enemy.DamageIntHS = damageRIntHS;
                 akShootSound();
                 StartCoroutine(BulletRCounter());
-                if (!Input.GetKey(crouchKey) || (Input.GetKey(crouchKey) && !plMovement.onGround))
+                if (!Input.GetKey(InputManager.IM.crouchKey) || (Input.GetKey(InputManager.IM.crouchKey) && !plMovement.onGround))
                 {
                     StartCoroutine(RiflerFire());
                     if (plMovement.isMovingFW)
                         bcloneGO = Instantiate(bulletRGO, playerRGO.transform.position + new Vector3(0.5f, 4.75f, 0), Quaternion.identity);
                     if (!plMovement.isMovingFW)
                         bcloneGO = Instantiate(bulletRBackGO, playerRGO.transform.position + new Vector3(-0.5f, 4.75f, 0), Quaternion.identity);
-                    if (Input.GetKey(crouchKey))
+                    if (Input.GetKey(InputManager.IM.crouchKey))
                     {
                         rFireBigSRCrouch.color = new Color(255, 255, 255, 0);
                         rFireMedSRCrouch.color = new Color(255, 255, 255, 0);
                         rFireSmallSRCrouch.color = new Color(255, 255, 255, 0);
                     }
                 }
-                if (Input.GetKey(crouchKey) && plMovement.onGround)
+                if (Input.GetKey(InputManager.IM.crouchKey) && plMovement.onGround)
                 {
                     StartCoroutine(RiflerFireCrouch());
                     if (plMovement.isMovingFW)
                         bcloneGO = Instantiate(bulletRGO, playerRGO.transform.position + new Vector3(0.5f, 4.0f, 0), Quaternion.identity);
                     if (!plMovement.isMovingFW)
                         bcloneGO = Instantiate(bulletRBackGO, playerRGO.transform.position + new Vector3(-0.5f, 4.0f, 0), Quaternion.identity);
-                    if (!Input.GetKey(crouchKey))
+                    if (!Input.GetKey(InputManager.IM.crouchKey))
                     {
                         rFireBigSR.color = new Color(255, 255, 255, 0);
                         rFireMedSR.color = new Color(255, 255, 255, 0);
@@ -254,7 +252,7 @@ public class GameManager : MonoBehaviour
             }
 
             // Empty
-            if (Input.GetKey(attackKey) && bulletsRAtAllInt == 0 && inMagRInt == 0 && !emptySoundCooldown && !PauseMenu.isPaused)
+            if (Input.GetKey(InputManager.IM.attackKey) && bulletsRAtAllInt == 0 && inMagRInt == 0 && !emptySoundCooldown && !PauseMenu.isPaused)
             {
                 StartCoroutine(emptyMagSound());
             }
@@ -272,7 +270,7 @@ public class GameManager : MonoBehaviour
             bsalltext.text = "/" + bulletsSAtAllInt.ToString();
 
             // Reload
-            if (Input.GetKeyDown(reloadKey) && sCanReload && !sReloadCooldown && bulletsSAtAllInt > 0 && !PauseMenu.isPaused)
+            if (Input.GetKeyDown(InputManager.IM.reloadKey) && sCanReload && !sReloadCooldown && bulletsSAtAllInt > 0 && !PauseMenu.isPaused)
             {
                 StartCoroutine(magFadeSniper());
                 StartCoroutine(ReloadCooldownSniper());
@@ -296,13 +294,13 @@ public class GameManager : MonoBehaviour
 
             // Attack
 
-            if (Input.GetKeyDown(attackKey) && canAttackS && canSAttackAfterReload && !PauseMenu.isPaused)
+            if (Input.GetKeyDown(InputManager.IM.attackKey) && canAttackS && canSAttackAfterReload && !PauseMenu.isPaused)
             {
                 Enemy.DamageInt = damageSInt;
                 Enemy.DamageIntHS = damageSIntHS;
                 svdShootSound();
                 StartCoroutine(BulletSCounter());
-                if (!Input.GetKey(crouchKey) || (Input.GetKey(crouchKey) && !plMovement.onGround))
+                if (!Input.GetKey(InputManager.IM.crouchKey) || (Input.GetKey(InputManager.IM.crouchKey) && !plMovement.onGround))
                 {
                     StartCoroutine(SniperFire());
                     if (plMovement.isMovingFW)
@@ -310,7 +308,7 @@ public class GameManager : MonoBehaviour
                     if (!plMovement.isMovingFW)
                         bcloneGO = Instantiate(bulletSBackGO, playerSGO.transform.position + new Vector3(-0.5f, 4.67f, 0), Quaternion.identity);
                 }
-                if (Input.GetKey(crouchKey) && plMovement.onGround)
+                if (Input.GetKey(InputManager.IM.crouchKey) && plMovement.onGround)
                 {
                     StartCoroutine(SniperFireCrouch());
                     if (plMovement.isMovingFW)
@@ -327,7 +325,7 @@ public class GameManager : MonoBehaviour
             }
             // Empty
 
-            if (Input.GetKey(attackKey) && bulletsSAtAllInt == 0 && inMagSInt == 0 && !emptySoundCooldown && !PauseMenu.isPaused)
+            if (Input.GetKey(InputManager.IM.attackKey) && bulletsSAtAllInt == 0 && inMagSInt == 0 && !emptySoundCooldown && !PauseMenu.isPaused)
             {
                 StartCoroutine(emptyMagSound());
             }
@@ -343,8 +341,8 @@ public class GameManager : MonoBehaviour
             HPbarImage.fillAmount = HPSiInt * 0.007f;
 
             // Attack
-            
-            if (Input.GetKeyDown(attackKey) && canAttackSi && !PauseMenu.isPaused)
+
+            if (Input.GetKeyDown(InputManager.IM.attackKey) && canAttackSi && !PauseMenu.isPaused)
             {
                 Enemy.DamageInt = damageSiInt;
                 Enemy.DamageIntHS = damageSiInt;
@@ -376,7 +374,7 @@ public class GameManager : MonoBehaviour
     {
         soundContrGO.GetComponent<SoundController>().svdShootS();
     }
-    public void akShootSound() 
+    public void akShootSound()
     {
         soundContrGO.GetComponent<SoundController>().akShootS();
     }
@@ -472,12 +470,12 @@ public class GameManager : MonoBehaviour
     {
         if (plMovement.isMovingFW)
         {
-            cloneGO = Instantiate(magRGO, playerRGO.transform.position + new Vector3(0.6f, 2.9f, 0), Quaternion.Euler(x, y, z));
+            cloneGO = Instantiate(magRGO, playerRGO.transform.position + new Vector3(0.6f, 2.9f, 0), Quaternion.Euler(0, 0, z));
             cloneGO.gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
         }
         if (!plMovement.isMovingFW)
         {
-            cloneGO = Instantiate(magRGO, playerRGO.transform.position + new Vector3(-0.6f, 2.9f, 0), Quaternion.Euler(x, y, z));
+            cloneGO = Instantiate(magRGO, playerRGO.transform.position + new Vector3(-0.6f, 2.9f, 0), Quaternion.Euler(0, 0, z));
             cloneGO.gameObject.transform.eulerAngles = new Vector3(0, 180, 0);
         }
 
@@ -581,19 +579,19 @@ public class GameManager : MonoBehaviour
         sCanReload = false;
 
         yield return new WaitForSeconds(0.15f);
-        if (plMovement.isMovingFW && !Input.GetKey(crouchKey))
+        if (plMovement.isMovingFW && !Input.GetKey(InputManager.IM.crouchKey))
         {
             cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(0.4f, 3, 0), Quaternion.identity);
         }
-        if (!plMovement.isMovingFW && !Input.GetKey(crouchKey))
+        if (!plMovement.isMovingFW && !Input.GetKey(InputManager.IM.crouchKey))
         {
             cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(-0.4f, 3, 0), Quaternion.identity);
         }
-        if (plMovement.isMovingFW && Input.GetKey(crouchKey))
+        if (plMovement.isMovingFW && Input.GetKey(InputManager.IM.crouchKey))
         {
             cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(1, 2.5f, 0), Quaternion.identity);
         }
-        if (!plMovement.isMovingFW && Input.GetKey(crouchKey))
+        if (!plMovement.isMovingFW && Input.GetKey(InputManager.IM.crouchKey))
         {
             cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(-1, 2.5f, 0), Quaternion.identity);
         }

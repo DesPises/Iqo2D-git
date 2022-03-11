@@ -72,8 +72,8 @@ public class Boss : MonoBehaviour
 
     void Update()
     {
-        GameManager.bulletsRAtAllInt = 999;
-        GameManager.bulletsSAtAllInt = 999;
+        GameManager.instance.bulletsRAtAllInt = 999;
+        GameManager.instance.bulletsSAtAllInt = 999;
 
         HPbar.fillAmount = HP * 0.004f;
 

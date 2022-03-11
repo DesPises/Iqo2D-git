@@ -10,9 +10,9 @@ public class RAmmo : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
-            GameManager.canAttackR = true;
+            GameManager.instance.canAttackR = true;
             soundContrGO.GetComponent<SoundController>().ammoS();
-            GameManager.bulletsRAtAllInt += 30;
+            GameManager.instance.bulletsRAtAllInt += 30;
             Destroy(rAmmoGO);
         }
     }
