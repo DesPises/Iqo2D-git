@@ -110,7 +110,6 @@ public class Animations : MonoBehaviour
         if (plMovement.character == "Sickler")
         {
             //Attack
-            anim.SetInteger("combo", GameManager.instance.comboSi);
             if (Input.GetKeyDown(attackKey) && GameManager.instance.canAttackSiAnim && !PauseMenu.isPaused)
             {
                 anim.SetBool("attack", true);

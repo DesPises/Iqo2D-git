@@ -135,7 +135,7 @@ public class CharacterChangeCode : MonoBehaviour
         sniperGO.gameObject.SetActive(false);
         sicklerGO.gameObject.SetActive(false);
         plMovement.character = "Rifler";
-        StartCoroutine(ChangeCoroutine());
+        StartCoroutine(CooldownCoroutine());
     }
 
     private void PickSniper()
@@ -144,7 +144,7 @@ public class CharacterChangeCode : MonoBehaviour
         sniperGO.gameObject.SetActive(true);
         sicklerGO.gameObject.SetActive(false);
         plMovement.character = "Sniper";
-        StartCoroutine(ChangeCoroutine());
+        StartCoroutine(CooldownCoroutine());
     }
 
     private void PickSickler()
@@ -153,10 +153,10 @@ public class CharacterChangeCode : MonoBehaviour
         sniperGO.gameObject.SetActive(false);
         sicklerGO.gameObject.SetActive(true);
         plMovement.character = "Sickler";
-        StartCoroutine(ChangeCoroutine());
+        StartCoroutine(CooldownCoroutine());
     }
 
-    IEnumerator ChangeCoroutine()
+    IEnumerator CooldownCoroutine()
     {
         yield return null;
         change = true;

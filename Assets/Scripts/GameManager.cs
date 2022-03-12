@@ -44,6 +44,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SpriteRenderer sFireMedSRCrouch;
     [SerializeField] private SpriteRenderer sFireSmallSRCrouch;
 
+    private readonly Color invisible = new(255, 255, 255, 0);
+    private readonly Color visible = new(255, 255, 255, 190);
+
     [SerializeField] private Rigidbody2D rb;
 
     // HP
@@ -53,6 +56,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text bstext;
     [SerializeField] private Text bralltext;
     [SerializeField] private Text bsalltext;
+
+    // Other variables
+
     public static int sniperDamageInt;
     public static int sicklerDamageInt;
     public static int sEnemyHPInt;
@@ -62,10 +68,6 @@ public class GameManager : MonoBehaviour
     public static int HPRInt;
     public static int HPSInt;
     public static int HPSiInt;
-
-    //Variables
-
-    private readonly float z = 8;
 
     public bool rCanReload;
     public bool sCanReload;
@@ -79,11 +81,11 @@ public class GameManager : MonoBehaviour
     public bool canRAttackAfterReload;
     public bool canSAttackAfterReload;
 
-    public bool rDavayReload;
-    public bool sDavayReload;
+    public bool rDavayReload { get; private set; }
+    public bool sDavayReload { get; private set; }
 
-    public bool canWalkSi;
-    public bool doesSiAttack;
+    public bool canWalkSi { get; private set; }
+    public bool doesSiAttack { get; private set; }
 
     public bool rIsDead;
     public bool sIsDead;
@@ -97,43 +99,34 @@ public class GameManager : MonoBehaviour
     public int bulletsSAtAllInt;
     public int lastRBulletsInt;
     public int lastSBulletsInt;
-    public int leftInMagIntR;
-    public int leftInMagIntS;
-
-    public int comboSi;
-    public int comboSiDelivery;
 
     public int damageRInt = 2;
-    public int damageSInt = 18;
-    public int damageSiInt = 12;
     public int damageRIntHS = 3;
-    public int damageSIntHS = 25;
+
+    private readonly int damageSInt = 18;
+    private readonly int damageSiInt = 12;
+    private readonly int damageSIntHS = 25;
 
     void Start()
     {
         instance = this;
 
+        // Set default HP for every character
         HPRInt = 100;
         HPSInt = 60;
         HPSiInt = 140;
+        // Set default ammo for rifler and sniper
         inMagRInt = 30;
         inMagSInt = 5;
         bulletsRAtAllInt = 75;
         bulletsSAtAllInt = 17;
 
-        rCanReload = false;
-        sCanReload = false;
         canAttackR = true;
         canAttackS = true;
         canAttackSi = true;
-        doesSiAttack = false;
         canAttackSiAnim = true;
-        rReloadCooldown = false;
         canRAttackAfterReload = true;
         canSAttackAfterReload = true;
-        rDavayReload = false;
-        sDavayReload = false;
-        comboSi = 0;
         canWalkSi = true;
         emptySoundCooldown = false;
 
@@ -146,7 +139,7 @@ public class GameManager : MonoBehaviour
         // Damage sound
         if (Enemy.doesHitPlayer)
         {
-            dmgSound();
+            DmgSound();
             alienHitSound();
         }
         // Death
@@ -178,7 +171,7 @@ public class GameManager : MonoBehaviour
         // Rifler
         if (plMovement.character == "Rifler")
         {
-            // HUD, HP and Bullets
+            // HP bar and ammo
             HPbarImage.fillAmount = HPRInt * 0.01f;
             brtext.text = inMagRInt.ToString();
             bralltext.text = "/" + bulletsRAtAllInt.ToString();
@@ -187,16 +180,17 @@ public class GameManager : MonoBehaviour
             // Reload
             if (Input.GetKeyDown(InputManager.IM.reloadKey) && rCanReload && !rReloadCooldown && !PauseMenu.isPaused)
             {
-                StartCoroutine(magFadeRifler());
+                StartCoroutine(MagFadeRifler());
                 StartCoroutine(ReloadCooldownRifler());
             }
             if (inMagRInt == 0 && rCanReload)
             {
-                StartCoroutine(magFadeRifler());
+                StartCoroutine(MagFadeRifler());
                 StartCoroutine(ReloadCooldownRifler());
                 StartCoroutine(ReloadRAnim());
 
             }
+
             if (inMagRInt < 30 && bulletsRAtAllInt > 0)
                 rCanReload = true;
 
@@ -223,9 +217,9 @@ public class GameManager : MonoBehaviour
                         bcloneGO = Instantiate(bulletRBackGO, playerRGO.transform.position + new Vector3(-0.5f, 4.75f, 0), Quaternion.identity);
                     if (Input.GetKey(InputManager.IM.crouchKey))
                     {
-                        rFireBigSRCrouch.color = new Color(255, 255, 255, 0);
-                        rFireMedSRCrouch.color = new Color(255, 255, 255, 0);
-                        rFireSmallSRCrouch.color = new Color(255, 255, 255, 0);
+                        rFireBigSRCrouch.color = invisible;
+                        rFireMedSRCrouch.color = invisible;
+                        rFireSmallSRCrouch.color = invisible;
                     }
                 }
                 if (Input.GetKey(InputManager.IM.crouchKey) && plMovement.onGround)
@@ -237,9 +231,9 @@ public class GameManager : MonoBehaviour
                         bcloneGO = Instantiate(bulletRBackGO, playerRGO.transform.position + new Vector3(-0.5f, 4.0f, 0), Quaternion.identity);
                     if (!Input.GetKey(InputManager.IM.crouchKey))
                     {
-                        rFireBigSR.color = new Color(255, 255, 255, 0);
-                        rFireMedSR.color = new Color(255, 255, 255, 0);
-                        rFireSmallSR.color = new Color(255, 255, 255, 0);
+                        rFireBigSR.color = invisible;
+                        rFireMedSR.color = invisible;
+                        rFireSmallSR.color = invisible;
                     }
                 }
 
@@ -254,7 +248,7 @@ public class GameManager : MonoBehaviour
             // Empty
             if (Input.GetKey(InputManager.IM.attackKey) && bulletsRAtAllInt == 0 && inMagRInt == 0 && !emptySoundCooldown && !PauseMenu.isPaused)
             {
-                StartCoroutine(emptyMagSound());
+                StartCoroutine(EmptyMagSound());
             }
         }
 
@@ -264,7 +258,7 @@ public class GameManager : MonoBehaviour
         // Sniper
         if (plMovement.character == "Sniper")
         {
-            // HUD, HP and Bullets
+            // HP bar and ammo
             HPbarImage.fillAmount = HPSInt * 0.0167f;
             bstext.text = inMagSInt.ToString();
             bsalltext.text = "/" + bulletsSAtAllInt.ToString();
@@ -272,17 +266,17 @@ public class GameManager : MonoBehaviour
             // Reload
             if (Input.GetKeyDown(InputManager.IM.reloadKey) && sCanReload && !sReloadCooldown && bulletsSAtAllInt > 0 && !PauseMenu.isPaused)
             {
-                StartCoroutine(magFadeSniper());
+                StartCoroutine(MagFadeSniper());
                 StartCoroutine(ReloadCooldownSniper());
             }
-            if (inMagSInt == 0 && sCanReload)
+            else if (inMagSInt == 0 && sCanReload)
             {
-                StartCoroutine(magFadeSniper());
+                StartCoroutine(MagFadeSniper());
                 StartCoroutine(ReloadCooldownSniper());
                 sReloadCooldown = false;
                 StartCoroutine(ReloadSAnim());
-
             }
+            
             if (inMagSInt < 5 && bulletsSAtAllInt > 0)
                 sCanReload = true;
 
@@ -327,7 +321,7 @@ public class GameManager : MonoBehaviour
 
             if (Input.GetKey(InputManager.IM.attackKey) && bulletsSAtAllInt == 0 && inMagSInt == 0 && !emptySoundCooldown && !PauseMenu.isPaused)
             {
-                StartCoroutine(emptyMagSound());
+                StartCoroutine(EmptyMagSound());
             }
         }
 
@@ -337,23 +331,22 @@ public class GameManager : MonoBehaviour
         // Sickler
         if (plMovement.character == "Sickler")
         {
-            // HUD and HP
+            // HP bar
             HPbarImage.fillAmount = HPSiInt * 0.007f;
 
             // Attack
-
             if (Input.GetKeyDown(InputManager.IM.attackKey) && canAttackSi && !PauseMenu.isPaused)
             {
                 Enemy.DamageInt = damageSiInt;
                 Enemy.DamageIntHS = damageSiInt;
-                StartCoroutine(siAttack());
-                StartCoroutine(canWalk());
+                StartCoroutine(SiAttack());
+                StartCoroutine(CanWalkCooldown());
             }
         }
     }
 
-    // Sounds functions
-    IEnumerator emptyMagSound()
+    // Sound methods
+    IEnumerator EmptyMagSound()
     {
         emptySoundCooldown = true;
         soundContrGO.GetComponent<SoundController>().emptyMagS();
@@ -361,7 +354,7 @@ public class GameManager : MonoBehaviour
         emptySoundCooldown = false;
     }
 
-    public void dmgSound()
+    public void DmgSound()
     {
         soundContrGO.GetComponent<SoundController>().dmgS();
     }
@@ -392,35 +385,35 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator RiflerFire()
     {
-        rFireBigSR.color = new Color(255, 255, 255, 190);
-        rFireMedSR.color = new Color(255, 255, 255, 0);
-        rFireSmallSR.color = new Color(255, 255, 255, 0);
+        rFireBigSR.color = visible;
+        rFireMedSR.color = invisible;
+        rFireSmallSR.color = invisible;
         yield return new WaitForSeconds(0.03f);
-        rFireBigSR.color = new Color(255, 255, 255, 0);
-        rFireMedSR.color = new Color(255, 255, 255, 190);
-        rFireSmallSR.color = new Color(255, 255, 255, 0);
+        rFireBigSR.color = invisible;
+        rFireMedSR.color = visible;
+        rFireSmallSR.color = invisible;
         yield return new WaitForSeconds(0.03f);
-        rFireBigSR.color = new Color(255, 255, 255, 0);
-        rFireMedSR.color = new Color(255, 255, 255, 0);
-        rFireSmallSR.color = new Color(255, 255, 255, 190);
+        rFireBigSR.color = invisible;
+        rFireMedSR.color = invisible;
+        rFireSmallSR.color = visible;
         yield return new WaitForSeconds(0.03f);
-        rFireSmallSR.color = new Color(255, 255, 255, 0);
+        rFireSmallSR.color = invisible;
     }
     IEnumerator RiflerFireCrouch()
     {
-        rFireBigSRCrouch.color = new Color(255, 255, 255, 190);
-        rFireMedSRCrouch.color = new Color(255, 255, 255, 0);
-        rFireSmallSRCrouch.color = new Color(255, 255, 255, 0);
+        rFireBigSRCrouch.color = visible;
+        rFireMedSRCrouch.color = invisible;
+        rFireSmallSRCrouch.color = invisible;
         yield return new WaitForSeconds(0.03f);
-        rFireBigSRCrouch.color = new Color(255, 255, 255, 0);
-        rFireMedSRCrouch.color = new Color(255, 255, 255, 190);
-        rFireSmallSRCrouch.color = new Color(255, 255, 255, 0);
+        rFireBigSRCrouch.color = invisible;
+        rFireMedSRCrouch.color = visible;
+        rFireSmallSRCrouch.color = invisible;
         yield return new WaitForSeconds(0.03f);
-        rFireBigSRCrouch.color = new Color(255, 255, 255, 0);
-        rFireMedSRCrouch.color = new Color(255, 255, 255, 0);
-        rFireSmallSRCrouch.color = new Color(255, 255, 255, 190);
+        rFireBigSRCrouch.color = invisible;
+        rFireMedSRCrouch.color = invisible;
+        rFireSmallSRCrouch.color = visible;
         yield return new WaitForSeconds(0.03f);
-        rFireSmallSRCrouch.color = new Color(255, 255, 255, 0);
+        rFireSmallSRCrouch.color = invisible;
     }
     IEnumerator ReloadRAnim()
     {
@@ -431,58 +424,41 @@ public class GameManager : MonoBehaviour
     IEnumerator ReloadCooldownRifler()
     {
         canRAttackAfterReload = false;
-        if (bulletsRAtAllInt > 29)
+        int leftInMag = inMagRInt;
+
+        if (inMagRInt + bulletsRAtAllInt > 30)
         {
-            leftInMagIntR = inMagRInt;
             inMagRInt = 30;
-            bulletsRAtAllInt -= (30 - leftInMagIntR);
+            bulletsRAtAllInt -= (30 - leftInMag);
         }
         else
         {
-            if (inMagRInt == 0)
-            {
-                inMagRInt = bulletsRAtAllInt;
-                bulletsRAtAllInt = 0;
-            }
-            else
-            {
-                leftInMagIntR = inMagRInt;
-                if (inMagRInt + bulletsRAtAllInt > 30)
-                {
-                    inMagRInt = 30;
-                    bulletsRAtAllInt -= (30 - leftInMagIntR);
-                }
-                else
-                {
-                    inMagRInt += bulletsRAtAllInt;
-                    bulletsRAtAllInt = 0;
-                }
-            }
+            inMagRInt += bulletsRAtAllInt;
+            bulletsRAtAllInt = 0;
         }
-        yield return new WaitForSeconds(0.01f);
+        yield return null;
         rReloadCooldown = true;
         yield return new WaitForSeconds(0.6f);
         canRAttackAfterReload = true;
         yield return new WaitForSeconds(2f);
         rReloadCooldown = false;
     }
-    IEnumerator magFadeRifler()
+    IEnumerator MagFadeRifler()
     {
         if (plMovement.isMovingFW)
         {
-            cloneGO = Instantiate(magRGO, playerRGO.transform.position + new Vector3(0.6f, 2.9f, 0), Quaternion.Euler(0, 0, z));
-            cloneGO.gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
+            cloneGO = Instantiate(magRGO, playerRGO.transform.position + new Vector3(0.6f, 2.9f, 0), Quaternion.Euler(0, 0, 8));
+            cloneGO.transform.eulerAngles = new Vector3(0, 0, 0);
         }
         if (!plMovement.isMovingFW)
         {
-            cloneGO = Instantiate(magRGO, playerRGO.transform.position + new Vector3(-0.6f, 2.9f, 0), Quaternion.Euler(0, 0, z));
-            cloneGO.gameObject.transform.eulerAngles = new Vector3(0, 180, 0);
+            cloneGO = Instantiate(magRGO, playerRGO.transform.position + new Vector3(-0.6f, 2.9f, 0), Quaternion.Euler(0, 0, 8));
+            cloneGO.transform.eulerAngles = new Vector3(0, 180, 0);
         }
 
         yield return new WaitForSeconds(0.01f);
         rCanReload = false;
-        yield return new WaitForSeconds(1);
-        Destroy(cloneGO);
+        Destroy(cloneGO, 1f);
     }
 
 
@@ -499,37 +475,35 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator SniperFire()
     {
-        sFireBigSR.color = new Color(255, 255, 255, 190);
-        sFireMedSR.color = new Color(255, 255, 255, 0);
-        sFireSmallSR.color = new Color(255, 255, 255, 0);
+        sFireBigSR.color = visible;
+        sFireMedSR.color = invisible;
+        sFireSmallSR.color = invisible;
         yield return new WaitForSeconds(0.03f);
-        sFireBigSR.color = new Color(255, 255, 255, 0);
-        sFireMedSR.color = new Color(255, 255, 255, 190);
-        sFireSmallSR.color = new Color(255, 255, 255, 0);
+        sFireBigSR.color = invisible;
+        sFireMedSR.color = visible;
+        sFireSmallSR.color = invisible;
         yield return new WaitForSeconds(0.03f);
-        sFireBigSR.color = new Color(255, 255, 255, 0);
-        sFireMedSR.color = new Color(255, 255, 255, 0);
-        sFireSmallSR.color = new Color(255, 255, 255, 190);
+        sFireBigSR.color = invisible;
+        sFireMedSR.color = invisible;
+        sFireSmallSR.color = visible;
         yield return new WaitForSeconds(0.03f);
-        sFireSmallSR.color = new Color(255, 255, 255, 0);
-
+        sFireSmallSR.color = invisible;
     }
     IEnumerator SniperFireCrouch()
     {
-        sFireBigSRCrouch.color = new Color(255, 255, 255, 190);
-        sFireMedSRCrouch.color = new Color(255, 255, 255, 0);
-        sFireSmallSRCrouch.color = new Color(255, 255, 255, 0);
+        sFireBigSRCrouch.color = visible;
+        sFireMedSRCrouch.color = invisible;
+        sFireSmallSRCrouch.color = invisible;
         yield return new WaitForSeconds(0.03f);
-        sFireBigSRCrouch.color = new Color(255, 255, 255, 0);
-        sFireMedSRCrouch.color = new Color(255, 255, 255, 190);
-        sFireSmallSRCrouch.color = new Color(255, 255, 255, 0);
+        sFireBigSRCrouch.color = invisible;
+        sFireMedSRCrouch.color = visible;
+        sFireSmallSRCrouch.color = invisible;
         yield return new WaitForSeconds(0.03f);
-        sFireBigSRCrouch.color = new Color(255, 255, 255, 0);
-        sFireMedSRCrouch.color = new Color(255, 255, 255, 0);
-        sFireSmallSRCrouch.color = new Color(255, 255, 255, 190);
+        sFireBigSRCrouch.color = invisible;
+        sFireMedSRCrouch.color = invisible;
+        sFireSmallSRCrouch.color = visible;
         yield return new WaitForSeconds(0.03f);
-        sFireSmallSRCrouch.color = new Color(255, 255, 255, 0);
-
+        sFireSmallSRCrouch.color = invisible;
     }
     IEnumerator ReloadSAnim()
     {
@@ -540,114 +514,87 @@ public class GameManager : MonoBehaviour
     IEnumerator ReloadCooldownSniper()
     {
         canSAttackAfterReload = false;
-        if (bulletsSAtAllInt > 4)
+        int leftInMag = inMagSInt;
+
+        if (inMagSInt + bulletsSAtAllInt > 5)
         {
-            leftInMagIntS = inMagSInt;
             inMagSInt = 5;
-            bulletsSAtAllInt -= (5 - leftInMagIntS);
+            bulletsSAtAllInt -= (5 - leftInMag);
         }
         else
         {
-            if (inMagSInt == 0)
-            {
-                inMagSInt = bulletsSAtAllInt;
-                bulletsSAtAllInt = 0;
-            }
-            else
-            {
-                leftInMagIntS = inMagSInt;
-                if (inMagSInt + bulletsSAtAllInt > 5)
-                {
-                    inMagSInt = 5;
-                    bulletsSAtAllInt -= (5 - leftInMagIntS);
-                }
-                else
-                {
-                    inMagSInt += bulletsSAtAllInt;
-                    bulletsSAtAllInt = 0;
-                }
-            }
+            inMagSInt += bulletsSAtAllInt;
+            bulletsSAtAllInt = 0;
         }
+
         yield return new WaitForSeconds(0.6f);
         canSAttackAfterReload = true;
         yield return new WaitForSeconds(3f);
         sReloadCooldown = false;
     }
-    IEnumerator magFadeSniper()
+    IEnumerator MagFadeSniper()
     {
-        yield return new WaitForSeconds(0.01f);
-        sCanReload = false;
+        yield return null;
 
+        sCanReload = false;
         yield return new WaitForSeconds(0.15f);
+
         if (plMovement.isMovingFW && !Input.GetKey(InputManager.IM.crouchKey))
         {
-            cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(0.4f, 3, 0), Quaternion.identity);
+            cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(0.4f, 3), Quaternion.identity);
         }
-        if (!plMovement.isMovingFW && !Input.GetKey(InputManager.IM.crouchKey))
+        else if (!plMovement.isMovingFW && !Input.GetKey(InputManager.IM.crouchKey))
         {
-            cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(-0.4f, 3, 0), Quaternion.identity);
+            cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(-0.4f, 3), Quaternion.identity);
         }
-        if (plMovement.isMovingFW && Input.GetKey(InputManager.IM.crouchKey))
+        else if (plMovement.isMovingFW && Input.GetKey(InputManager.IM.crouchKey))
         {
-            cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(1, 2.5f, 0), Quaternion.identity);
+            cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(1, 2.5f), Quaternion.identity);
         }
-        if (!plMovement.isMovingFW && Input.GetKey(InputManager.IM.crouchKey))
+        else if (!plMovement.isMovingFW && Input.GetKey(InputManager.IM.crouchKey))
         {
-            cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(-1, 2.5f, 0), Quaternion.identity);
+            cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(-1, 2.5f), Quaternion.identity);
         }
 
-        yield return new WaitForSeconds(0.84f);
-        Destroy(cloneGO);
+        Destroy(cloneGO, 0.85f);
     }
 
 
 
 
     // Sickler coroutines
-    IEnumerator siAttack()
+    IEnumerator SiAttack()
     {
         plMovement.secJump = false;
         if (plMovement.isMovingFW)
         {
             rb.velocity = new Vector2(2, 0);
-            rb.AddForce(Vector2.down * 40 + Vector2.right * 50, ForceMode2D.Impulse);
         }
         if (!plMovement.isMovingFW)
         {
             rb.velocity = new Vector2(-2, 0);
-            rb.AddForce(Vector2.down * 40 + Vector2.left * 50, ForceMode2D.Impulse);
         }
+        rb.AddForce(Vector2.down * 40 + Vector2.right * 50, ForceMode2D.Impulse);
+
         canAttackSi = false;
         doesSiAttack = true;
-        siAttackCombo();
         yield return null;
-        canAttackSiAnim = false;
 
-        comboSi = comboSiDelivery;
+        canAttackSiAnim = false;
         yield return new WaitForSeconds(0.4f);
+
         doesSiAttack = false;
         canAttackSi = true;
         canAttackSiAnim = true;
     }
-    IEnumerator canWalk()
+    IEnumerator CanWalkCooldown()
     {
         canWalkSi = false;
         yield return new WaitForSeconds(0.5f);
         canWalkSi = true;
     }
-    void siAttackCombo()
-    {
-        if (comboSi == 1)
-        {
-            comboSiDelivery = 0;
-        }
-        if (comboSi == 0)
-        {
-            comboSiDelivery = 0;
-        }
 
-    }
-
+    // Pause soundtrack, set isPaused variable to true and stop time
     IEnumerator TimeStop()
     {
         PauseMenu.isPaused = true;
