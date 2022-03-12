@@ -63,7 +63,6 @@ public class Animations : MonoBehaviour
 
         //Change
         anim.SetBool("change", CharacterChangeCode.change);
-        anim.SetBool("changed", CharacterChangeCode.isChanged);
 
 
 

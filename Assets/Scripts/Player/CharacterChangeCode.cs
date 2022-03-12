@@ -12,9 +12,8 @@ public class CharacterChangeCode : MonoBehaviour
     private Vector3 plSCoordinates;
     private Vector3 plSiCoordinates;
 
-    public static bool change;
     public static bool canChange;
-    public static bool isChanged;
+    public static bool change;
 
     void Start()
     {
@@ -23,7 +22,6 @@ public class CharacterChangeCode : MonoBehaviour
 
         change = false;
         canChange = true;
-        isChanged = false;
     }
 
     void Update()

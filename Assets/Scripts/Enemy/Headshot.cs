@@ -4,21 +4,14 @@ using UnityEngine;
 
 public class Headshot : MonoBehaviour
 {
-    public GameObject enemyGO;
+    [SerializeField] private GameObject enemy;
 
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.tag == "Bullet")
         {
-            enemyGO.GetComponent<Enemy>().HeadDMG();
+            enemy.GetComponent<Enemy>().HeadDMG();
             Destroy(col.gameObject);
         }
-    }
-
-    //Sickler headshot
-
-    public void siIsNearHead()
-    {
-        enemyGO.GetComponent<Enemy>().siIsNearHead();
     }
 }

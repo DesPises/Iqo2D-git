@@ -1048,11 +1048,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd3f991eea1635f4b8ead9f95099df53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTransform: {fileID: 6229390993649034380}
-  playerSniperTransform: {fileID: 2046951171425472004}
-  playerSicklerTransform: {fileID: 6685572641584056882}
-  PlayerTag: Player
-  movingSpeed: 3
+  playerRifler: {fileID: 6229390993649034380}
+  playerSniper: {fileID: 812879073764450758}
+  playerSickler: {fileID: 6685572641584056882}
 --- !u!1 &583286815 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4799590540455488723, guid: acef27295ab962d47ba0771f6bd6e9af, type: 3}
@@ -1740,7 +1738,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1363755354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8173,11 +8171,6 @@ GameObject:
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2511613637138156537, guid: 822c3022d59f19f42860ed700a402624, type: 3}
   m_PrefabInstance: {fileID: 6373192764846327656}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &2046951171425472004 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2046951171770112726, guid: b995b6c0935826948be0c699ce4eaf65, type: 3}
-  m_PrefabInstance: {fileID: 7672396219989239258}
   m_PrefabAsset: {fileID: 0}
 --- !u!212 &2104597356158243097 stripped
 SpriteRenderer:

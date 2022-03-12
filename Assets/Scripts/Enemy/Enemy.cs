@@ -176,14 +176,9 @@ public class Enemy : MonoBehaviour
 
     //Sickler headshot
 
-    public void siIsNearHead()
-    {
-        HeadOff();
-        rb.velocity = new Vector2(0, 0);
-    }
-
     public void HeadOff()
     {
+        rb.velocity = new Vector2(0, 0);
         nmeAnim.SetBool("die", false);
         nmeAnim.SetBool("headOff", true);
         StartCoroutine(DIE());
