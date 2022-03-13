@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class plMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D plRB;
     private LayerMask floorLayer;
@@ -61,17 +61,17 @@ public class plMovement : MonoBehaviour
 
             // Characters specifications
 
-            if (character == "Rifler" && !GameManager.instance.rIsDead)
+            if (character == "Rifler" && !GameManager.Instance.rIsDead)
             {
                     Move(5);
             }
 
-            if (character == "Sniper" && !GameManager.instance.sIsDead)
+            if (character == "Sniper" && !GameManager.Instance.sIsDead)
             {
                     Move(4);
             }
 
-            if (character == "Sickler" && !GameManager.instance.siIsDead && GameManager.instance.canWalkSi)
+            if (character == "Sickler" && !GameManager.Instance.siIsDead && GameManager.Instance.canWalkSi)
             {
                     Move(6);
             }

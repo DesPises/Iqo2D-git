@@ -17,7 +17,7 @@ public class Tutorial : MonoBehaviour
 
     void Start()
     {
-        plMovement.character = "Rifler";
+        PlayerMovement.character = "Rifler";
         riflerKey = InputManager.IM.torKey;
         sniperKey = InputManager.IM.tosKey;
         sicklerKey = InputManager.IM.tosiKey;
@@ -81,7 +81,7 @@ public class Tutorial : MonoBehaviour
                 h4.SetActive(true);
             }
 
-            if (plMovement.character == "Sickler" && plMovement.isNearEnemy && Input.GetKey(attackKey))
+            if (PlayerMovement.character == "Sickler" && PlayerMovement.isNearEnemy && Input.GetKey(attackKey))
             {
                 hint = 4;
             }
@@ -180,7 +180,7 @@ public class Tutorial : MonoBehaviour
                 hr4.SetActive(true);
             }
 
-            if (plMovement.character == "Sickler" && plMovement.isNearEnemy && Input.GetKey(attackKey))
+            if (PlayerMovement.character == "Sickler" && PlayerMovement.isNearEnemy && Input.GetKey(attackKey))
             {
                 hint = 4;
             }
@@ -234,17 +234,17 @@ public class Tutorial : MonoBehaviour
 
 
         //Coordinates
-        if (plMovement.character == "Rifler")
+        if (PlayerMovement.character == "Rifler")
         {
             plRPosition = riflerGO.transform;
             plRCoordinates = new Vector3(plRPosition.position.x, plRPosition.position.y - 2, plRPosition.position.z);
         }
-        if (plMovement.character == "Sniper")
+        if (PlayerMovement.character == "Sniper")
         {
             plSPosition = sniperGO.transform;
             plSCoordinates = new Vector3(plSPosition.position.x, plSPosition.position.y - 2, plSPosition.position.z);
         }
-        if (plMovement.character == "Sickler")
+        if (PlayerMovement.character == "Sickler")
         {
             plSiPosition = sicklerGO.transform;
             plSiCoordinates = new Vector3(plSiPosition.position.x, plSiPosition.position.y + 2, plSiPosition.position.z);
@@ -254,73 +254,73 @@ public class Tutorial : MonoBehaviour
         //Characters pick
 
         //Pick rifler
-        if (CanChangeR && Input.GetKeyDown(riflerKey) && plMovement.character == "Sniper")
+        if (CanChangeR && Input.GetKeyDown(riflerKey) && PlayerMovement.character == "Sniper")
         {
             riflerGO.gameObject.SetActive(true);
             sniperGO.gameObject.SetActive(false);
             sicklerGO.gameObject.SetActive(false);
-            plMovement.character = "Rifler";
+            PlayerMovement.character = "Rifler";
             riflerGO.transform.position = plSCoordinates + new Vector3(0, 2, 0);
             StartCoroutine(ChangeVoid());
 
         }
-        if (CanChangeR && Input.GetKeyDown(riflerKey) && plMovement.character == "Sickler")
+        if (CanChangeR && Input.GetKeyDown(riflerKey) && PlayerMovement.character == "Sickler")
         {
             riflerGO.gameObject.SetActive(true);
             sniperGO.gameObject.SetActive(false);
             sicklerGO.gameObject.SetActive(false);
-            plMovement.character = "Rifler";
+            PlayerMovement.character = "Rifler";
             riflerGO.transform.position = plSiCoordinates;
             StartCoroutine(ChangeVoid());
         }
         //Pick sniper
-        if (CanChangeS && Input.GetKeyDown(sniperKey) && plMovement.character == "Rifler")
+        if (CanChangeS && Input.GetKeyDown(sniperKey) && PlayerMovement.character == "Rifler")
         {
             riflerGO.gameObject.SetActive(false);
             sniperGO.gameObject.SetActive(true);
             sicklerGO.gameObject.SetActive(false);
-            plMovement.character = "Sniper";
+            PlayerMovement.character = "Sniper";
             sniperGO.transform.position = plRCoordinates + new Vector3(0, 2, 0);
             StartCoroutine(ChangeVoid());
         }
-        if (CanChangeS && Input.GetKeyDown(sniperKey) && plMovement.character == "Sickler")
+        if (CanChangeS && Input.GetKeyDown(sniperKey) && PlayerMovement.character == "Sickler")
         {
             riflerGO.gameObject.SetActive(false);
             sniperGO.gameObject.SetActive(true);
             sicklerGO.gameObject.SetActive(false);
-            plMovement.character = "Sniper";
+            PlayerMovement.character = "Sniper";
             sniperGO.transform.position = plSiCoordinates;
             StartCoroutine(ChangeVoid());
         }
         //Pick sickler
-        if (CanChangeSi && Input.GetKeyDown(sicklerKey) && plMovement.character == "Rifler")
+        if (CanChangeSi && Input.GetKeyDown(sicklerKey) && PlayerMovement.character == "Rifler")
         {
             riflerGO.gameObject.SetActive(false);
             sniperGO.gameObject.SetActive(false);
             sicklerGO.gameObject.SetActive(true);
-            plMovement.character = "Sickler";
+            PlayerMovement.character = "Sickler";
             sicklerGO.transform.position = plRCoordinates;
             StartCoroutine(ChangeVoid());
         }
-        if (CanChangeSi && Input.GetKeyDown(sicklerKey) && plMovement.character == "Sniper")
+        if (CanChangeSi && Input.GetKeyDown(sicklerKey) && PlayerMovement.character == "Sniper")
         {
             riflerGO.gameObject.SetActive(false);
             sniperGO.gameObject.SetActive(false);
             sicklerGO.gameObject.SetActive(true);
-            plMovement.character = "Sickler";
+            PlayerMovement.character = "Sickler";
             sicklerGO.transform.position = plSCoordinates;
             StartCoroutine(ChangeVoid());
         }
 
         //Infinite ammo
 
-        if (GameManager.instance.bulletsRAtAllInt <= 0)
+        if (GameManager.Instance.bulletsRAtAllInt <= 0)
         {
-            GameManager.instance.bulletsRAtAllInt = 75;
+            GameManager.Instance.bulletsRAtAllInt = 75;
         }
-        if (GameManager.instance.bulletsSAtAllInt <= 0)
+        if (GameManager.Instance.bulletsSAtAllInt <= 0)
         {
-            GameManager.instance.bulletsSAtAllInt = 15;
+            GameManager.Instance.bulletsSAtAllInt = 15;
         }
     }
 
@@ -329,15 +329,15 @@ public class Tutorial : MonoBehaviour
         yield return null;
         Change = true;
         //Change animations
-        if (plMovement.character == "Rifler")
+        if (PlayerMovement.character == "Rifler")
         {
             rAnim.SetBool("change", Change);
         }
-        if (plMovement.character == "Sniper")
+        if (PlayerMovement.character == "Sniper")
         {
             sAnim.SetBool("change", Change);
         }
-        if (plMovement.character == "Sickler")
+        if (PlayerMovement.character == "Sickler")
         {
             siAnim.SetBool("change", Change);
         }

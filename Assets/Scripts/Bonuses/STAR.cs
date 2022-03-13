@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class STAR : MonoBehaviour
+public class Star : MonoBehaviour
 {
     public GameObject InfAmmoGO;
     public GameObject InfHPGO;
@@ -26,24 +26,24 @@ public class STAR : MonoBehaviour
 
     void Update()
     {
-        if (isInfAmmoOn && GameManager.instance.sIsDead)
+        if (isInfAmmoOn && GameManager.Instance.sIsDead)
         {
             timerGO.SetActive(false);
             InfAmmoGO.SetActive(false);
             CharacterChangeCode.canChange = true;
-            GameManager.instance.bulletsSAtAllInt = sHadAmmo + (GameManager.instance.bulletsSAtAllInt - 999);
+            GameManager.Instance.bulletsSAtAllInt = sHadAmmo + (GameManager.Instance.bulletsSAtAllInt - 999);
             Destroy(STARGO);
         }
-        if (isDDOn && GameManager.instance.rIsDead)
+        if (isDDOn && GameManager.Instance.rIsDead)
         {
             timerGO.SetActive(false);
             DDGO.SetActive(false);
             CharacterChangeCode.canChange = true;
-            GameManager.instance.damageRInt = 2;
-            GameManager.instance.damageRIntHS = 3;
+            GameManager.Instance.damageRInt = 2;
+            GameManager.Instance.damageRIntHS = 3;
             Destroy(STARGO);
         }
-        if (isInfHPOn && GameManager.instance.siIsDead)
+        if (isInfHPOn && GameManager.Instance.siIsDead)
         {
             timerGO.SetActive(false);
             InfHPGO.SetActive(false);
@@ -52,14 +52,14 @@ public class STAR : MonoBehaviour
             Destroy(STARGO);
         }
 
-        if (isDDOn && GameManager.instance.bulletsRAtAllInt == 0 && GameManager.instance.inMagRInt == 0)
+        if (isDDOn && GameManager.Instance.bulletsRAtAllInt == 0 && GameManager.Instance.inMagRInt == 0)
         {
-            GameManager.instance.bulletsRAtAllInt += 30;
+            GameManager.Instance.bulletsRAtAllInt += 30;
         }
 
         if (isInfAmmoOn)
         {
-            GameManager.instance.bulletsSAtAllInt = 999;
+            GameManager.Instance.bulletsSAtAllInt = 999;
         }
     }
 
@@ -67,7 +67,7 @@ public class STAR : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
-            if (plMovement.character == "Rifler" && !isDDOn)
+            if (PlayerMovement.character == "Rifler" && !isDDOn)
             {
                 GameManager.HPRInt = 100;
                 soundContrGO.GetComponent<SoundController>().bonusS();
@@ -75,16 +75,16 @@ public class STAR : MonoBehaviour
                 sr.color = new Color(0, 0, 0, 0);
                 DoubleDamage();
             }
-            if (plMovement.character == "Sniper" && !isInfAmmoOn)
+            if (PlayerMovement.character == "Sniper" && !isInfAmmoOn)
             {
                 GameManager.HPSInt = 60;
-                GameManager.instance.canAttackS = true;
+                GameManager.Instance.canAttackS = true;
                 soundContrGO.GetComponent<SoundController>().bonusS();
                 boxcollider.enabled = false;
                 sr.color = new Color(0, 0, 0, 0);
                 InfiniteAmmo();
             }
-            if (plMovement.character == "Sickler" && !isInfHPOn)
+            if (PlayerMovement.character == "Sickler" && !isInfHPOn)
             {
                 GameManager.HPSiInt = 140;
                 soundContrGO.GetComponent<SoundController>().bonusS();
@@ -101,18 +101,18 @@ public class STAR : MonoBehaviour
         StartCoroutine(DDOff());
         DDGO.SetActive(true);
         CharacterChangeCode.canChange = false;
-        GameManager.instance.damageRInt = 5;
-        GameManager.instance.damageRIntHS = 7;
+        GameManager.Instance.damageRInt = 5;
+        GameManager.Instance.damageRIntHS = 7;
     }
 
     void InfiniteAmmo()
     {
-        sHadAmmo = GameManager.instance.bulletsSAtAllInt;
+        sHadAmmo = GameManager.Instance.bulletsSAtAllInt;
         StartCoroutine(Timer());
         StartCoroutine(InfAmmoOff());
         InfAmmoGO.SetActive(true);
         CharacterChangeCode.canChange = false;
-        GameManager.instance.bulletsSAtAllInt = 999;
+        GameManager.Instance.bulletsSAtAllInt = 999;
     }
 
     void Immortality()
@@ -155,7 +155,7 @@ public class STAR : MonoBehaviour
     {
         isInfAmmoOn = true;
         yield return new WaitForSeconds(15);
-        GameManager.instance.bulletsSAtAllInt = sHadAmmo + (GameManager.instance.bulletsSAtAllInt - 999);
+        GameManager.Instance.bulletsSAtAllInt = sHadAmmo + (GameManager.Instance.bulletsSAtAllInt - 999);
         isInfAmmoOn = false;
     }
 
@@ -163,8 +163,8 @@ public class STAR : MonoBehaviour
     {
         isDDOn = true;
         yield return new WaitForSeconds(15);
-        GameManager.instance.damageRInt = 2;
-        GameManager.instance.damageRIntHS = 3;
+        GameManager.Instance.damageRInt = 2;
+        GameManager.Instance.damageRIntHS = 3;
         isDDOn = false;
     }
 }

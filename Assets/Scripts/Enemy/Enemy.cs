@@ -35,12 +35,12 @@ public class Enemy : MonoBehaviour
         //Move
         if (!reverseRotation)
         {
-            if (transform.position.x > plMovement.plCoordinateX && !isNearPlayer && HPInt > 0)
+            if (transform.position.x > PlayerMovement.plCoordinateX && !isNearPlayer && HPInt > 0)
             {
                 rb.velocity = new Vector2(-speed, -1);
                 enemyGO.transform.eulerAngles = new Vector3(0, 0, 0);
             }
-            if (transform.position.x < plMovement.plCoordinateX && !isNearPlayer && HPInt > 0)
+            if (transform.position.x < PlayerMovement.plCoordinateX && !isNearPlayer && HPInt > 0)
             {
                 rb.velocity = new Vector2(speed, -1);
                 enemyGO.transform.eulerAngles = new Vector3(0, 180, 0);
@@ -48,12 +48,12 @@ public class Enemy : MonoBehaviour
         }
         if (reverseRotation)
         {
-            if (transform.position.x > plMovement.plCoordinateX && !isNearPlayer && HPInt > 0)
+            if (transform.position.x > PlayerMovement.plCoordinateX && !isNearPlayer && HPInt > 0)
             {
                 rb.velocity = new Vector2(-speed, -1);
                 enemyGO.transform.eulerAngles = new Vector3(0, 180, 0);
             }
-            if (transform.position.x < plMovement.plCoordinateX && !isNearPlayer && HPInt > 0)
+            if (transform.position.x < PlayerMovement.plCoordinateX && !isNearPlayer && HPInt > 0)
             {
                 rb.velocity = new Vector2(speed, -1);
                 enemyGO.transform.eulerAngles = new Vector3(0, 0, 0);
@@ -152,11 +152,11 @@ public class Enemy : MonoBehaviour
 
     public void DealDamage()
     {
-        if (plMovement.character == "Rifler")
+        if (PlayerMovement.character == "Rifler")
             GameManager.HPRInt -= DamageHitInt;
-        if (plMovement.character == "Sniper")
+        if (PlayerMovement.character == "Sniper")
             GameManager.HPSInt -= DamageHitInt;
-        if (plMovement.character == "Sickler")
+        if (PlayerMovement.character == "Sickler")
             GameManager.HPSiInt -= DamageHitInt;
         StartCoroutine(SignalToPlayerGetDamageAnim());
     }

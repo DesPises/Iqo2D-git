@@ -63,7 +63,7 @@ public class SpawnBonus : MonoBehaviour
     {
         starCooldown = true;
         yield return new WaitForSeconds(10);
-        if (StarCopy != null && !STAR.isDDOn && !STAR.isInfAmmoOn && !STAR.isInfHPOn)
+        if (StarCopy != null && !global::Star.isDDOn && !global::Star.isInfAmmoOn && !global::Star.isInfHPOn)
             Destroy(StarCopy);
         yield return new WaitForSeconds(Random.Range(20f, 35f));
         starCooldown = false;

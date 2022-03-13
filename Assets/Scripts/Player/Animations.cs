@@ -35,18 +35,18 @@ public class Animations : MonoBehaviour
         }
 
         //Jump
-        if (Input.GetKeyDown(jumpKey) && plMovement.onGround && !PauseMenu.isPaused)
+        if (Input.GetKeyDown(jumpKey) && PlayerMovement.onGround && !PauseMenu.isPaused)
         {
             StartCoroutine(Jump());
         }
-        if (Input.GetKeyDown(jumpKey) && !plMovement.onGround && plMovement.secJump && !PauseMenu.isPaused)
+        if (Input.GetKeyDown(jumpKey) && !PlayerMovement.onGround && PlayerMovement.secJump && !PauseMenu.isPaused)
         {
             StartCoroutine(SecJump());
         }
-        anim.SetBool("grounded", plMovement.onGround);
+        anim.SetBool("grounded", PlayerMovement.onGround);
 
         //Crouch
-        if (Input.GetKey(crouchKey) && plMovement.onGround && !PauseMenu.isPaused)
+        if (Input.GetKey(crouchKey) && PlayerMovement.onGround && !PauseMenu.isPaused)
         {
             anim.SetBool("crouch", true);
         }
@@ -67,18 +67,18 @@ public class Animations : MonoBehaviour
 
 
         //Rifler
-        if (plMovement.character == "Rifler")
+        if (PlayerMovement.character == "Rifler")
         {
             //Attack
-            if (Input.GetKey(attackKey) && GameManager.instance.inMagRInt > 0 && GameManager.instance.canRAttackAfterReload && !PauseMenu.isPaused)
+            if (Input.GetKey(attackKey) && GameManager.Instance.inMagRInt > 0 && GameManager.Instance.canRAttackAfterReload && !PauseMenu.isPaused)
             {
                 anim.SetBool("attack", true);
             }
             else anim.SetBool("attack", false);
 
             //Reload
-            if ((Input.GetKeyDown(reloadKey) && GameManager.instance.rCanReload && !GameManager.instance.rReloadCooldown && !PauseMenu.isPaused) ||
-                  GameManager.instance.rDavayReload)
+            if ((Input.GetKeyDown(reloadKey) && GameManager.Instance.rCanReload && !GameManager.Instance.rReloadCooldown && !PauseMenu.isPaused) ||
+                  GameManager.Instance.rDavayReload)
             {
                 StartCoroutine(Reload());
             }
@@ -87,18 +87,18 @@ public class Animations : MonoBehaviour
 
 
         //Sniper
-        if (plMovement.character == "Sniper")
+        if (PlayerMovement.character == "Sniper")
         {
             //Attack
-            if (Input.GetKeyDown(attackKey) && GameManager.instance.canAttackS && GameManager.instance.canSAttackAfterReload && !PauseMenu.isPaused)
+            if (Input.GetKeyDown(attackKey) && GameManager.Instance.canAttackS && GameManager.Instance.canSAttackAfterReload && !PauseMenu.isPaused)
             {
                 anim.SetBool("attack", true);
             }
             else anim.SetBool("attack", false);
 
             //Reload
-            if ((Input.GetKeyDown(reloadKey) && GameManager.instance.sCanReload && !GameManager.instance.sReloadCooldown && !PauseMenu.isPaused) ||
-                  GameManager.instance.sDavayReload)
+            if ((Input.GetKeyDown(reloadKey) && GameManager.Instance.sCanReload && !GameManager.Instance.sReloadCooldown && !PauseMenu.isPaused) ||
+                  GameManager.Instance.sDavayReload)
             {
                 StartCoroutine(Reload());
             }
@@ -107,14 +107,14 @@ public class Animations : MonoBehaviour
 
 
         //Sickler
-        if (plMovement.character == "Sickler")
+        if (PlayerMovement.character == "Sickler")
         {
             //Attack
-            if (Input.GetKeyDown(attackKey) && GameManager.instance.canAttackSiAnim && !PauseMenu.isPaused)
+            if (Input.GetKeyDown(attackKey) && GameManager.Instance.canAttackSiAnim && !PauseMenu.isPaused)
             {
                 anim.SetBool("attack", true);
             }
-            if (!Input.GetKeyDown(attackKey) || !GameManager.instance.canAttackSiAnim)
+            if (!Input.GetKeyDown(attackKey) || !GameManager.Instance.canAttackSiAnim)
             {
                 anim.SetBool("attack", false);
             }
@@ -132,7 +132,7 @@ public class Animations : MonoBehaviour
         anim.SetBool("2jump", true);
         yield return null;
         anim.SetBool("2jump", false);
-        plMovement.secJump = false;
+        PlayerMovement.secJump = false;
     }
     IEnumerator Damage()
     {

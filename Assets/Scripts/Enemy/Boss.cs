@@ -72,8 +72,8 @@ public class Boss : MonoBehaviour
 
     void Update()
     {
-        GameManager.instance.bulletsRAtAllInt = 999;
-        GameManager.instance.bulletsSAtAllInt = 999;
+        GameManager.Instance.bulletsRAtAllInt = 999;
+        GameManager.Instance.bulletsSAtAllInt = 999;
 
         HPbar.fillAmount = HP * 0.004f;
 
@@ -210,11 +210,11 @@ public class Boss : MonoBehaviour
 
     void DealDamage()
     {
-        if (plMovement.character == "Rifler")
+        if (PlayerMovement.character == "Rifler")
             GameManager.HPRInt -= 40;
-        if (plMovement.character == "Sniper")
+        if (PlayerMovement.character == "Sniper")
             GameManager.HPSInt -= 40;
-        if (plMovement.character == "Sickler")
+        if (PlayerMovement.character == "Sickler")
             GameManager.HPSiInt -= 40;
     }
 

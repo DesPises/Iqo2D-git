@@ -18,7 +18,7 @@ public class CharacterChangeCode : MonoBehaviour
     void Start()
     {
         // Set starting character to rifler
-        plMovement.character = "Rifler";
+        PlayerMovement.character = "Rifler";
 
         change = false;
         canChange = true;
@@ -34,62 +34,62 @@ public class CharacterChangeCode : MonoBehaviour
         // Characters pick
 
         // Pick rifler
-        if (canChange && Input.GetKeyDown(InputManager.IM.torKey) && !GameManager.instance.rIsDead)
+        if (canChange && Input.GetKeyDown(InputManager.IM.torKey) && !GameManager.Instance.rIsDead)
         {
-            if (plMovement.character == "Sniper")
+            if (PlayerMovement.character == "Sniper")
             {
                 riflerGO.transform.position = plSCoordinates + new Vector3(0, 2, 0);
 
             }
-            if (plMovement.character == "Sickler")
+            if (PlayerMovement.character == "Sickler")
             {
                 riflerGO.transform.position = plSiCoordinates;
 
             }
-            GameManager.instance.SwitchToRifler();
+            GameManager.Instance.SwitchToRifler();
             PickRifler();
         }
 
         // Pick sniper
-        if (canChange && Input.GetKeyDown(InputManager.IM.tosKey) && !GameManager.instance.sIsDead)
+        if (canChange && Input.GetKeyDown(InputManager.IM.tosKey) && !GameManager.Instance.sIsDead)
         {
-            if (plMovement.character == "Rifler")
+            if (PlayerMovement.character == "Rifler")
             {
                 sniperGO.transform.position = plRCoordinates + new Vector3(0, 2, 0);
             }
-            if (plMovement.character == "Sickler")
+            if (PlayerMovement.character == "Sickler")
             {
                 sniperGO.transform.position = plSiCoordinates;
             }
-            GameManager.instance.SwitchToSniper();
+            GameManager.Instance.SwitchToSniper();
             PickSniper();
         }
 
         // Pick sickler
-        if (canChange && Input.GetKeyDown(InputManager.IM.tosiKey) && !GameManager.instance.siIsDead)
+        if (canChange && Input.GetKeyDown(InputManager.IM.tosiKey) && !GameManager.Instance.siIsDead)
         {
-            if (plMovement.character == "Rifler")
+            if (PlayerMovement.character == "Rifler")
             {
                 sicklerGO.transform.position = plRCoordinates;
             }
-            if (plMovement.character == "Sniper")
+            if (PlayerMovement.character == "Sniper")
             {
                 sicklerGO.transform.position = plSCoordinates;
             }
-            GameManager.instance.SwitchToSickler();
+            GameManager.Instance.SwitchToSickler();
             PickSickler();
         }
 
         // Rifler dies
 
-        if (plMovement.character == "Rifler" && GameManager.instance.rIsDead)
+        if (PlayerMovement.character == "Rifler" && GameManager.Instance.rIsDead)
         {
-            if (!GameManager.instance.siIsDead)
+            if (!GameManager.Instance.siIsDead)
             {
                 sicklerGO.transform.position = plRCoordinates;
                 PickSickler();
             }
-            if (GameManager.instance.siIsDead && !GameManager.instance.sIsDead)
+            if (GameManager.Instance.siIsDead && !GameManager.Instance.sIsDead)
             {
                 sniperGO.transform.position = plRCoordinates + new Vector3(0, 2, 0);
                 PickSniper();
@@ -98,14 +98,14 @@ public class CharacterChangeCode : MonoBehaviour
 
         // Sniper dies
 
-        if (plMovement.character == "Sniper" && GameManager.instance.sIsDead)
+        if (PlayerMovement.character == "Sniper" && GameManager.Instance.sIsDead)
         {
-            if (!GameManager.instance.siIsDead)
+            if (!GameManager.Instance.siIsDead)
             {
                 sicklerGO.transform.position = plSCoordinates;
                 PickSickler();
             }
-            if (GameManager.instance.siIsDead && !GameManager.instance.rIsDead)
+            if (GameManager.Instance.siIsDead && !GameManager.Instance.rIsDead)
             {
                 riflerGO.transform.position = plSCoordinates + new Vector3(0, 2, 0);
                 PickRifler();
@@ -114,14 +114,14 @@ public class CharacterChangeCode : MonoBehaviour
 
         // Sickler dies
 
-        if (plMovement.character == "Sickler" && GameManager.instance.siIsDead)
+        if (PlayerMovement.character == "Sickler" && GameManager.Instance.siIsDead)
         {
-            if (!GameManager.instance.sIsDead)
+            if (!GameManager.Instance.sIsDead)
             {
                 riflerGO.transform.position = plSiCoordinates;
                 PickSniper();
             }
-            if (!GameManager.instance.sIsDead && GameManager.instance.rIsDead)
+            if (!GameManager.Instance.sIsDead && GameManager.Instance.rIsDead)
             {
                 sniperGO.transform.position = plSiCoordinates;
                 PickRifler();
@@ -134,7 +134,7 @@ public class CharacterChangeCode : MonoBehaviour
         riflerGO.gameObject.SetActive(true);
         sniperGO.gameObject.SetActive(false);
         sicklerGO.gameObject.SetActive(false);
-        plMovement.character = "Rifler";
+        PlayerMovement.character = "Rifler";
         StartCoroutine(CooldownCoroutine());
     }
 
@@ -143,7 +143,7 @@ public class CharacterChangeCode : MonoBehaviour
         riflerGO.gameObject.SetActive(false);
         sniperGO.gameObject.SetActive(true);
         sicklerGO.gameObject.SetActive(false);
-        plMovement.character = "Sniper";
+        PlayerMovement.character = "Sniper";
         StartCoroutine(CooldownCoroutine());
     }
 
@@ -152,7 +152,7 @@ public class CharacterChangeCode : MonoBehaviour
         riflerGO.gameObject.SetActive(false);
         sniperGO.gameObject.SetActive(false);
         sicklerGO.gameObject.SetActive(true);
-        plMovement.character = "Sickler";
+        PlayerMovement.character = "Sickler";
         StartCoroutine(CooldownCoroutine());
     }
 
@@ -164,7 +164,7 @@ public class CharacterChangeCode : MonoBehaviour
         change = false;
         canChange = false;
         yield return new WaitForSeconds(0.25f);
-        if (!STAR.isDDOn && !STAR.isInfAmmoOn && !STAR.isInfHPOn)
+        if (!Star.isDDOn && !Star.isInfAmmoOn && !Star.isInfHPOn)
         {
             canChange = true;
         }

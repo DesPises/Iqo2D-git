@@ -8,9 +8,9 @@ public class DeathMenu : MonoBehaviour
     public void Restart()
     {
         PauseMenu.isPaused = false;
-        GameManager.instance.rIsDead = false;
-        GameManager.instance.sIsDead = false;
-        GameManager.instance.siIsDead = false;
+        GameManager.Instance.rIsDead = false;
+        GameManager.Instance.sIsDead = false;
+        GameManager.Instance.siIsDead = false;
         CharacterChangeCode.canChange = true;
         StartCoroutine(RestartC());
     }
@@ -18,9 +18,9 @@ public class DeathMenu : MonoBehaviour
     public void MainMenu()
     {
         PauseMenu.isPaused = false;
-        GameManager.instance.rIsDead = false;
-        GameManager.instance.sIsDead = false;
-        GameManager.instance.siIsDead = false;
+        GameManager.Instance.rIsDead = false;
+        GameManager.Instance.sIsDead = false;
+        GameManager.Instance.siIsDead = false;
         StartCoroutine(MainMenuC());
     }
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class cameraFollow : MonoBehaviour
+public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private Transform playerRifler;
     [SerializeField] private Transform playerSniper;
@@ -21,16 +21,16 @@ public class cameraFollow : MonoBehaviour
     {
         // Set target point and FOV depending of character
 
-        if (plMovement.character == "Rifler" && playerRifler)
+        if (PlayerMovement.character == "Rifler" && playerRifler)
         {
             cam.orthographicSize = 6;
             target = new Vector3(playerRifler.position.x, 1, -10);
         }
 
-        else if (plMovement.character == "Sniper" && playerSniper)
+        else if (PlayerMovement.character == "Sniper" && playerSniper)
         {
             cam.orthographicSize = 6.8f;
-            if (plMovement.isMovingFW)
+            if (PlayerMovement.isMovingFW)
             {
                 target = new Vector3(playerSniper.position.x + 1, 1.5f, -10);
             }
@@ -40,7 +40,7 @@ public class cameraFollow : MonoBehaviour
             }
         }
 
-        else if (plMovement.character == "Sickler" && playerSickler)
+        else if (PlayerMovement.character == "Sickler" && playerSickler)
         {
             cam.orthographicSize = 5.2f;
             target = new Vector3(playerSickler.position.x, 0, -10);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class BfrCity : MonoBehaviour
+public class BeforeCity : MonoBehaviour
 {
     public GameObject s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, space, sr1, sr2, sr3, sr4, sr5, sr6, sr7, sr8, sr9, sr10, sr11, spacer, scream, screamr, cameraGO;
     private int i = 0;

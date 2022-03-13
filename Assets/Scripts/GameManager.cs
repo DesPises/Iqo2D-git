@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance { get; private set; }
+    public static GameManager Instance { get; private set; }
 
     //Objects
     [SerializeField] private GameObject bulletRGO;
@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        instance = this;
+        Instance = this;
 
         // Set default HP for every character
         HPRInt = 100;
@@ -169,7 +169,7 @@ public class GameManager : MonoBehaviour
         }
 
         // Rifler
-        if (plMovement.character == "Rifler")
+        if (PlayerMovement.character == "Rifler")
         {
             // HP bar and ammo
             HPbarImage.fillAmount = HPRInt * 0.01f;
@@ -208,12 +208,12 @@ public class GameManager : MonoBehaviour
                 Enemy.DamageIntHS = damageRIntHS;
                 akShootSound();
                 StartCoroutine(BulletRCounter());
-                if (!Input.GetKey(InputManager.IM.crouchKey) || (Input.GetKey(InputManager.IM.crouchKey) && !plMovement.onGround))
+                if (!Input.GetKey(InputManager.IM.crouchKey) || (Input.GetKey(InputManager.IM.crouchKey) && !PlayerMovement.onGround))
                 {
                     StartCoroutine(RiflerFire());
-                    if (plMovement.isMovingFW)
+                    if (PlayerMovement.isMovingFW)
                         bcloneGO = Instantiate(bulletRGO, playerRGO.transform.position + new Vector3(0.5f, 4.75f, 0), Quaternion.identity);
-                    if (!plMovement.isMovingFW)
+                    if (!PlayerMovement.isMovingFW)
                         bcloneGO = Instantiate(bulletRBackGO, playerRGO.transform.position + new Vector3(-0.5f, 4.75f, 0), Quaternion.identity);
                     if (Input.GetKey(InputManager.IM.crouchKey))
                     {
@@ -222,12 +222,12 @@ public class GameManager : MonoBehaviour
                         rFireSmallSRCrouch.color = invisible;
                     }
                 }
-                if (Input.GetKey(InputManager.IM.crouchKey) && plMovement.onGround)
+                if (Input.GetKey(InputManager.IM.crouchKey) && PlayerMovement.onGround)
                 {
                     StartCoroutine(RiflerFireCrouch());
-                    if (plMovement.isMovingFW)
+                    if (PlayerMovement.isMovingFW)
                         bcloneGO = Instantiate(bulletRGO, playerRGO.transform.position + new Vector3(0.5f, 4.0f, 0), Quaternion.identity);
-                    if (!plMovement.isMovingFW)
+                    if (!PlayerMovement.isMovingFW)
                         bcloneGO = Instantiate(bulletRBackGO, playerRGO.transform.position + new Vector3(-0.5f, 4.0f, 0), Quaternion.identity);
                     if (!Input.GetKey(InputManager.IM.crouchKey))
                     {
@@ -256,7 +256,7 @@ public class GameManager : MonoBehaviour
 
 
         // Sniper
-        if (plMovement.character == "Sniper")
+        if (PlayerMovement.character == "Sniper")
         {
             // HP bar and ammo
             HPbarImage.fillAmount = HPSInt * 0.0167f;
@@ -294,20 +294,20 @@ public class GameManager : MonoBehaviour
                 Enemy.DamageIntHS = damageSIntHS;
                 svdShootSound();
                 StartCoroutine(BulletSCounter());
-                if (!Input.GetKey(InputManager.IM.crouchKey) || (Input.GetKey(InputManager.IM.crouchKey) && !plMovement.onGround))
+                if (!Input.GetKey(InputManager.IM.crouchKey) || (Input.GetKey(InputManager.IM.crouchKey) && !PlayerMovement.onGround))
                 {
                     StartCoroutine(SniperFire());
-                    if (plMovement.isMovingFW)
+                    if (PlayerMovement.isMovingFW)
                         bcloneGO = Instantiate(bulletSGO, playerSGO.transform.position + new Vector3(0.5f, 4.67f, 0), Quaternion.identity);
-                    if (!plMovement.isMovingFW)
+                    if (!PlayerMovement.isMovingFW)
                         bcloneGO = Instantiate(bulletSBackGO, playerSGO.transform.position + new Vector3(-0.5f, 4.67f, 0), Quaternion.identity);
                 }
-                if (Input.GetKey(InputManager.IM.crouchKey) && plMovement.onGround)
+                if (Input.GetKey(InputManager.IM.crouchKey) && PlayerMovement.onGround)
                 {
                     StartCoroutine(SniperFireCrouch());
-                    if (plMovement.isMovingFW)
+                    if (PlayerMovement.isMovingFW)
                         bcloneGO = Instantiate(bulletSGO, playerSGO.transform.position + new Vector3(0.5f, 4.0f, 0), Quaternion.identity);
-                    if (!plMovement.isMovingFW)
+                    if (!PlayerMovement.isMovingFW)
                         bcloneGO = Instantiate(bulletSBackGO, playerSGO.transform.position + new Vector3(-0.5f, 4.0f, 0), Quaternion.identity);
                 }
             }
@@ -329,7 +329,7 @@ public class GameManager : MonoBehaviour
 
 
         // Sickler
-        if (plMovement.character == "Sickler")
+        if (PlayerMovement.character == "Sickler")
         {
             // HP bar
             HPbarImage.fillAmount = HPSiInt * 0.007f;
@@ -445,12 +445,12 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator MagFadeRifler()
     {
-        if (plMovement.isMovingFW)
+        if (PlayerMovement.isMovingFW)
         {
             cloneGO = Instantiate(magRGO, playerRGO.transform.position + new Vector3(0.6f, 2.9f, 0), Quaternion.Euler(0, 0, 8));
             cloneGO.transform.eulerAngles = new Vector3(0, 0, 0);
         }
-        if (!plMovement.isMovingFW)
+        if (!PlayerMovement.isMovingFW)
         {
             cloneGO = Instantiate(magRGO, playerRGO.transform.position + new Vector3(-0.6f, 2.9f, 0), Quaternion.Euler(0, 0, 8));
             cloneGO.transform.eulerAngles = new Vector3(0, 180, 0);
@@ -539,19 +539,19 @@ public class GameManager : MonoBehaviour
         sCanReload = false;
         yield return new WaitForSeconds(0.15f);
 
-        if (plMovement.isMovingFW && !Input.GetKey(InputManager.IM.crouchKey))
+        if (PlayerMovement.isMovingFW && !Input.GetKey(InputManager.IM.crouchKey))
         {
             cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(0.4f, 3), Quaternion.identity);
         }
-        else if (!plMovement.isMovingFW && !Input.GetKey(InputManager.IM.crouchKey))
+        else if (!PlayerMovement.isMovingFW && !Input.GetKey(InputManager.IM.crouchKey))
         {
             cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(-0.4f, 3), Quaternion.identity);
         }
-        else if (plMovement.isMovingFW && Input.GetKey(InputManager.IM.crouchKey))
+        else if (PlayerMovement.isMovingFW && Input.GetKey(InputManager.IM.crouchKey))
         {
             cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(1, 2.5f), Quaternion.identity);
         }
-        else if (!plMovement.isMovingFW && Input.GetKey(InputManager.IM.crouchKey))
+        else if (!PlayerMovement.isMovingFW && Input.GetKey(InputManager.IM.crouchKey))
         {
             cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(-1, 2.5f), Quaternion.identity);
         }
@@ -565,12 +565,12 @@ public class GameManager : MonoBehaviour
     // Sickler coroutines
     IEnumerator SiAttack()
     {
-        plMovement.secJump = false;
-        if (plMovement.isMovingFW)
+        PlayerMovement.secJump = false;
+        if (PlayerMovement.isMovingFW)
         {
             rb.velocity = new Vector2(2, 0);
         }
-        if (!plMovement.isMovingFW)
+        if (!PlayerMovement.isMovingFW)
         {
             rb.velocity = new Vector2(-2, 0);
         }

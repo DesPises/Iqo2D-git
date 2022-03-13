@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class siAttack : MonoBehaviour
+public class SicklerAttackScript : MonoBehaviour
 {
     private float cooldownF;
     private readonly float defCooldownF = 0.27f;
