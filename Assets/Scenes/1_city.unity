@@ -1487,7 +1487,7 @@ Transform:
   - {fileID: 812879073764450758}
   - {fileID: 6685572641584056882}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &146471898
 Animator:
@@ -3575,7 +3575,7 @@ Transform:
   - {fileID: 713752091}
   - {fileID: 1609991556}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &347675396
 MonoBehaviour:
@@ -6165,7 +6165,7 @@ Transform:
   m_Children:
   - {fileID: 105123315}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &758802829
 GameObject:
@@ -8454,7 +8454,7 @@ RectTransform:
   - {fileID: 113642112}
   - {fileID: 881255693}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -8658,7 +8658,7 @@ Transform:
   - {fileID: 2879871707810690658}
   - {fileID: 7610544307562326187}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1020295344
 GameObject:
@@ -10248,7 +10248,7 @@ Transform:
   - {fileID: 9099539287525141504}
   - {fileID: 70779840}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1207303643
 GameObject:
@@ -11828,7 +11828,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1365454633
 GameObject:
@@ -12975,7 +12975,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1503564308
 GameObject:
@@ -15734,6 +15734,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1854002454}
   m_CullTransparentMesh: 1
+--- !u!1 &1864419176
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1864419178}
+  - component: {fileID: 1864419177}
+  m_Layer: 0
+  m_Name: Character change script
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1864419177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1864419176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5491b261138b83f41ab2281c0375578e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  riflerGO: {fileID: 5096711170291449071}
+  sniperGO: {fileID: 812879073764450753}
+  sicklerGO: {fileID: 5480868864503534161}
+--- !u!4 &1864419178
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1864419176}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.9886227, y: 1.5210149, z: 32937.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1876119046
 GameObject:
   m_ObjectHideFlags: 0
@@ -16425,7 +16472,7 @@ Transform:
   - {fileID: 1663070857}
   - {fileID: 293738166}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2044454099
 GameObject:
@@ -16470,7 +16517,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2067991012
 GameObject:
@@ -16866,7 +16913,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2088074786
 GameObject:
@@ -18506,6 +18553,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4149b8535d0a4e4ea32cc04f55fc0c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Anim: {fileID: 0}
+  gizmosY: 0
+  gizmosX: 0
 --- !u!114 &812879073764450763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39745,7 +39795,7 @@ RectTransform:
   - {fileID: 1726865844}
   - {fileID: 2592363174831264536}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -41070,21 +41120,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3680901039801998163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3680901039801998167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5491b261138b83f41ab2281c0375578e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  riflerGO: {fileID: 5096711170291449071}
-  sniperGO: {fileID: 812879073764450753}
-  sicklerGO: {fileID: 5480868864503534161}
 --- !u!114 &3680901039801998166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41152,9 +41187,6 @@ MonoBehaviour:
   sReloadCooldown: 0
   canRAttackAfterReload: 0
   canSAttackAfterReload: 0
-  rIsDead: 0
-  sIsDead: 0
-  siIsDead: 0
   emptySoundCooldown: 0
   inMagRInt: 0
   inMagSInt: 0
@@ -41174,7 +41206,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3680901039801998161}
   - component: {fileID: 3680901039801998166}
-  - component: {fileID: 3680901039801998163}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -48215,6 +48246,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73102df23e1a01948bda0852680c3d09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Anim: {fileID: 0}
+  gizmosY: 0
+  gizmosX: 0
 --- !u!114 &6229390993649034385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48674,6 +48708,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ddf0b9f73331c84da966b07d6eb8bcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Anim: {fileID: 0}
+  gizmosY: 0
+  gizmosX: 0
   attackPos: {fileID: 878310108}
   BossGO: {fileID: 0}
 --- !u!114 &6685572641584056886
@@ -49784,7 +49821,7 @@ RectTransform:
   - {fileID: 7126485471513621541}
   - {fileID: 7126485471544659460}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

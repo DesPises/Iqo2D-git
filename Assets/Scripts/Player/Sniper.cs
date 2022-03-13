@@ -6,6 +6,8 @@ public class Sniper : Player
 {
     public static Sniper Instance { get; private set; }
 
+    public int ammoInStock;
+
     void Start()
     {
         Instance = this;

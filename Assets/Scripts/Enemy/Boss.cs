@@ -72,9 +72,6 @@ public class Boss : MonoBehaviour
 
     void Update()
     {
-        GameManager.Instance.bulletsRAtAllInt = 999;
-        GameManager.Instance.bulletsSAtAllInt = 999;
-
         HPbar.fillAmount = HP * 0.004f;
 
         if (HP > HPfull / 2 && !cooldown)

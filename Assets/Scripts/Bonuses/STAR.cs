@@ -39,8 +39,6 @@ public class Star : MonoBehaviour
             timerGO.SetActive(false);
             DDGO.SetActive(false);
             CharacterChangeCode.canChange = true;
-            GameManager.Instance.damageRInt = 2;
-            GameManager.Instance.damageRIntHS = 3;
             Destroy(STARGO);
         }
         if (isInfHPOn && Player.sicklerIsDead)
@@ -51,9 +49,9 @@ public class Star : MonoBehaviour
             Destroy(STARGO);
         }
 
-        if (isDDOn && GameManager.Instance.bulletsRAtAllInt == 0 && GameManager.Instance.inMagRInt == 0)
+        if (isDDOn && Rifler.Instance.ammoInStock == 0)
         {
-            GameManager.Instance.bulletsRAtAllInt += 30;
+            Rifler.Instance.ammoInStock += 30;
         }
 
         if (isInfAmmoOn)
@@ -100,8 +98,8 @@ public class Star : MonoBehaviour
         StartCoroutine(DDOff());
         DDGO.SetActive(true);
         CharacterChangeCode.canChange = false;
-        GameManager.Instance.damageRInt = 5;
-        GameManager.Instance.damageRIntHS = 7;
+        Rifler.Instance.damage = 5;
+        Rifler.Instance.damageHS = 7;
     }
 
     void InfiniteAmmo()
@@ -162,8 +160,8 @@ public class Star : MonoBehaviour
     {
         isDDOn = true;
         yield return new WaitForSeconds(15);
-        GameManager.Instance.damageRInt = 2;
-        GameManager.Instance.damageRIntHS = 3;
+        Rifler.Instance.damage = 2;
+        Rifler.Instance.damageHS = 3;
         isDDOn = false;
     }
 }

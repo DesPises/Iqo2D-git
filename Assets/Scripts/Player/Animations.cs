@@ -7,7 +7,7 @@ public class Animations : MonoBehaviour
 
     void Update()
     {
-        anim.SetBool("grounded", Player.onGround);
+        anim.SetBool("grounded", Player .onGround);
         anim.SetBool("change", CharacterChangeCode.change);
 
         //For All
@@ -29,7 +29,7 @@ public class Animations : MonoBehaviour
             else AttackOff();
 
             //Reload
-            if ((Input.GetKeyDown(InputManager.IM.reloadKey) && GameManager.Instance.rCanReload && !GameManager.Instance.rReloadCooldown && !PauseMenu.isPaused) ||
+            if ((Input.GetKeyDown(InputManager.IM.reloadKey) && GameManager.Instance.riflerCanReload && !GameManager.Instance.rReloadCooldown && !PauseMenu.isPaused) ||
                   GameManager.Instance.rDavayReload)
             {
                 StartCoroutine(Reload());
@@ -47,7 +47,7 @@ public class Animations : MonoBehaviour
             else AttackOff();
 
             //Reload
-            if ((Input.GetKeyDown(InputManager.IM.reloadKey) && GameManager.Instance.sCanReload && !GameManager.Instance.sReloadCooldown && !PauseMenu.isPaused) ||
+            if ((Input.GetKeyDown(InputManager.IM.reloadKey) && GameManager.Instance.sniperCanReload && !GameManager.Instance.sReloadCooldown && !PauseMenu.isPaused) ||
                   GameManager.Instance.sDavayReload)
             {
                 StartCoroutine(Reload());

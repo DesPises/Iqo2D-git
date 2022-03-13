@@ -34,6 +34,9 @@ public class Tutorial : MonoBehaviour
 
     void Update()
     {
+        Rifler.Instance.ammoInStock = 999;
+        Sniper.Instance.ammoInStock = 999;
+
         //English
         if (Language.eng)
         {
@@ -310,17 +313,6 @@ public class Tutorial : MonoBehaviour
             Player.character = "Sickler";
             sicklerGO.transform.position = plSCoordinates;
             StartCoroutine(ChangeVoid());
-        }
-
-        //Infinite ammo
-
-        if (GameManager.Instance.bulletsRAtAllInt <= 0)
-        {
-            GameManager.Instance.bulletsRAtAllInt = 75;
-        }
-        if (GameManager.Instance.bulletsSAtAllInt <= 0)
-        {
-            GameManager.Instance.bulletsSAtAllInt = 15;
         }
     }
 
