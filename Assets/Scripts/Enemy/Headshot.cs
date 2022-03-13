@@ -11,7 +11,7 @@ public class Headshot : MonoBehaviour
     {
         if (col.gameObject.tag == "Bullet")
         {
-            enemy.GetComponent<Enemy>().HeadDMG();
+            enemy.GetComponent<Enemy>().GetHeadDamage();
             Destroy(col.gameObject);
         }
     }

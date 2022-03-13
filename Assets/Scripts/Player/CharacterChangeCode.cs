@@ -18,7 +18,7 @@ public class CharacterChangeCode : MonoBehaviour
     void Start()
     {
         // Set starting character to rifler
-        PlayerMovement.character = "Rifler";
+        Player.character = "Rifler";
 
         change = false;
         canChange = true;
@@ -34,14 +34,14 @@ public class CharacterChangeCode : MonoBehaviour
         // Characters pick
 
         // Pick rifler
-        if (canChange && Input.GetKeyDown(InputManager.IM.torKey) && !GameManager.Instance.rIsDead)
+        if (canChange && Input.GetKeyDown(InputManager.IM.torKey) && !Player.riflerIsDead)
         {
-            if (PlayerMovement.character == "Sniper")
+            if (Player.character == "Sniper")
             {
                 riflerGO.transform.position = plSCoordinates + new Vector3(0, 2, 0);
 
             }
-            if (PlayerMovement.character == "Sickler")
+            if (Player.character == "Sickler")
             {
                 riflerGO.transform.position = plSiCoordinates;
 
@@ -51,13 +51,13 @@ public class CharacterChangeCode : MonoBehaviour
         }
 
         // Pick sniper
-        if (canChange && Input.GetKeyDown(InputManager.IM.tosKey) && !GameManager.Instance.sIsDead)
+        if (canChange && Input.GetKeyDown(InputManager.IM.tosKey) && !Player.sniperIsDead)
         {
-            if (PlayerMovement.character == "Rifler")
+            if (Player.character == "Rifler")
             {
                 sniperGO.transform.position = plRCoordinates + new Vector3(0, 2, 0);
             }
-            if (PlayerMovement.character == "Sickler")
+            if (Player.character == "Sickler")
             {
                 sniperGO.transform.position = plSiCoordinates;
             }
@@ -66,13 +66,13 @@ public class CharacterChangeCode : MonoBehaviour
         }
 
         // Pick sickler
-        if (canChange && Input.GetKeyDown(InputManager.IM.tosiKey) && !GameManager.Instance.siIsDead)
+        if (canChange && Input.GetKeyDown(InputManager.IM.tosiKey) && !Player.sicklerIsDead)
         {
-            if (PlayerMovement.character == "Rifler")
+            if (Player.character == "Rifler")
             {
                 sicklerGO.transform.position = plRCoordinates;
             }
-            if (PlayerMovement.character == "Sniper")
+            if (Player.character == "Sniper")
             {
                 sicklerGO.transform.position = plSCoordinates;
             }
@@ -82,14 +82,14 @@ public class CharacterChangeCode : MonoBehaviour
 
         // Rifler dies
 
-        if (PlayerMovement.character == "Rifler" && GameManager.Instance.rIsDead)
+        if (Player.character == "Rifler" && Player.riflerIsDead)
         {
-            if (!GameManager.Instance.siIsDead)
+            if (!Player.sicklerIsDead)
             {
                 sicklerGO.transform.position = plRCoordinates;
                 PickSickler();
             }
-            if (GameManager.Instance.siIsDead && !GameManager.Instance.sIsDead)
+            if (Player.sicklerIsDead && !Player.sniperIsDead)
             {
                 sniperGO.transform.position = plRCoordinates + new Vector3(0, 2, 0);
                 PickSniper();
@@ -98,14 +98,14 @@ public class CharacterChangeCode : MonoBehaviour
 
         // Sniper dies
 
-        if (PlayerMovement.character == "Sniper" && GameManager.Instance.sIsDead)
+        if (Player.character == "Sniper" && Player.sniperIsDead)
         {
-            if (!GameManager.Instance.siIsDead)
+            if (!Player.sicklerIsDead)
             {
                 sicklerGO.transform.position = plSCoordinates;
                 PickSickler();
             }
-            if (GameManager.Instance.siIsDead && !GameManager.Instance.rIsDead)
+            if (Player.sicklerIsDead && !Player.riflerIsDead)
             {
                 riflerGO.transform.position = plSCoordinates + new Vector3(0, 2, 0);
                 PickRifler();
@@ -114,14 +114,14 @@ public class CharacterChangeCode : MonoBehaviour
 
         // Sickler dies
 
-        if (PlayerMovement.character == "Sickler" && GameManager.Instance.siIsDead)
+        if (Player.character == "Sickler" && Player.sicklerIsDead)
         {
-            if (!GameManager.Instance.sIsDead)
+            if (!Player.sniperIsDead)
             {
                 riflerGO.transform.position = plSiCoordinates;
                 PickSniper();
             }
-            if (!GameManager.Instance.sIsDead && GameManager.Instance.rIsDead)
+            if (Player.sniperIsDead && !Player.riflerIsDead)
             {
                 sniperGO.transform.position = plSiCoordinates;
                 PickRifler();
@@ -134,7 +134,7 @@ public class CharacterChangeCode : MonoBehaviour
         riflerGO.gameObject.SetActive(true);
         sniperGO.gameObject.SetActive(false);
         sicklerGO.gameObject.SetActive(false);
-        PlayerMovement.character = "Rifler";
+        Player.character = "Rifler";
         StartCoroutine(CooldownCoroutine());
     }
 
@@ -143,7 +143,7 @@ public class CharacterChangeCode : MonoBehaviour
         riflerGO.gameObject.SetActive(false);
         sniperGO.gameObject.SetActive(true);
         sicklerGO.gameObject.SetActive(false);
-        PlayerMovement.character = "Sniper";
+        Player.character = "Sniper";
         StartCoroutine(CooldownCoroutine());
     }
 
@@ -152,7 +152,7 @@ public class CharacterChangeCode : MonoBehaviour
         riflerGO.gameObject.SetActive(false);
         sniperGO.gameObject.SetActive(false);
         sicklerGO.gameObject.SetActive(true);
-        PlayerMovement.character = "Sickler";
+        Player.character = "Sickler";
         StartCoroutine(CooldownCoroutine());
     }
 

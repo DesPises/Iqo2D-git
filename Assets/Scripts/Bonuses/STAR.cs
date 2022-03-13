@@ -26,7 +26,7 @@ public class Star : MonoBehaviour
 
     void Update()
     {
-        if (isInfAmmoOn && GameManager.Instance.sIsDead)
+        if (isInfAmmoOn && Player.sniperIsDead)
         {
             timerGO.SetActive(false);
             InfAmmoGO.SetActive(false);
@@ -34,7 +34,7 @@ public class Star : MonoBehaviour
             GameManager.Instance.bulletsSAtAllInt = sHadAmmo + (GameManager.Instance.bulletsSAtAllInt - 999);
             Destroy(STARGO);
         }
-        if (isDDOn && GameManager.Instance.rIsDead)
+        if (isDDOn && Player.riflerIsDead)
         {
             timerGO.SetActive(false);
             DDGO.SetActive(false);
@@ -43,12 +43,11 @@ public class Star : MonoBehaviour
             GameManager.Instance.damageRIntHS = 3;
             Destroy(STARGO);
         }
-        if (isInfHPOn && GameManager.Instance.siIsDead)
+        if (isInfHPOn && Player.sicklerIsDead)
         {
             timerGO.SetActive(false);
             InfHPGO.SetActive(false);
             CharacterChangeCode.canChange = true;
-            GameManager.HPSiInt = 140;
             Destroy(STARGO);
         }
 
@@ -67,26 +66,26 @@ public class Star : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
-            if (PlayerMovement.character == "Rifler" && !isDDOn)
+            if (Player.character == "Rifler" && !isDDOn)
             {
-                GameManager.HPRInt = 100;
+                Rifler.Instance.RefillHP(100);
                 soundContrGO.GetComponent<SoundController>().bonusS();
                 boxcollider.enabled = false;
                 sr.color = new Color(0, 0, 0, 0);
                 DoubleDamage();
             }
-            if (PlayerMovement.character == "Sniper" && !isInfAmmoOn)
+            if (Player.character == "Sniper" && !isInfAmmoOn)
             {
-                GameManager.HPSInt = 60;
+                Sniper.Instance.RefillHP(60);
                 GameManager.Instance.canAttackS = true;
                 soundContrGO.GetComponent<SoundController>().bonusS();
                 boxcollider.enabled = false;
                 sr.color = new Color(0, 0, 0, 0);
                 InfiniteAmmo();
             }
-            if (PlayerMovement.character == "Sickler" && !isInfHPOn)
+            if (Player.character == "Sickler" && !isInfHPOn)
             {
-                GameManager.HPSiInt = 140;
+                Sickler.Instance.RefillHP(140);
                 soundContrGO.GetComponent<SoundController>().bonusS();
                 boxcollider.enabled = false;
                 sr.color = new Color(0, 0, 0, 0);
@@ -121,7 +120,7 @@ public class Star : MonoBehaviour
         StartCoroutine(ImmortalityOff());
         InfHPGO.SetActive(true);
         CharacterChangeCode.canChange = false;
-        GameManager.HPSiInt = 9999999;
+        Sickler.Instance.Immortality();
     }
 
     IEnumerator Timer()
@@ -147,7 +146,7 @@ public class Star : MonoBehaviour
     {
         isInfHPOn = true;
         yield return new WaitForSeconds(15);
-        GameManager.HPSiInt = 140;
+        Sickler.Instance.RefillHP(140);
         isInfHPOn = false;
     }
 

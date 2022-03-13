@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SicklerAttackScript : MonoBehaviour
+public class Sickler : Player
 {
+    public static Sickler Instance { get; private set; }
+
     private float cooldownF;
     private readonly float defCooldownF = 0.27f;
     private readonly float rangeF = 2.3f;
@@ -17,6 +19,7 @@ public class SicklerAttackScript : MonoBehaviour
 
     void Start()
     {
+        Instance = this;
         enemy = LayerMask.GetMask("Enemy");
         enemyHead = LayerMask.GetMask("EnemyHead");
         BossLayer = LayerMask.GetMask("Boss");
@@ -37,6 +40,17 @@ public class SicklerAttackScript : MonoBehaviour
 
     void Update()
     {
+        GameManager.Instance.HPBarFill(HP, 0.007f);
+
+        if (HP <= 0)
+        {
+            Death();
+        }
+        else
+        {
+            sicklerIsDead = false;
+        }
+
         // Decrease cooldown by time
         if (cooldownF > 0)
         {
@@ -49,6 +63,17 @@ public class SicklerAttackScript : MonoBehaviour
         {
             BossGO.GetComponent<Boss>().DamageFromSickler();
         }
+    }
+
+    public override void Death()
+    {
+        base.Death();
+        sicklerIsDead = true;
+    }
+
+    public void Immortality()
+    {
+        HP = 99999999;
     }
 
     // Draw circle of attack range

@@ -8,19 +8,19 @@ public class HPBonus : MonoBehaviour
 
     void Update()
     {
-        if (PlayerMovement.character == "Rifler")
+        if (Player.character == "Rifler")
         {
             vodkaGO.SetActive(true);
             shawaGO.SetActive(false);
             kebabGO.SetActive(false);
         }
-        if (PlayerMovement.character == "Sniper")
+        if (Player.character == "Sniper")
         {
             vodkaGO.SetActive(false);
             shawaGO.SetActive(true);
             kebabGO.SetActive(false);
         }
-        if (PlayerMovement.character == "Sickler")
+        if (Player.character == "Sickler")
         {
             vodkaGO.SetActive(false);
             shawaGO.SetActive(false);
@@ -34,24 +34,7 @@ public class HPBonus : MonoBehaviour
         {
             soundContrGO.GetComponent<SoundController>().HPS();
             Destroy(HPGO);
-            if (PlayerMovement.character == "Rifler")
-            {
-                GameManager.HPRInt += 35;
-                if (GameManager.HPRInt > 100)
-                    GameManager.HPRInt = 100;
-            }
-            if (PlayerMovement.character == "Sniper")
-            {
-                GameManager.HPSInt += 35;
-                if (GameManager.HPSInt > 60)
-                    GameManager.HPSInt = 60;
-            }
-            if (PlayerMovement.character == "Sickler")
-            {
-                GameManager.HPSiInt += 35;
-                if (GameManager.HPSiInt > 140 && !Star.isInfHPOn)
-                    GameManager.HPSiInt = 140;
-            }
+            
         }
     }
 }

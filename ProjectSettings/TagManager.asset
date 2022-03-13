@@ -16,6 +16,10 @@ TagManager:
   - BulletS
   - Rus
   - Eng
+  - HPBonus
+  - StarBonus
+  - AmmoSniper
+  - AmmoRifler
   layers:
   - Default
   - TransparentFX

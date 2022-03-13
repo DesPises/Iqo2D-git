@@ -21,16 +21,16 @@ public class CameraFollow : MonoBehaviour
     {
         // Set target point and FOV depending of character
 
-        if (PlayerMovement.character == "Rifler" && playerRifler)
+        if (Player.character == "Rifler" && playerRifler)
         {
             cam.orthographicSize = 6;
             target = new Vector3(playerRifler.position.x, 1, -10);
         }
 
-        else if (PlayerMovement.character == "Sniper" && playerSniper)
+        else if (Player.character == "Sniper" && playerSniper)
         {
             cam.orthographicSize = 6.8f;
-            if (PlayerMovement.isMovingFW)
+            if (Player.isMovingFW)
             {
                 target = new Vector3(playerSniper.position.x + 1, 1.5f, -10);
             }
@@ -40,7 +40,7 @@ public class CameraFollow : MonoBehaviour
             }
         }
 
-        else if (PlayerMovement.character == "Sickler" && playerSickler)
+        else if (Player.character == "Sickler" && playerSickler)
         {
             cam.orthographicSize = 5.2f;
             target = new Vector3(playerSickler.position.x, 0, -10);

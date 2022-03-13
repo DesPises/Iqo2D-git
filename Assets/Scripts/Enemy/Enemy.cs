@@ -35,12 +35,12 @@ public class Enemy : MonoBehaviour
         //Move
         if (!reverseRotation)
         {
-            if (transform.position.x > PlayerMovement.plCoordinateX && !isNearPlayer && HPInt > 0)
+            if (transform.position.x > Player.plCoordinateX && !isNearPlayer && HPInt > 0)
             {
                 rb.velocity = new Vector2(-speed, -1);
                 enemyGO.transform.eulerAngles = new Vector3(0, 0, 0);
             }
-            if (transform.position.x < PlayerMovement.plCoordinateX && !isNearPlayer && HPInt > 0)
+            if (transform.position.x < Player.plCoordinateX && !isNearPlayer && HPInt > 0)
             {
                 rb.velocity = new Vector2(speed, -1);
                 enemyGO.transform.eulerAngles = new Vector3(0, 180, 0);
@@ -48,12 +48,12 @@ public class Enemy : MonoBehaviour
         }
         if (reverseRotation)
         {
-            if (transform.position.x > PlayerMovement.plCoordinateX && !isNearPlayer && HPInt > 0)
+            if (transform.position.x > Player.plCoordinateX && !isNearPlayer && HPInt > 0)
             {
                 rb.velocity = new Vector2(-speed, -1);
                 enemyGO.transform.eulerAngles = new Vector3(0, 180, 0);
             }
-            if (transform.position.x < PlayerMovement.plCoordinateX && !isNearPlayer && HPInt > 0)
+            if (transform.position.x < Player.plCoordinateX && !isNearPlayer && HPInt > 0)
             {
                 rb.velocity = new Vector2(speed, -1);
                 enemyGO.transform.eulerAngles = new Vector3(0, 0, 0);
@@ -78,14 +78,14 @@ public class Enemy : MonoBehaviour
         if (HPInt <= 0)
         {
             nmeAnim.SetBool("die", true);
-            StartCoroutine(DIE());
+            StartCoroutine(Death());
             rb.velocity = new Vector2(0, 0);
         }
     }
 
     public void TakeDamage()
     {
-        StartCoroutine(DMG());
+        StartCoroutine(GetDamaged());
     }
 
   
@@ -94,13 +94,13 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.tag == "Bullet" || collision.gameObject.tag == "BulletS")
         {
-            StartCoroutine(DMG());
+            StartCoroutine(GetDamaged());
         }
     }
 
-    IEnumerator DMG()
+    IEnumerator GetDamaged()
     {
-        dmgSound();
+        DmgSound();
         BloodOn();
         nmeAnim.SetBool("dmg", true);
         yield return null;
@@ -108,7 +108,7 @@ public class Enemy : MonoBehaviour
         HPInt -= DamageInt;
     }
 
-    public void HeadDMG()
+    public void GetHeadDamage()
     {
         HPInt -= DamageIntHS;
         StartCoroutine(HeadDMGAnim());
@@ -122,7 +122,7 @@ public class Enemy : MonoBehaviour
         nmeAnim.SetBool("dmg", false);
     }
 
-    IEnumerator DIE()
+    IEnumerator Death()
     {
         capsCollider.enabled = false;
         yield return new WaitForSeconds(1);
@@ -152,12 +152,12 @@ public class Enemy : MonoBehaviour
 
     public void DealDamage()
     {
-        if (PlayerMovement.character == "Rifler")
-            GameManager.HPRInt -= DamageHitInt;
-        if (PlayerMovement.character == "Sniper")
-            GameManager.HPSInt -= DamageHitInt;
-        if (PlayerMovement.character == "Sickler")
-            GameManager.HPSiInt -= DamageHitInt;
+        if (Player.character == "Rifler")
+            Rifler.Instance.GetDamage(DamageHitInt);
+        if (Player.character == "Sniper")
+            Sniper.Instance.GetDamage(DamageHitInt);
+        if (Player.character == "Sickler")
+            Sickler.Instance.GetDamage(DamageHitInt);
         StartCoroutine(SignalToPlayerGetDamageAnim());
     }
 
@@ -181,32 +181,32 @@ public class Enemy : MonoBehaviour
         rb.velocity = new Vector2(0, 0);
         nmeAnim.SetBool("die", false);
         nmeAnim.SetBool("headOff", true);
-        StartCoroutine(DIE());
+        StartCoroutine(Death());
     }
 
     //Sounds
 
-    public void dmgSound()
+    public void DmgSound()
     {
         soundContrGO.GetComponent<SoundController>().alienHitS();
     }
 
-    public void deathSound()
+    public void DeathSound()
     {
         soundContrGO.GetComponent<SoundController>().alienDeathS();
     }
 
-    public void explosionSound()
+    public void ExplosionSound()
     {
         soundContrGO.GetComponent<SoundController>().explosionS();
     }
 
-    public void laserSound()
+    public void LaserSound()
     {
         soundContrGO.GetComponent<SoundController>().laserS();
     }
 
-    public void dmgFromSiSound()
+    public void DamageFromSicklerSound()
     {
         soundContrGO.GetComponent<SoundController>().siHitS();
     }

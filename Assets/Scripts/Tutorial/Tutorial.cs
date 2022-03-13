@@ -17,7 +17,7 @@ public class Tutorial : MonoBehaviour
 
     void Start()
     {
-        PlayerMovement.character = "Rifler";
+        Player.character = "Rifler";
         riflerKey = InputManager.IM.torKey;
         sniperKey = InputManager.IM.tosKey;
         sicklerKey = InputManager.IM.tosiKey;
@@ -81,7 +81,7 @@ public class Tutorial : MonoBehaviour
                 h4.SetActive(true);
             }
 
-            if (PlayerMovement.character == "Sickler" && PlayerMovement.isNearEnemy && Input.GetKey(attackKey))
+            if (Player.character == "Sickler" && Player.isNearEnemy && Input.GetKey(attackKey))
             {
                 hint = 4;
             }
@@ -180,7 +180,7 @@ public class Tutorial : MonoBehaviour
                 hr4.SetActive(true);
             }
 
-            if (PlayerMovement.character == "Sickler" && PlayerMovement.isNearEnemy && Input.GetKey(attackKey))
+            if (Player.character == "Sickler" && Player.isNearEnemy && Input.GetKey(attackKey))
             {
                 hint = 4;
             }
@@ -234,17 +234,17 @@ public class Tutorial : MonoBehaviour
 
 
         //Coordinates
-        if (PlayerMovement.character == "Rifler")
+        if (Player.character == "Rifler")
         {
             plRPosition = riflerGO.transform;
             plRCoordinates = new Vector3(plRPosition.position.x, plRPosition.position.y - 2, plRPosition.position.z);
         }
-        if (PlayerMovement.character == "Sniper")
+        if (Player.character == "Sniper")
         {
             plSPosition = sniperGO.transform;
             plSCoordinates = new Vector3(plSPosition.position.x, plSPosition.position.y - 2, plSPosition.position.z);
         }
-        if (PlayerMovement.character == "Sickler")
+        if (Player.character == "Sickler")
         {
             plSiPosition = sicklerGO.transform;
             plSiCoordinates = new Vector3(plSiPosition.position.x, plSiPosition.position.y + 2, plSiPosition.position.z);
@@ -254,60 +254,60 @@ public class Tutorial : MonoBehaviour
         //Characters pick
 
         //Pick rifler
-        if (CanChangeR && Input.GetKeyDown(riflerKey) && PlayerMovement.character == "Sniper")
+        if (CanChangeR && Input.GetKeyDown(riflerKey) && Player.character == "Sniper")
         {
             riflerGO.gameObject.SetActive(true);
             sniperGO.gameObject.SetActive(false);
             sicklerGO.gameObject.SetActive(false);
-            PlayerMovement.character = "Rifler";
+            Player.character = "Rifler";
             riflerGO.transform.position = plSCoordinates + new Vector3(0, 2, 0);
             StartCoroutine(ChangeVoid());
 
         }
-        if (CanChangeR && Input.GetKeyDown(riflerKey) && PlayerMovement.character == "Sickler")
+        if (CanChangeR && Input.GetKeyDown(riflerKey) && Player.character == "Sickler")
         {
             riflerGO.gameObject.SetActive(true);
             sniperGO.gameObject.SetActive(false);
             sicklerGO.gameObject.SetActive(false);
-            PlayerMovement.character = "Rifler";
+            Player.character = "Rifler";
             riflerGO.transform.position = plSiCoordinates;
             StartCoroutine(ChangeVoid());
         }
         //Pick sniper
-        if (CanChangeS && Input.GetKeyDown(sniperKey) && PlayerMovement.character == "Rifler")
+        if (CanChangeS && Input.GetKeyDown(sniperKey) && Player.character == "Rifler")
         {
             riflerGO.gameObject.SetActive(false);
             sniperGO.gameObject.SetActive(true);
             sicklerGO.gameObject.SetActive(false);
-            PlayerMovement.character = "Sniper";
+            Player.character = "Sniper";
             sniperGO.transform.position = plRCoordinates + new Vector3(0, 2, 0);
             StartCoroutine(ChangeVoid());
         }
-        if (CanChangeS && Input.GetKeyDown(sniperKey) && PlayerMovement.character == "Sickler")
+        if (CanChangeS && Input.GetKeyDown(sniperKey) && Player.character == "Sickler")
         {
             riflerGO.gameObject.SetActive(false);
             sniperGO.gameObject.SetActive(true);
             sicklerGO.gameObject.SetActive(false);
-            PlayerMovement.character = "Sniper";
+            Player.character = "Sniper";
             sniperGO.transform.position = plSiCoordinates;
             StartCoroutine(ChangeVoid());
         }
         //Pick sickler
-        if (CanChangeSi && Input.GetKeyDown(sicklerKey) && PlayerMovement.character == "Rifler")
+        if (CanChangeSi && Input.GetKeyDown(sicklerKey) && Player.character == "Rifler")
         {
             riflerGO.gameObject.SetActive(false);
             sniperGO.gameObject.SetActive(false);
             sicklerGO.gameObject.SetActive(true);
-            PlayerMovement.character = "Sickler";
+            Player.character = "Sickler";
             sicklerGO.transform.position = plRCoordinates;
             StartCoroutine(ChangeVoid());
         }
-        if (CanChangeSi && Input.GetKeyDown(sicklerKey) && PlayerMovement.character == "Sniper")
+        if (CanChangeSi && Input.GetKeyDown(sicklerKey) && Player.character == "Sniper")
         {
             riflerGO.gameObject.SetActive(false);
             sniperGO.gameObject.SetActive(false);
             sicklerGO.gameObject.SetActive(true);
-            PlayerMovement.character = "Sickler";
+            Player.character = "Sickler";
             sicklerGO.transform.position = plSCoordinates;
             StartCoroutine(ChangeVoid());
         }
@@ -329,15 +329,15 @@ public class Tutorial : MonoBehaviour
         yield return null;
         Change = true;
         //Change animations
-        if (PlayerMovement.character == "Rifler")
+        if (Player.character == "Rifler")
         {
             rAnim.SetBool("change", Change);
         }
-        if (PlayerMovement.character == "Sniper")
+        if (Player.character == "Sniper")
         {
             sAnim.SetBool("change", Change);
         }
-        if (PlayerMovement.character == "Sickler")
+        if (Player.character == "Sickler")
         {
             siAnim.SetBool("change", Change);
         }

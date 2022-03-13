@@ -210,12 +210,12 @@ public class Boss : MonoBehaviour
 
     void DealDamage()
     {
-        if (PlayerMovement.character == "Rifler")
-            GameManager.HPRInt -= 40;
-        if (PlayerMovement.character == "Sniper")
-            GameManager.HPSInt -= 40;
-        if (PlayerMovement.character == "Sickler")
-            GameManager.HPSiInt -= 40;
+        if (Player.character == "Rifler")
+            Rifler.Instance.GetDamage(40);
+        if (Player.character == "Sniper")
+            Sniper.Instance.GetDamage(40);
+        if (Player.character == "Sickler")
+            Sickler.Instance.GetDamage(40);
     }
 
     //Gizmos
@@ -351,9 +351,6 @@ public class Boss : MonoBehaviour
     IEnumerator Death()
     {
         entrygrowl.volume = PlayerPrefs.GetFloat("volume") * 2;
-        GameManager.HPRInt = 100;
-        GameManager.HPSInt = 100;
-        GameManager.HPSiInt = 200;
         anim.SetBool("dead", true);
         immunity = true;
         yield return new WaitForSeconds(1.5f);

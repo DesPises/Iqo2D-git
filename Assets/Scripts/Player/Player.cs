@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class Player : MonoBehaviour
 {
+    [SerializeField] private Animations Anim;
+
     private Rigidbody2D plRB;
     private LayerMask floorLayer;
 
@@ -13,12 +15,18 @@ public class PlayerMovement : MonoBehaviour
     private readonly float jumpForce = 200;
     private readonly float floorDist = 1;
 
+    protected int HP;
+
     public static bool secJump = false;
     public static bool isMovingFW = true;
     public static bool onGround = false;
     public static bool isNearEnemy = false;
     public static string character;
     public static float plCoordinateX;
+
+    public static bool riflerIsDead;
+    public static bool sniperIsDead;
+    public static bool sicklerIsDead;
 
     private void Start()
     {
@@ -58,27 +66,57 @@ public class PlayerMovement : MonoBehaviour
             {
                 Crouch();
             }
+            else
+            {
+                Anim.CrouchOff();
+            }
 
             // Characters specifications
 
-            if (character == "Rifler" && !GameManager.Instance.rIsDead)
+            if (character == "Rifler" && !riflerIsDead)
             {
-                    Move(5);
+                Move(5);
             }
 
-            if (character == "Sniper" && !GameManager.Instance.sIsDead)
+            if (character == "Sniper" && !sniperIsDead)
             {
-                    Move(4);
+                Move(4);
             }
 
-            if (character == "Sickler" && !GameManager.Instance.siIsDead && GameManager.Instance.canWalkSi)
+            if (character == "Sickler" && !sicklerIsDead && GameManager.Instance.canWalkSi)
             {
-                    Move(6);
+                Move(6);
             }
         }
     }
 
+    public void HPBonus()
+    {
+        HP += 35;
+    }
 
+    public void GetDamage(int damage)
+    {
+        HP -= damage;
+    }
+
+    protected void HPlimit(int limit)
+    {
+        if (HP > limit)
+        {
+            HP = limit;
+        }
+    }
+
+    public void RefillHP(int full)
+    {
+        HP = full;
+    }
+
+    public virtual void Death()
+    {
+        CharacterChangeCode.canChange = true;
+    }
 
     //Movement methods
 
@@ -88,13 +126,19 @@ public class PlayerMovement : MonoBehaviour
         {
             if (Input.GetKey(InputManager.IM.fwKey) && !Input.GetKey(InputManager.IM.bwKey))
             {
+                Anim.Run();
                 isMovingFW = true;
                 plRB.velocity = new Vector2(moveSpeed, plRB.velocity.y);
             }
             else if (Input.GetKey(InputManager.IM.bwKey) && !Input.GetKey(InputManager.IM.fwKey))
             {
+                Anim.Run();
                 isMovingFW = false;
                 plRB.velocity = new Vector2(-moveSpeed, plRB.velocity.y);
+            }
+            else
+            {
+                Anim.RunOff();
             }
         }
         else
@@ -112,6 +156,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Jump()
     {
+        StartCoroutine(Anim.Jump());
         secJump = true;
         plRB.velocity = new Vector2(plRB.velocity.x, 0);
         plRB.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
@@ -119,14 +164,15 @@ public class PlayerMovement : MonoBehaviour
 
     void SecJump()
     {
+        StartCoroutine(Anim.SecJump());
         plRB.velocity = new Vector2(plRB.velocity.x, 0);
         plRB.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
 
     void Crouch()
     {
+        Anim.Crouch();
         plRB.velocity = new Vector2(0, 0);
-
     }
     private void RotationControl()
     {
