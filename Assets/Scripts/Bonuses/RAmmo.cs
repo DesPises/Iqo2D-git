@@ -7,7 +7,7 @@ public class RAmmo : MonoBehaviour
         if (col.gameObject.tag == "Player")
         {
             SoundController.Instance.ammoS();
-            Rifler.Instance.ammoInStock += 30;
+            //Rifler.Instance.ammoInStock += 30;
             Destroy(gameObject);
         }
     }

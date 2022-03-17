@@ -30,7 +30,7 @@ public class CameraFollow : MonoBehaviour
         else if (Player.character == "Sniper" && playerSniper)
         {
             cam.orthographicSize = 6.8f;
-            if (Player.isMovingFW)
+            if (Player.isMovingForward)
             {
                 target = new Vector3(playerSniper.position.x + 1, 1.5f, -10);
             }

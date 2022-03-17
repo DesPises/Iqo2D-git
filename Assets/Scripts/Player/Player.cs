@@ -6,8 +6,16 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private Animations Anim;
 
-    private Rigidbody2D plRB;
+    [SerializeField] protected GameObject bulletPrefab;
+    [SerializeField] protected GameObject magPrefab;
+    [SerializeField] protected GameObject player;
+
+    [SerializeField] protected SpriteRenderer[] fireAnimationPics;
+    [SerializeField] protected SpriteRenderer[] crouchFireAnimationPics;
+
     private LayerMask floorLayer;
+
+    private Rigidbody2D plRB;
 
     [SerializeField] private float gizmosY;
     [SerializeField] private float gizmosX;
@@ -16,24 +24,43 @@ public class Player : MonoBehaviour
     private readonly float floorDist = 1;
 
     protected int HP;
+    protected int HPMax;
+    protected float attackRate;
+    protected int ammoMax;
+    protected float reloadTime;
 
-    public static bool secJump = false;
-    public static bool isMovingFW = true;
-    public static bool onGround = false;
-    public static bool isNearEnemy = false;
+    private bool secJump;
+    private bool isBonusActive;
+    private bool canMove;
+
     public static string character;
     public static float plCoordinateX;
 
+    public static bool isMovingForward = true;
+    public static bool onGround;
     public static bool riflerIsDead;
     public static bool sniperIsDead;
     public static bool sicklerIsDead;
 
+    protected bool canAttack;
+    protected bool reloading;
+    protected bool emptySoundCooldown;
+
+    public int ammoInMag { get; protected set; }
+    public int ammoInStock { get; protected set; }
+    protected int damage;
+    protected int damageHS;
+
+    protected readonly Color invisible = new(255, 255, 255, 0);
+    protected readonly Color visible = new(255, 255, 255, 190);
+
     private void Start()
     {
-        plRB = GetComponent<Rigidbody2D>();
         floorLayer = LayerMask.GetMask("Floor");
+        plRB = GetComponent<Rigidbody2D>();
+        canMove = true;
 
-        isMovingFW = true;
+        isMovingForward = true;
     }
 
 
@@ -83,11 +110,16 @@ public class Player : MonoBehaviour
                 Move(4);
             }
 
-            if (character == "Sickler" && !sicklerIsDead && GameManager.Instance.canWalkSi)
+            if (character == "Sickler" && !sicklerIsDead && canMove)
             {
                 Move(6);
             }
         }
+    }
+
+    public virtual void Death()
+    {
+        CharacterChangeCode.canChange = true;
     }
 
     public void HPBonus()
@@ -108,14 +140,101 @@ public class Player : MonoBehaviour
         }
     }
 
+    // Bonuses
+
     public void RefillHP(int full)
     {
         HP = full;
     }
 
-    public virtual void Death()
+    public IEnumerator AmmoBonus(int ammo)
     {
-        CharacterChangeCode.canChange = true;
+        if (Sniper.Instance.isBonusActive)
+        {
+            while (Sniper.Instance.isBonusActive)
+            {
+                yield return null;
+            }
+            ammoInStock += ammo;
+        }
+        else
+        {
+            ammoInStock += ammo;
+        }
+    }
+
+    public IEnumerator DoubleDamage()
+    {
+        damage = 5;
+        damageHS = 7;
+        yield return new WaitForSeconds(15);
+        damage = 2;
+        damageHS = 3;
+    }
+
+    public IEnumerator InfiniteAmmo(int time)
+    {
+        isBonusActive = true;
+        int oldAmmo = ammoInStock;
+        ammoInStock = 999;
+        yield return new WaitForSeconds(time);
+        ammoInStock = oldAmmo;
+        isBonusActive = false;
+    }
+
+    public IEnumerator Immortality()
+    {
+        HP = 9999999;
+        yield return new WaitForSeconds(15);
+        HP = HPMax;
+    }
+
+    // Shoot methods
+
+    protected IEnumerator FireRateControl(float fireRate)
+    {
+        canAttack = false;
+        yield return null;
+        ammoInMag--;
+        yield return new WaitForSeconds(fireRate);
+        canAttack = true;
+    }
+
+    protected IEnumerator FireAnimation()
+    {
+        for (int i = 0; i < fireAnimationPics.Length; i++)
+        {
+            fireAnimationPics[i].color = visible;
+            yield return new WaitForSeconds(0.03f);
+            fireAnimationPics[i].color = invisible;
+        }
+    }
+    protected IEnumerator CrouchFireAnimation()
+    {
+        for (int i = 0; i < crouchFireAnimationPics.Length; i++)
+        {
+            crouchFireAnimationPics[i].color = visible;
+            yield return new WaitForSeconds(0.03f);
+            crouchFireAnimationPics[i].color = invisible;
+        }
+    }
+    protected IEnumerator Reload(int ammoMax, float reloadTime)
+    {
+        int leftInMag = ammoInMag;
+
+        if (ammoInMag + ammoInStock > ammoMax)
+        {
+            ammoInMag = ammoMax;
+            ammoInStock -= (ammoMax - leftInMag);
+        }
+        else
+        {
+            ammoInMag += ammoInStock;
+            ammoInStock = 0;
+        }
+        reloading = true;
+        yield return new WaitForSeconds(reloadTime);
+        reloading = false;
     }
 
     //Movement methods
@@ -127,13 +246,13 @@ public class Player : MonoBehaviour
             if (Input.GetKey(InputManager.IM.fwKey) && !Input.GetKey(InputManager.IM.bwKey))
             {
                 Anim.Run();
-                isMovingFW = true;
+                isMovingForward = true;
                 plRB.velocity = new Vector2(moveSpeed, plRB.velocity.y);
             }
             else if (Input.GetKey(InputManager.IM.bwKey) && !Input.GetKey(InputManager.IM.fwKey))
             {
                 Anim.Run();
-                isMovingFW = false;
+                isMovingForward = false;
                 plRB.velocity = new Vector2(-moveSpeed, plRB.velocity.y);
             }
             else
@@ -145,17 +264,19 @@ public class Player : MonoBehaviour
         {
             if (Input.GetKeyDown(InputManager.IM.fwKey))
             {
-                isMovingFW = true;
+                isMovingForward = true;
             }
             else if (Input.GetKeyDown(InputManager.IM.bwKey))
             {
-                isMovingFW = false;
+                isMovingForward = false;
             }
         }
     }
 
     void Jump()
     {
+        SoundController.Instance.JumpS();
+
         StartCoroutine(Anim.Jump());
         secJump = true;
         plRB.velocity = new Vector2(plRB.velocity.x, 0);
@@ -164,6 +285,8 @@ public class Player : MonoBehaviour
 
     void SecJump()
     {
+        SoundController.Instance.JumpS();
+
         StartCoroutine(Anim.SecJump());
         plRB.velocity = new Vector2(plRB.velocity.x, 0);
         plRB.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
@@ -178,44 +301,27 @@ public class Player : MonoBehaviour
     {
         if (character != "Sniper")
         {
-            if (!isMovingFW)
+            if (!isMovingForward)
             {
                 gameObject.transform.eulerAngles = new Vector3(0, 180, 0);
             }
-            if (isMovingFW)
+            if (isMovingForward)
             {
                 gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
             }
         }
         else
         {
-            if (!isMovingFW)
+            if (!isMovingForward)
             {
                 gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
             }
-            if (isMovingFW)
+            if (isMovingForward)
             {
                 gameObject.transform.eulerAngles = new Vector3(0, 180, 0);
             }
         }
     }
-
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.gameObject.CompareTag("Enemy"))
-        {
-            isNearEnemy = true;
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D col)
-    {
-        if (col.gameObject.CompareTag("Enemy"))
-        {
-            isNearEnemy = false;
-        }
-    }
-
 
     //Sounds methods
 
@@ -229,12 +335,7 @@ public class Player : MonoBehaviour
         SoundController.Instance.RunS();
     }
 
-    public void JumpSound()
-    {
-        SoundController.Instance.JumpS();
-    }
-
-    public void SiVzmahSound()
+    public void SickleSound()
     {
         SoundController.Instance.siVzmahS();
     }
@@ -243,6 +344,25 @@ public class Player : MonoBehaviour
     {
         SoundController.Instance.siHitS();
     }
+
+    protected IEnumerator EmptyMagSound()
+    {
+        emptySoundCooldown = true;
+        SoundController.Instance.emptyMagS();
+        yield return new WaitForSeconds(0.4f);
+        emptySoundCooldown = false;
+    }
+
+    public void DmgSound()
+    {
+        SoundController.Instance.dmgS();
+    }
+
+    public void AlienHitSound()
+    {
+        SoundController.Instance.alienHitS();
+    }
+
 
     // Draw raycast of ground check
 

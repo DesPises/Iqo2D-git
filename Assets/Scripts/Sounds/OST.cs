@@ -5,6 +5,8 @@ using UnityEngine.Audio;
 
 public class OST : MonoBehaviour
 {
+    public static OST Instance { get; private set; }
+
     public AudioSource ost;
     public bool doesContinueFromPreviousScene;
     public bool notPlayableScene;
@@ -12,6 +14,8 @@ public class OST : MonoBehaviour
 
     void Start()
     {
+        Instance = this;
+
         if (PlayerPrefs.HasKey("volume"))
             ost.volume = PlayerPrefs.GetFloat("volume");
         else

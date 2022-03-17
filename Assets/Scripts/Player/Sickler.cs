@@ -17,9 +17,15 @@ public class Sickler : Player
     private LayerMask BossLayer;
     public GameObject BossGO;
 
+
     void Start()
     {
         Instance = this;
+
+        HPMax = 140;
+        HP = HPMax;
+        damage = 12;
+
         enemy = LayerMask.GetMask("Enemy");
         enemyHead = LayerMask.GetMask("EnemyHead");
         BossLayer = LayerMask.GetMask("Boss");
@@ -40,7 +46,7 @@ public class Sickler : Player
 
     void Update()
     {
-        GameManager.Instance.HPBarFill(HP, 0.007f);
+        GameManager.Instance.HPBarFill(HP, 1 / HPMax);
 
         if (HP <= 0)
         {
@@ -63,6 +69,12 @@ public class Sickler : Player
         {
             BossGO.GetComponent<Boss>().DamageFromSickler();
         }
+
+        // Attack
+        if (Input.GetKeyDown(InputManager.IM.attackKey) && canAttack && !PauseMenu.isPaused)
+        {
+            StartCoroutine(Attack());
+        }
     }
 
     public override void Death()
@@ -71,9 +83,26 @@ public class Sickler : Player
         sicklerIsDead = true;
     }
 
-    public void Immortality()
+    IEnumerator Attack()
     {
-        HP = 99999999;
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+
+        //Player.secJump = false;
+        if (Player.isMovingForward)
+        {
+            rb.velocity = new Vector2(2, 0);
+        }
+        if (!Player.isMovingForward)
+        {
+            rb.velocity = new Vector2(-2, 0);
+        }
+        rb.AddForce(Vector2.down * 40 + Vector2.right * 50, ForceMode2D.Impulse);
+
+        canAttack = false;
+
+        yield return new WaitForSeconds(0.4f);
+
+        canAttack = true;
     }
 
     // Draw circle of attack range

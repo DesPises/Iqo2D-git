@@ -9,64 +9,6 @@ public class Animations : MonoBehaviour
     {
         anim.SetBool("grounded", Player .onGround);
         anim.SetBool("change", CharacterChangeCode.change);
-
-        //For All
-
-        //Damage
-        if (Enemy.doesHitPlayer)
-        {
-            StartCoroutine(Damage());
-        }
-
-        //Rifler
-        if (Player.character == "Rifler")
-        {
-            //Attack
-            if (Input.GetKey(InputManager.IM.attackKey) && GameManager.Instance.inMagRInt > 0 && GameManager.Instance.canRAttackAfterReload && !PauseMenu.isPaused)
-            {
-                Attack();
-            }
-            else AttackOff();
-
-            //Reload
-            if ((Input.GetKeyDown(InputManager.IM.reloadKey) && GameManager.Instance.riflerCanReload && !GameManager.Instance.rReloadCooldown && !PauseMenu.isPaused) ||
-                  GameManager.Instance.rDavayReload)
-            {
-                StartCoroutine(Reload());
-            }
-        }
-
-        //Sniper
-        if (Player.character == "Sniper")
-        {
-            //Attack
-            if (Input.GetKeyDown(InputManager.IM.attackKey) && GameManager.Instance.canAttackS && GameManager.Instance.canSAttackAfterReload && !PauseMenu.isPaused)
-            {
-                Attack();
-            }
-            else AttackOff();
-
-            //Reload
-            if ((Input.GetKeyDown(InputManager.IM.reloadKey) && GameManager.Instance.sniperCanReload && !GameManager.Instance.sReloadCooldown && !PauseMenu.isPaused) ||
-                  GameManager.Instance.sDavayReload)
-            {
-                StartCoroutine(Reload());
-            }
-        }
-
-        //Sickler
-        if (Player.character == "Sickler")
-        {
-            //Attack
-            if (Input.GetKeyDown(InputManager.IM.attackKey) && GameManager.Instance.canAttackSiAnim && !PauseMenu.isPaused)
-            {
-                Attack();
-            }
-            if (!Input.GetKeyDown(InputManager.IM.attackKey) || !GameManager.Instance.canAttackSiAnim)
-            {
-                AttackOff();
-            }
-        }
     }
 
     public void Run()
@@ -105,19 +47,21 @@ public class Animations : MonoBehaviour
         yield return null;
         anim.SetBool("jump", false);
     }
+
     public IEnumerator SecJump()
     {
         anim.SetBool("2jump", true);
         yield return null;
         anim.SetBool("2jump", false);
-        Player.secJump = false;
     }
+
     public IEnumerator Damage()
     {
         anim.SetBool("dmg", true);
         yield return null;
         anim.SetBool("dmg", false);
     }
+
     public IEnumerator Reload()
     {
         anim.SetBool("rr", true);

@@ -34,8 +34,8 @@ public class Tutorial : MonoBehaviour
 
     void Update()
     {
-        Rifler.Instance.ammoInStock = 999;
-        Sniper.Instance.ammoInStock = 999;
+        StartCoroutine(Rifler.Instance.InfiniteAmmo(9999999));
+        StartCoroutine(Sniper.Instance.InfiniteAmmo(9999999));
 
         //English
         if (Language.eng)
@@ -84,7 +84,7 @@ public class Tutorial : MonoBehaviour
                 h4.SetActive(true);
             }
 
-            if (Player.character == "Sickler" && Player.isNearEnemy && Input.GetKey(attackKey))
+            if (Player.character == "Sickler" && Input.GetKey(attackKey))
             {
                 hint = 4;
             }
@@ -183,7 +183,7 @@ public class Tutorial : MonoBehaviour
                 hr4.SetActive(true);
             }
 
-            if (Player.character == "Sickler" && Player.isNearEnemy && Input.GetKey(attackKey))
+            if (Player.character == "Sickler" && Input.GetKey(attackKey))
             {
                 hint = 4;
             }
