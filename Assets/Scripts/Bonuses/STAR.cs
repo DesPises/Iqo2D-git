@@ -1,168 +1,115 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Star : MonoBehaviour
 {
-    public GameObject InfAmmoGO;
-    public GameObject InfHPGO;
-    public GameObject DDGO;
-    public GameObject timerGO;
-    public GameObject STARGO;
-    public GameObject soundContrGO;
-    public Text timeText;
-    public BoxCollider2D boxcollider;
-    public SpriteRenderer sr;
-    public static int sHadAmmo;
-    public static bool isDDOn;
-    public static bool isInfAmmoOn;
-    public static bool isInfHPOn;
+    [SerializeField] private GameObject infiniteAmmoIcon;
+    [SerializeField] private GameObject immortalityIcon;
+    [SerializeField] private GameObject doubleDamageIcon;
+    [SerializeField] private GameObject timer;
+    [SerializeField] private Text timeText;
+
+    private BoxCollider2D boxCollider;
+    private SpriteRenderer sr;
 
     void Start()
     {
-        isInfHPOn = false;
-        isDDOn = false;
-        isInfAmmoOn = false;
+        // Get components
+        boxCollider = GetComponent<BoxCollider2D>();
+        sr = GetComponent<SpriteRenderer>();
     }
 
     void Update()
     {
-        if (isInfAmmoOn && Player.sniperIsDead)
+        // If bonus is active and character dies
+
+        if (Rifler.Instance.isBonusActive && Player.riflerIsDead)
         {
-            timerGO.SetActive(false);
-            InfAmmoGO.SetActive(false);
-            CharacterChangeCode.canChange = true;
-            //GameManager.Instance.bulletsSAtAllInt = sHadAmmo + (GameManager.Instance.bulletsSAtAllInt - 999);
-            Destroy(STARGO);
-        }
-        if (isDDOn && Player.riflerIsDead)
-        {
-            timerGO.SetActive(false);
-            DDGO.SetActive(false);
-            CharacterChangeCode.canChange = true;
-            Destroy(STARGO);
-        }
-        if (isInfHPOn && Player.sicklerIsDead)
-        {
-            timerGO.SetActive(false);
-            InfHPGO.SetActive(false);
-            CharacterChangeCode.canChange = true;
-            Destroy(STARGO);
+            doubleDamageIcon.SetActive(false);
+            OnCharacterDeath();
         }
 
-        if (isDDOn && Rifler.Instance.ammoInStock == 0)
+        if (Sniper.Instance.isBonusActive && Player.sniperIsDead)
         {
-            //Rifler.Instance.ammoInStock += 30;
+            infiniteAmmoIcon.SetActive(false);
+            OnCharacterDeath();
         }
 
-        if (isInfAmmoOn)
+        if (Sickler.Instance.isBonusActive && Player.sicklerIsDead)
         {
-            //GameManager.Instance.bulletsSAtAllInt = 999;
+            immortalityIcon.SetActive(false);
+            OnCharacterDeath();
+        }
+
+        // If player is rifler, bonus is active, and player ran out of ammo, give 30 bonus rifle ammo 
+        if (Rifler.Instance.isBonusActive && Rifler.Instance.ammoInStock == 0)
+        {
+            StartCoroutine(GameManager.Instance.AmmoBonus(30, 1));
         }
     }
 
+    // Pick up bonus
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Player")
+        if (col.gameObject.CompareTag("Player"))
         {
-            if (Player.character == "Rifler" && !isDDOn)
+            CharacterChangeCode.canChange = false;
+            DisableComponentsAndPlaySound();
+            StartCoroutine(Timer());
+
+            if (Player.character == "Rifler" && !Rifler.Instance.isBonusActive)
             {
-                Rifler.Instance.RefillHP(100);
-                soundContrGO.GetComponent<SoundController>().bonusS();
-                boxcollider.enabled = false;
-                sr.color = new Color(0, 0, 0, 0);
-                DoubleDamage();
+                Rifler.Instance.RefillHPToFull(100);
+                doubleDamageIcon.SetActive(true);
+                StartCoroutine(Rifler.Instance.DoubleDamage());
             }
-            if (Player.character == "Sniper" && !isInfAmmoOn)
+            if (Player.character == "Sniper" && !Sniper.Instance.isBonusActive)
             {
-                Sniper.Instance.RefillHP(60);
-                //GameManager.Instance.canAttackS = true;
-                soundContrGO.GetComponent<SoundController>().bonusS();
-                boxcollider.enabled = false;
-                sr.color = new Color(0, 0, 0, 0);
-                InfiniteAmmo();
+                Sniper.Instance.RefillHPToFull(60);
+                infiniteAmmoIcon.SetActive(true);
+                StartCoroutine(Sniper.Instance.InfiniteAmmo(15));
             }
-            if (Player.character == "Sickler" && !isInfHPOn)
+            if (Player.character == "Sickler" && !Sickler.Instance.isBonusActive)
             {
-                Sickler.Instance.RefillHP(140);
-                soundContrGO.GetComponent<SoundController>().bonusS();
-                boxcollider.enabled = false;
-                sr.color = new Color(0, 0, 0, 0);
-                Immortality();
+                Sickler.Instance.RefillHPToFull(140);
+                immortalityIcon.SetActive(true);
+                StartCoroutine(Sickler.Instance.Immortality());
             }
         }
     }
 
-    void DoubleDamage()
+    private void OnCharacterDeath()
     {
-        StartCoroutine(Timer());
-        StartCoroutine(DDOff());
-        DDGO.SetActive(true);
-        CharacterChangeCode.canChange = false;
-        Rifler.Instance.DoubleDamage();
+        timer.SetActive(false);
+        CharacterChangeCode.canChange = true;
+        Destroy(gameObject);
     }
 
-    void InfiniteAmmo()
+    private void DisableComponentsAndPlaySound()
     {
-        //sHadAmmo = GameManager.Instance.bulletsSAtAllInt;
-        StartCoroutine(Timer());
-        StartCoroutine(InfAmmoOff());
-        InfAmmoGO.SetActive(true);
+        boxCollider.enabled = false;
+        sr.enabled = false;
+        SoundController.Instance.bonusS();
         CharacterChangeCode.canChange = false;
-        //GameManager.Instance.bulletsSAtAllInt = 999;
     }
 
-    void Immortality()
+    private IEnumerator Timer()
     {
-        StartCoroutine(Timer());
-        StartCoroutine(ImmortalityOff());
-        InfHPGO.SetActive(true);
-        CharacterChangeCode.canChange = false;
-        Sickler.Instance.Immortality();
-    }
-
-    IEnumerator Timer()
-    {
-        timerGO.SetActive(true);
+        timer.SetActive(true);
         for (int i = 15; i >= 0; i--)
         {
             timeText.text = i.ToString();
             yield return new WaitForSeconds(1);
             if (i == 0)
             {
-                timerGO.SetActive(false);
-                InfAmmoGO.SetActive(false);
-                InfHPGO.SetActive(false);
-                DDGO.SetActive(false);
+                timer.SetActive(false);
+                infiniteAmmoIcon.SetActive(false);
+                immortalityIcon.SetActive(false);
+                doubleDamageIcon.SetActive(false);
                 CharacterChangeCode.canChange = true;
-                Destroy(STARGO);
+                Destroy(gameObject);
             }
         }
-    }
-
-    IEnumerator ImmortalityOff()
-    {
-        isInfHPOn = true;
-        yield return new WaitForSeconds(15);
-        Sickler.Instance.RefillHP(140);
-        isInfHPOn = false;
-    }
-
-    IEnumerator InfAmmoOff()
-    {
-        isInfAmmoOn = true;
-        yield return new WaitForSeconds(15);
-        //GameManager.Instance.bulletsSAtAllInt = sHadAmmo + (GameManager.Instance.bulletsSAtAllInt - 999);
-        isInfAmmoOn = false;
-    }
-
-    IEnumerator DDOff()
-    {
-        isDDOn = true;
-        yield return new WaitForSeconds(15);
-        //Rifler.Instance.damage = 2;
-        //Rifler.Instance.damageHS = 3;
-        isDDOn = false;
     }
 }

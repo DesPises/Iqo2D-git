@@ -4,10 +4,10 @@ public class RAmmo : MonoBehaviour
 {
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Player")
+        if (col.gameObject.CompareTag("Player"))
         {
             SoundController.Instance.ammoS();
-            //Rifler.Instance.ammoInStock += 30;
+            StartCoroutine(GameManager.Instance.AmmoBonus(30, 1));
             Destroy(gameObject);
         }
     }

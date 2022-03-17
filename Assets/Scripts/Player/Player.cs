@@ -29,8 +29,8 @@ public class Player : MonoBehaviour
     protected int ammoMax;
     protected float reloadTime;
 
-    private bool secJump;
-    private bool isBonusActive;
+    protected bool secJump;
+    public bool isBonusActive;
     private bool canMove;
 
     public static string character;
@@ -47,7 +47,7 @@ public class Player : MonoBehaviour
     protected bool emptySoundCooldown;
 
     public int ammoInMag { get; protected set; }
-    public int ammoInStock { get; protected set; }
+    public int ammoInStock;
     protected int damage;
     protected int damageHS;
 
@@ -125,6 +125,7 @@ public class Player : MonoBehaviour
     public void HPBonus()
     {
         HP += 35;
+        SoundController.Instance.HPS();
     }
 
     public void GetDamage(int damage)
@@ -142,26 +143,12 @@ public class Player : MonoBehaviour
 
     // Bonuses
 
-    public void RefillHP(int full)
+    public void RefillHPToFull(int full)
     {
         HP = full;
     }
 
-    public IEnumerator AmmoBonus(int ammo)
-    {
-        if (Sniper.Instance.isBonusActive)
-        {
-            while (Sniper.Instance.isBonusActive)
-            {
-                yield return null;
-            }
-            ammoInStock += ammo;
-        }
-        else
-        {
-            ammoInStock += ammo;
-        }
-    }
+ 
 
     public IEnumerator DoubleDamage()
     {

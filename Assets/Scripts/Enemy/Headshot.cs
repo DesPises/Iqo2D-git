@@ -9,7 +9,7 @@ public class Headshot : MonoBehaviour
     // Get increased headshot damage from bullet
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Bullet")
+        if (col.gameObject.CompareTag("Bullet"))
         {
             enemy.GetComponent<Enemy>().GetHeadDamage();
             Destroy(col.gameObject);

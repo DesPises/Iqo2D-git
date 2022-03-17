@@ -1,9 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Audio;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,7 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject soundController;
 
     // HP
-    [SerializeField] private Image HPbarImage;
+    [SerializeField] private Image HPBarImage;
 
     // Ammo UI
     [SerializeField] private Text ammoInRiflerMagText;
@@ -59,9 +56,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public IEnumerator AmmoBonus(int ammo, int bulletType)
+    {
+        if (bulletType == 0)
+        {
+            if (Sniper.Instance.isBonusActive)
+            {
+                while (Sniper.Instance.isBonusActive)
+                {
+                    yield return null;
+                }
+                Sniper.Instance.ammoInStock += ammo;
+            }
+            else
+            {
+                Sniper.Instance.ammoInStock += ammo;
+            }
+        }
+        else
+        {
+            Rifler.Instance.ammoInStock += ammo;
+        }
+    }
+
+
+    // Display HP ammount
     public void HPBarFill(int HP, float multiplier)
     {
-        HPbarImage.fillAmount = HP * multiplier;
+        HPBarImage.fillAmount = HP * multiplier;
     }
 
    

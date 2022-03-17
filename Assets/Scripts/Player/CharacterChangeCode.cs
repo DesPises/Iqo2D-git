@@ -164,7 +164,7 @@ public class CharacterChangeCode : MonoBehaviour
         change = false;
         canChange = false;
         yield return new WaitForSeconds(0.25f);
-        if (!Star.isDDOn && !Star.isInfAmmoOn && !Star.isInfHPOn)
+        if (!Rifler.Instance.isBonusActive && !Sniper.Instance.isBonusActive && !Sickler.Instance.isBonusActive)
         {
             canChange = true;
         }

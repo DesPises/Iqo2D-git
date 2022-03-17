@@ -1,40 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HPBonus : MonoBehaviour
 {
-    public GameObject HPGO, vodkaGO, shawaGO, kebabGO, soundContrGO;
+    [SerializeField] private GameObject vodka;
+    [SerializeField] private GameObject shawa;
+    [SerializeField] private GameObject kebab;
 
     void Update()
     {
         if (Player.character == "Rifler")
         {
-            vodkaGO.SetActive(true);
-            shawaGO.SetActive(false);
-            kebabGO.SetActive(false);
+            vodka.SetActive(true);
+            shawa.SetActive(false);
+            kebab.SetActive(false);
         }
         if (Player.character == "Sniper")
         {
-            vodkaGO.SetActive(false);
-            shawaGO.SetActive(true);
-            kebabGO.SetActive(false);
+            vodka.SetActive(false);
+            shawa.SetActive(true);
+            kebab.SetActive(false);
         }
         if (Player.character == "Sickler")
         {
-            vodkaGO.SetActive(false);
-            shawaGO.SetActive(false);
-            kebabGO.SetActive(true);
-        }
-    }
-
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.gameObject.tag == "Player")
-        {
-            soundContrGO.GetComponent<SoundController>().HPS();
-            Destroy(HPGO);
-            
+            vodka.SetActive(false);
+            shawa.SetActive(false);
+            kebab.SetActive(true);
         }
     }
 }
