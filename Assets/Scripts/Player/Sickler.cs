@@ -6,14 +6,12 @@ public class Sickler : Player
 {
     public static Sickler Instance { get; private set; }
 
-    private float cooldownF;
-    private readonly float defCooldownF = 0.27f;
-    private readonly float rangeF = 2.3f;
-    public static float cdsi;
+    private float attackCooldown;
+    private readonly float defaultAttackCooldown = 0.27f;
+    private readonly float attackRange = 2.3f;
 
     public Transform attackPos;
     private LayerMask enemy;
-    private LayerMask enemyHead;
     private LayerMask BossLayer;
     public GameObject BossGO;
 
@@ -27,20 +25,19 @@ public class Sickler : Player
         damage = 12;
 
         enemy = LayerMask.GetMask("Enemy");
-        enemyHead = LayerMask.GetMask("EnemyHead");
         BossLayer = LayerMask.GetMask("Boss");
     }
 
     public void SicklerAttack()
     {
-        if (cooldownF <= 0)
+        if (attackCooldown <= 0)
         {
-            Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPos.position, rangeF, enemy);
+            Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemy);
             for (int i = 0; i < enemies.Length; i++)
             {
                 enemies[i].GetComponent<Enemy>().TakeDamage();
             }
-            cooldownF = defCooldownF;
+            attackCooldown = defaultAttackCooldown;
         }
     }
 
@@ -58,14 +55,13 @@ public class Sickler : Player
         }
 
         // Decrease cooldown by time
-        if (cooldownF > 0)
+        if (attackCooldown > 0)
         {
-            cooldownF -= Time.deltaTime;
-            cdsi = cooldownF;
+            attackCooldown -= Time.deltaTime;
         }
 
         // Attack Boss
-        if (BossGO != null && Physics2D.OverlapCircle(attackPos.position, rangeF, BossLayer) && Input.GetKeyDown(InputManager.IM.attackKey) && cooldownF <= 0)
+        if (BossGO != null && Physics2D.OverlapCircle(attackPos.position, attackRange, BossLayer) && Input.GetKeyDown(InputManager.IM.attackKey) && attackCooldown <= 0)
         {
             BossGO.GetComponent<Boss>().DamageFromSickler();
         }
@@ -105,10 +101,19 @@ public class Sickler : Player
         canAttack = true;
     }
 
+    // If big enemy's head is in sickler attack area and player press attack key, chop enemy's head
+    void OnTriggerStay2D(Collider2D col)
+    {
+        if (col.gameObject.CompareTag("EnemyHead") && Input.GetKeyDown(InputManager.IM.attackKey) && attackCooldown <= 0)
+        {
+            col.gameObject.GetComponentInParent<Enemy>().HeadOff();
+        }
+    }
+
     // Draw circle of attack range
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackPos.position, rangeF);
+        Gizmos.DrawWireSphere(attackPos.position, attackRange);
     }
 }

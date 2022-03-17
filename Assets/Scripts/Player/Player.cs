@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private Animations Anim;
+    [SerializeField] protected Animations Anim;
 
     [SerializeField] protected GameObject bulletPrefab;
     [SerializeField] protected GameObject magPrefab;
