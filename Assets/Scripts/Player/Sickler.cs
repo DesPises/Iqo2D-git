@@ -16,6 +16,7 @@ public class Sickler : Player
     void Start()
     {
         Instance = this;
+        player = gameObject;
 
         HPMax = 140;
         HP = HPMax;
@@ -45,7 +46,7 @@ public class Sickler : Player
         }
 
         // Attack
-        if (Input.GetKeyDown(InputManager.IM.attackKey) && canAttack && !PauseMenu.isPaused)
+        if (Input.GetKeyDown(InputManager.IM.attackKey) && canAttack && !GameManager.Instance.isPaused)
         {
             Attack();
         }

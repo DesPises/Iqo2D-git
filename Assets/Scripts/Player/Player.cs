@@ -66,7 +66,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (!PauseMenu.isPaused)
+        if (!GameManager.Instance.isPaused)
         {
             // Link player's pos to variable
             plCoordinateX = transform.position.x;

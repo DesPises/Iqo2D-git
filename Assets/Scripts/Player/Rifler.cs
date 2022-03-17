@@ -39,7 +39,7 @@ public class Rifler : Player
         // Reload
         if (ammoInStock > 0 && ammoInMag < 30)
         {
-            if (Input.GetKeyDown(InputManager.IM.reloadKey) && !PauseMenu.isPaused || ammoInMag <= 0)
+            if (Input.GetKeyDown(InputManager.IM.reloadKey) && !GameManager.Instance.isPaused || ammoInMag <= 0)
             {
                 EmptyMagDrop();
                 StartCoroutine(Reload(ammoMax, reloadTime));
@@ -50,7 +50,7 @@ public class Rifler : Player
 
         if (ammoInMag > 0)
         {
-            if (Input.GetKey(InputManager.IM.attackKey) && canAttack && !reloading && !PauseMenu.isPaused)
+            if (Input.GetKey(InputManager.IM.attackKey) && canAttack && !reloading && !GameManager.Instance.isPaused)
             {
                 SoundController.Instance.akShootS();
 
@@ -99,7 +99,7 @@ public class Rifler : Player
 
         // Empty
 
-        if (Input.GetKey(InputManager.IM.attackKey) && ammoInStock <= 0 && ammoInMag <= 0 && !emptySoundCooldown && !PauseMenu.isPaused)
+        if (Input.GetKey(InputManager.IM.attackKey) && ammoInStock <= 0 && ammoInMag <= 0 && !emptySoundCooldown && !GameManager.Instance.isPaused)
         {
             StartCoroutine(EmptyMagSound());
         }

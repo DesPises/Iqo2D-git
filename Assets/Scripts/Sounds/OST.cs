@@ -31,10 +31,10 @@ public class OST : MonoBehaviour
     void Update()
     {
         PlayerPrefs.SetFloat("timeAudioPrevious", ost.time);
-        if (ost.volume != PlayerPrefs.GetFloat("volume") * 0.5f && !bossScene && !PauseMenu.isPaused)
+        if (ost.volume != PlayerPrefs.GetFloat("volume") * 0.5f && !bossScene && !GameManager.Instance.isPaused)
             StartCoroutine(WhenUnpaused());
 
-        if (bossScene && !PauseMenu.isPaused)
+        if (bossScene && !GameManager.Instance.isPaused)
             ost.volume = PlayerPrefs.GetFloat("volume");
     }
 
@@ -46,7 +46,7 @@ public class OST : MonoBehaviour
     IEnumerator WhenUnpaused()
     {
         yield return null;
-        if (!PauseMenu.isPaused || notPlayableScene)
+        if (!GameManager.Instance.isPaused || notPlayableScene)
             ost.volume = PlayerPrefs.GetFloat("volume") * 0.5f;
     }
 }
