@@ -710,6 +710,45 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &83106818
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 83106819}
+  m_Layer: 5
+  m_Name: Eng
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &83106819
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 83106818}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1326583010}
+  - {fileID: 825520814}
+  - {fileID: 1854002455}
+  m_Father: {fileID: 105123315}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &84764425
 GameObject:
   m_ObjectHideFlags: 0
@@ -1014,7 +1053,7 @@ GameObject:
   - component: {fileID: 105123317}
   - component: {fileID: 105123316}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Pause Menu Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1032,13 +1071,9 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1326583010}
-  - {fileID: 825520814}
-  - {fileID: 1854002455}
-  - {fileID: 794514810}
-  - {fileID: 1285601271}
-  - {fileID: 1426261834}
-  m_Father: {fileID: 755279250}
+  - {fileID: 83106819}
+  - {fileID: 748614480}
+  m_Father: {fileID: 3680901039801998161}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3589,14 +3624,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a5aaeeb8a51c7147b4483f49c419284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: {fileID: 1569340834}
-  HPCopy: {fileID: 0}
-  rB: {fileID: 1635810622}
-  rBCopy: {fileID: 0}
-  sB: {fileID: 906928120}
-  sBCopy: {fileID: 0}
-  Star: {fileID: 1176274732}
-  StarCopy: {fileID: 0}
+  HPBonusPrefab: {fileID: 0}
+  riflerAmmoBonusPrefab: {fileID: 0}
+  sniperAmmoBonusPrefab: {fileID: 0}
+  starBonusPrefab: {fileID: 0}
 --- !u!1 &354066739
 GameObject:
   m_ObjectHideFlags: 0
@@ -6114,6 +6145,45 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &748614479
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 748614480}
+  m_Layer: 5
+  m_Name: Rus
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &748614480
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748614479}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 794514810}
+  - {fileID: 1285601271}
+  - {fileID: 1426261834}
+  m_Father: {fileID: 105123315}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &755279248
 GameObject:
   m_ObjectHideFlags: 0
@@ -6123,7 +6193,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 755279250}
-  - component: {fileID: 755279249}
   m_Layer: 0
   m_Name: PauseMenu
   m_TagString: Untagged
@@ -6131,26 +6200,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &755279249
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 755279248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd57dbd8d6f20fd42bd61955b2292bec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pauseGO: {fileID: 105123314}
-  cGO: {fileID: 1326583009}
-  crGO: {fileID: 794514809}
-  rGO: {fileID: 825520813}
-  rrGO: {fileID: 1285601270}
-  mGO: {fileID: 1854002454}
-  mrGO: {fileID: 1426261830}
-  ostGO: {fileID: 2087383846}
 --- !u!4 &755279250
 Transform:
   m_ObjectHideFlags: 0
@@ -6162,8 +6211,7 @@ Transform:
   m_LocalPosition: {x: 7.853045, y: 0.7799258, z: -29.484972}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 105123315}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6667,8 +6715,8 @@ RectTransform:
   m_Children:
   - {fileID: 84764426}
   - {fileID: 1224302696}
-  m_Father: {fileID: 105123315}
-  m_RootOrder: 3
+  m_Father: {fileID: 748614480}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -6719,7 +6767,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 755279249}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: Continue
         m_Mode: 1
@@ -7036,7 +7084,7 @@ RectTransform:
   m_Children:
   - {fileID: 1124252765}
   - {fileID: 769242050}
-  m_Father: {fileID: 105123315}
+  m_Father: {fileID: 83106819}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -7088,7 +7136,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 755279249}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: Restart
         m_Mode: 1
@@ -7839,8 +7887,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e682be40cd0e2d4b8301da6e938d459, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sAmmoGO: {fileID: 906928120}
-  soundContrGO: {fileID: 2040679449}
 --- !u!61 &906928125
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -10011,15 +10057,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e380a219177d1e488c33c686bd9e98c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InfAmmoGO: {fileID: 177364226}
-  InfHPGO: {fileID: 1609991555}
-  DDGO: {fileID: 713752090}
-  timerGO: {fileID: 151139429}
-  STARGO: {fileID: 1176274732}
-  soundContrGO: {fileID: 2040679449}
+  infiniteAmmoIcon: {fileID: 0}
+  immortalityIcon: {fileID: 0}
+  doubleDamageIcon: {fileID: 0}
+  timer: {fileID: 0}
   timeText: {fileID: 1790524873}
-  boxcollider: {fileID: 1176274737}
-  sr: {fileID: 1176274734}
 --- !u!61 &1176274737
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11004,8 +11046,8 @@ RectTransform:
   m_Children:
   - {fileID: 1087989194}
   - {fileID: 173364354}
-  m_Father: {fileID: 105123315}
-  m_RootOrder: 4
+  m_Father: {fileID: 748614480}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -11056,7 +11098,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 755279249}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: Restart
         m_Mode: 1
@@ -11595,7 +11637,7 @@ RectTransform:
   m_Children:
   - {fileID: 778144861}
   - {fileID: 5163324}
-  m_Father: {fileID: 105123315}
+  m_Father: {fileID: 83106819}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -11647,7 +11689,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 755279249}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: Continue
         m_Mode: 1
@@ -12523,7 +12565,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 755279249}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: MainMenu
         m_Mode: 1
@@ -12587,8 +12629,8 @@ RectTransform:
   m_Children:
   - {fileID: 418431011}
   - {fileID: 1313240555}
-  m_Father: {fileID: 105123315}
-  m_RootOrder: 5
+  m_Father: {fileID: 748614480}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -15567,7 +15609,7 @@ RectTransform:
   m_Children:
   - {fileID: 782242859}
   - {fileID: 635230838}
-  m_Father: {fileID: 105123315}
+  m_Father: {fileID: 83106819}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -15619,7 +15661,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 755279249}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: MainMenu
         m_Mode: 1
@@ -18434,6 +18476,8 @@ MonoBehaviour:
   crouchFireAnimationPics: []
   gizmosY: 2
   gizmosX: 0
+  isBonusActive: 0
+  ammoInStock: 0
 --- !u!50 &812879073764450760
 Rigidbody2D:
   serializedVersion: 4
@@ -18501,6 +18545,8 @@ MonoBehaviour:
   crouchFireAnimationPics: []
   gizmosY: 0
   gizmosX: 0
+  isBonusActive: 0
+  ammoInStock: 0
 --- !u!114 &812879073764450763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41061,7 +41107,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 105123315}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -41097,6 +41144,9 @@ MonoBehaviour:
   ammoInRiflerStockText: {fileID: 0}
   ammoInSniperMagText: {fileID: 0}
   ammoInSniperStockText: {fileID: 0}
+  pauseGO: {fileID: 0}
+  engElements: {fileID: 0}
+  rusElements: {fileID: 0}
 --- !u!1 &3680901039801998167
 GameObject:
   m_ObjectHideFlags: 0
@@ -48094,6 +48144,8 @@ MonoBehaviour:
   crouchFireAnimationPics: []
   gizmosY: 1.95
   gizmosX: 0.3
+  isBonusActive: 0
+  ammoInStock: 0
 --- !u!61 &6229390993649034382
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -48161,6 +48213,8 @@ MonoBehaviour:
   crouchFireAnimationPics: []
   gizmosY: 0
   gizmosX: 0
+  isBonusActive: 0
+  ammoInStock: 0
 --- !u!114 &6229390993649034385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48612,6 +48666,8 @@ MonoBehaviour:
   crouchFireAnimationPics: []
   gizmosY: 3.8
   gizmosX: -0.45
+  isBonusActive: 0
+  ammoInStock: 0
 --- !u!114 &6685572641584056885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48632,6 +48688,8 @@ MonoBehaviour:
   crouchFireAnimationPics: []
   gizmosY: 0
   gizmosX: 0
+  isBonusActive: 0
+  ammoInStock: 0
   attackPos: {fileID: 878310108}
   BossGO: {fileID: 0}
 --- !u!114 &6685572641584056886

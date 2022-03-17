@@ -20,6 +20,7 @@ TagManager:
   - StarBonus
   - AmmoSniper
   - AmmoRifler
+  - SniperBullet
   layers:
   - Default
   - TransparentFX

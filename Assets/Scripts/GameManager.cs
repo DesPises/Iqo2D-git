@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -23,10 +24,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text ammoInSniperMagText;
     [SerializeField] private Text ammoInSniperStockText;
 
+    // Pause menu
+    public bool isPaused;
+
+    [SerializeField] private GameObject pauseElements;
+    [SerializeField] private GameObject engElements;
+    [SerializeField] private GameObject rusElements;
+
     void Start()
     {
         Instance = this;
 
+        isPaused = false;
         Time.timeScale = 1;
         deathMenu.SetActive(false);
     }
@@ -51,8 +60,33 @@ public class GameManager : MonoBehaviour
         {
             ammoInSniperMagText.text = Sniper.Instance.ammoInMag.ToString();
             ammoInSniperStockText.text = "/" + Sniper.Instance.ammoInStock.ToString();
-         
-            
+        }
+
+        // Pause
+        if (Input.GetKeyDown(KeyCode.Escape) && !isPaused)
+        {
+            StartCoroutine(IsPaused());
+            if (Language.eng)
+            {
+                engElements.SetActive(true);
+                rusElements.SetActive(false);
+            }
+            if (!Language.eng)
+            {
+                engElements.SetActive(false);
+                rusElements.SetActive(true);
+            }
+
+            pauseElements.SetActive(true);
+            Time.timeScale = 0;
+
+            if (ostGO != null)
+                ostGO.GetComponent<OST>().WhenPaused();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape) && isPaused)
+        {
+            Continue();
         }
     }
 
@@ -86,11 +120,54 @@ public class GameManager : MonoBehaviour
         HPBarImage.fillAmount = HP * multiplier;
     }
 
-   
-    // Pause soundtrack and stop time
+
+    // Pause
+    public void Continue()
+    {
+        isPaused = false;
+        pauseElements.SetActive(false);
+        Time.timeScale = 1;
+    }
+
+    public void Restart()
+    {
+        Player.riflerIsDead = false;
+        Player.sniperIsDead = false;
+        Player.sicklerIsDead = false;
+        CharacterChangeCode.canChange = true;
+        StartCoroutine(RestartC());
+    }
+
+    public void MainMenu()
+    {
+        Player.riflerIsDead = false;
+        Player.sniperIsDead = false;
+        Player.sicklerIsDead = false;
+        StartCoroutine(MainMenuC());
+    }
+
+    public IEnumerator RestartC()
+    {
+        Time.timeScale = 1;
+        yield return null;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public IEnumerator MainMenuC()
+    {
+        Time.timeScale = 1;
+        yield return null;
+        SceneManager.LoadScene(0);
+    }
+
+    IEnumerator IsPaused()
+    {
+        yield return null;
+        isPaused = true;
+    }
     IEnumerator TimeStop()
     {
-        PauseMenu.isPaused = true;
+        isPaused = true;
         OST.Instance.WhenPaused();
         yield return null;
         Time.timeScale = 0;
