@@ -36,8 +36,9 @@ public class Animations : MonoBehaviour
         anim.SetBool("attack", true);
     }
 
-    public void AttackOff()
+    public IEnumerator AttackOff()
     {
+        yield return null;
         anim.SetBool("attack", false);
     }
 

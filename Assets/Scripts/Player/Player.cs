@@ -1,11 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] protected Animations Anim;
 
+    // Objects
     [SerializeField] protected GameObject bulletPrefab;
     [SerializeField] protected GameObject magPrefab;
     [SerializeField] protected GameObject player;
@@ -13,34 +13,29 @@ public class Player : MonoBehaviour
     [SerializeField] protected SpriteRenderer[] fireAnimationPics;
     [SerializeField] protected SpriteRenderer[] crouchFireAnimationPics;
 
+    // Components
     protected LayerMask floorLayer;
-
     protected Rigidbody2D plRB;
 
-    [SerializeField] private float gizmosY;
-    [SerializeField] private float gizmosX;
-
+    // Readonly variables
     private readonly float jumpForce = 200;
     private readonly float floorDist = 1;
+    protected readonly Color invisible = new(255, 255, 255, 0);
+    protected readonly Color visible = new(255, 255, 255, 190);
 
+    protected float gizmosY;
+    protected float gizmosX;
+
+    // Player parameters
     protected int HP;
     protected int HPMax;
-    protected float attackRate;
     protected int ammoMax;
+    protected float attackRate;
     protected float reloadTime;
 
     protected bool secJump;
-    public bool isBonusActive;
     protected bool canMove;
-
-    public static string character;
-    public static float coordinateX;
-
-    public static bool isMovingForward = true;
-    public static bool onGround;
-    public static bool riflerIsDead;
-    public static bool sniperIsDead;
-    public static bool sicklerIsDead;
+    public bool isBonusActive;
 
     protected bool canAttack;
     protected bool reloading;
@@ -51,8 +46,15 @@ public class Player : MonoBehaviour
     protected int damage;
     protected int damageHS;
 
-    protected readonly Color invisible = new(255, 255, 255, 0);
-    protected readonly Color visible = new(255, 255, 255, 190);
+    // Static variables
+    public static string character;
+    public static float coordinateX;
+
+    public static bool isMovingForward = true;
+    public static bool onGround;
+    public static bool riflerIsDead;
+    public static bool sniperIsDead;
+    public static bool sicklerIsDead;
 
     protected void Movement()
     {
@@ -180,6 +182,8 @@ public class Player : MonoBehaviour
     }
     protected IEnumerator Reload(int ammoMax, float reloadTime)
     {
+        StartCoroutine(Anim.Reload());
+
         int leftInMag = ammoInMag;
 
         if (ammoInMag + ammoInStock > ammoMax)

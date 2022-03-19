@@ -1,5 +1,16 @@
-// Empty class helping to use Sniper methods from animation keys
+using UnityEngine;
 
-public class SniperReceiver : Sniper
+// Class helping to use Sniper sound methods from animation keys
+
+public class SniperReceiver : MonoBehaviour
 {
+    public void SvdReloadSound()
+    {
+        Sniper.Instance.SvdReloadSound();
+    }
+
+    public void RunSound()
+    {
+        Sniper.Instance.RunSound();
+    }
 }

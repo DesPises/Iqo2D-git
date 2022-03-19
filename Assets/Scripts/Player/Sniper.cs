@@ -10,8 +10,10 @@ public class Sniper : Player
         Instance = this;
         plRB = GetComponent<Rigidbody2D>();
         floorLayer = LayerMask.GetMask("Floor");
+
         canMove = true;
         isMovingForward = true;
+        canAttack = true;
 
         HPMax = 60;
         HP = HPMax;
@@ -23,7 +25,8 @@ public class Sniper : Player
         attackRate = 1f;
         ammoMax = 5;
         reloadTime = 1;
-        canAttack = true;
+        gizmosX = 0f;
+        gizmosY = 2f;
     }
 
     void Update()
@@ -37,7 +40,7 @@ public class Sniper : Player
         }
 
         // HP display
-        GameManager.Instance.HPBarFill(HP, 1 / HPMax);
+        GameManager.Instance.HPBarFill(HP, 1f / HPMax);
 
         // Death
         if (HP <= 0)
@@ -66,6 +69,8 @@ public class Sniper : Player
             if (Input.GetKeyDown(InputManager.IM.attackKey) && canAttack && !reloading && !GameManager.Instance.isPaused)
             {
                 SoundController.Instance.SvdShoot();
+                Anim.Attack();
+                StartCoroutine(Anim.AttackOff());
 
                 StartCoroutine(FireRateControl(attackRate));
 
@@ -149,11 +154,11 @@ public class Sniper : Player
 
             if (Input.GetKey(InputManager.IM.crouchKey))
             {
-                pos = player.transform.position + new Vector3(1, 2.5f);
+                pos = player.transform.position + new Vector3(1.8f, 2.5f);
             }
             else
             {
-                pos = player.transform.position + new Vector3(0.4f, 3);
+                pos = player.transform.position + new Vector3(1.1f, 3);
             }
         }
         else
@@ -161,11 +166,11 @@ public class Sniper : Player
             rot = Quaternion.Euler(0, 180, 0);
             if (Input.GetKey(InputManager.IM.crouchKey))
             {
-                pos = player.transform.position + new Vector3(-1, 2.5f);
+                pos = player.transform.position + new Vector3(-1.8f, 2.5f);
             }
             else
             {
-                pos = player.transform.position + new Vector3(-0.4f, 3);
+                pos = player.transform.position + new Vector3(-1.1f, 3);
             }
         }
 

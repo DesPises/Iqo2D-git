@@ -10,8 +10,10 @@ public class Rifler : Player
         player = gameObject;
         plRB = GetComponent<Rigidbody2D>();
         floorLayer = LayerMask.GetMask("Floor");
+
         canMove = true;
         isMovingForward = true;
+        canAttack = true;
 
         HPMax = 100;
         HP = HPMax;
@@ -22,7 +24,8 @@ public class Rifler : Player
         attackRate = 0.36f;
         ammoMax = 30;
         reloadTime = 0.75f;
-        canAttack = true;
+        gizmosX = 0.3f;
+        gizmosY = 1.95f;
     }
 
     void Update()
@@ -36,7 +39,7 @@ public class Rifler : Player
         }
 
         // HP display
-        GameManager.Instance.HPBarFill(HP, 1 / HPMax);
+        GameManager.Instance.HPBarFill(HP, 1f / HPMax);
 
         // Death
         if (HP <= 0)
@@ -65,6 +68,7 @@ public class Rifler : Player
             if (Input.GetKey(InputManager.IM.attackKey) && canAttack && !reloading && !GameManager.Instance.isPaused)
             {
                 SoundController.Instance.AkShoot();
+                Anim.Attack();
 
                 StartCoroutine(FireRateControl(attackRate));
 
@@ -108,12 +112,17 @@ public class Rifler : Player
                 bulletRb.velocity = 45 * direction * Vector3.right;
             }
         }
+        if (Input.GetKeyUp(InputManager.IM.attackKey) || reloading)
+        {
+            StartCoroutine(Anim.AttackOff());
+        }
 
         // Empty
 
         if (Input.GetKey(InputManager.IM.attackKey) && ammoInStock <= 0 && ammoInMag <= 0 && !emptySoundCooldown && !GameManager.Instance.isPaused)
         {
             StartCoroutine(EmptyMagSound());
+            StartCoroutine(Anim.AttackOff());
         }
     }
 

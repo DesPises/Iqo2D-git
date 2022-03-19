@@ -20,11 +20,14 @@ public class Sickler : Player
         plRB = GetComponent<Rigidbody2D>();
         floorLayer = LayerMask.GetMask("Floor");
         canMove = true;
+        canAttack = true;
         isMovingForward = true;
 
         HPMax = 140;
         HP = HPMax;
         damage = 12;
+        gizmosX = -0.45f;
+        gizmosY = 3.8f;
 
         enemy = LayerMask.GetMask("Enemy");
         BossLayer = LayerMask.GetMask("Boss");
@@ -41,7 +44,7 @@ public class Sickler : Player
         }
 
         // HP display
-        GameManager.Instance.HPBarFill(HP, 1 / HPMax);
+        GameManager.Instance.HPBarFill(HP, 1f / HPMax);
 
         // Death
         if (HP <= 0)
@@ -75,7 +78,7 @@ public class Sickler : Player
     void Attack()
     {
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
-
+        Anim.Attack();
 
         Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemy);
         for (int i = 0; i < enemies.Length; i++)
@@ -95,6 +98,7 @@ public class Sickler : Player
         rb.AddForce(Vector2.down * 40 + Vector2.right * 50, ForceMode2D.Impulse);
 
         StartCoroutine(FireRateControl(fireRate));
+        StartCoroutine(Anim.AttackOff());
     }
 
     // If big enemy's head is in sickler attack area and player press attack key, chop enemy's head

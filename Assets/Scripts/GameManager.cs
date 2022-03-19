@@ -40,6 +40,9 @@ public class GameManager : MonoBehaviour
         deathMenu.SetActive(false);
         pauseElements.SetActive(false);
 
+        // Set default character to rifler
+        SwitchToRifler();
+
         // Language
         foreach (GameObject go in engElements)
         {
@@ -53,19 +56,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        // Rifler ammo UI
-        if (Player.character == "Rifler")
-        {
-            ammoInRiflerMagText.text = Rifler.Instance.ammoInMag.ToString();
-            ammoInRiflerStockText.text = "/" + Rifler.Instance.ammoInStock.ToString();
-        }
-
-        // Sniper ammo UI
-        if (Player.character == "Sniper")
-        {
-            ammoInSniperMagText.text = Sniper.Instance.ammoInMag.ToString();
-            ammoInSniperStockText.text = "/" + Sniper.Instance.ammoInStock.ToString();
-        }
+        StartCoroutine(AmmoDisplayCoroutine());
 
         // Pause
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -91,6 +82,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private IEnumerator AmmoDisplayCoroutine()
+    {
+        yield return null;
+
+        // Rifler ammo UI
+        if (Player.character == "Rifler")
+        {
+            ammoInRiflerMagText.text = Rifler.Instance.ammoInMag.ToString();
+            ammoInRiflerStockText.text = "/" + Rifler.Instance.ammoInStock.ToString();
+        }
+
+        // Sniper ammo UI
+        if (Player.character == "Sniper")
+        {
+            ammoInSniperMagText.text = Sniper.Instance.ammoInMag.ToString();
+            ammoInSniperStockText.text = "/" + Sniper.Instance.ammoInStock.ToString();
+        }
+    }
     public IEnumerator AmmoBonus(int ammo, int bulletType)
     {
         if (bulletType == 0)

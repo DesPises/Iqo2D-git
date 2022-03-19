@@ -18191,16 +18191,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8df81205c71160340b48bf13d361f75a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Anim: {fileID: 0}
-  bulletPrefab: {fileID: 0}
-  magPrefab: {fileID: 0}
-  player: {fileID: 0}
-  fireAnimationPics: []
-  crouchFireAnimationPics: []
-  gizmosY: 0
-  gizmosX: 0
-  isBonusActive: 0
-  ammoInStock: 0
 --- !u!1 &812879073764450753
 GameObject:
   m_ObjectHideFlags: 0
@@ -18228,7 +18218,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 812879073764450753}
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 2.86, y: -6.28, z: 1.089626}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -49302,7 +49292,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7126485471513621541
 RectTransform:
   m_ObjectHideFlags: 0
@@ -49403,7 +49393,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7126485471760381384
 RectTransform:
   m_ObjectHideFlags: 0
