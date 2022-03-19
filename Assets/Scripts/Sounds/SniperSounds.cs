@@ -8,7 +8,7 @@ public class SniperSounds : MonoBehaviour
 
     public void runSound()
     {
-        soundContrGO.GetComponent<SoundController>().RunS();
+        soundContrGO.GetComponent<SoundController>().Run();
     }
 
     public void jumpSound()
@@ -18,7 +18,7 @@ public class SniperSounds : MonoBehaviour
 
     public void reloadSound()
     {
-        soundContrGO.GetComponent<SoundController>().svdReloadS();
+        soundContrGO.GetComponent<SoundController>().SvdReload();
     }
 
     

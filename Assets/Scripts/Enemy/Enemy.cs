@@ -35,12 +35,12 @@ public class Enemy : MonoBehaviour
         //Move
         if (!reverseRotation)
         {
-            if (transform.position.x > Player.plCoordinateX && !isNearPlayer && HPInt > 0)
+            if (transform.position.x > Player.coordinateX && !isNearPlayer && HPInt > 0)
             {
                 rb.velocity = new Vector2(-speed, -1);
                 enemyGO.transform.eulerAngles = new Vector3(0, 0, 0);
             }
-            if (transform.position.x < Player.plCoordinateX && !isNearPlayer && HPInt > 0)
+            if (transform.position.x < Player.coordinateX && !isNearPlayer && HPInt > 0)
             {
                 rb.velocity = new Vector2(speed, -1);
                 enemyGO.transform.eulerAngles = new Vector3(0, 180, 0);
@@ -48,12 +48,12 @@ public class Enemy : MonoBehaviour
         }
         if (reverseRotation)
         {
-            if (transform.position.x > Player.plCoordinateX && !isNearPlayer && HPInt > 0)
+            if (transform.position.x > Player.coordinateX && !isNearPlayer && HPInt > 0)
             {
                 rb.velocity = new Vector2(-speed, -1);
                 enemyGO.transform.eulerAngles = new Vector3(0, 180, 0);
             }
-            if (transform.position.x < Player.plCoordinateX && !isNearPlayer && HPInt > 0)
+            if (transform.position.x < Player.coordinateX && !isNearPlayer && HPInt > 0)
             {
                 rb.velocity = new Vector2(speed, -1);
                 enemyGO.transform.eulerAngles = new Vector3(0, 0, 0);
@@ -188,26 +188,26 @@ public class Enemy : MonoBehaviour
 
     public void DmgSound()
     {
-        soundContrGO.GetComponent<SoundController>().alienHitS();
+        soundContrGO.GetComponent<SoundController>().AlienHit();
     }
 
     public void DeathSound()
     {
-        soundContrGO.GetComponent<SoundController>().alienDeathS();
+        soundContrGO.GetComponent<SoundController>().AlienDeath();
     }
 
     public void ExplosionSound()
     {
-        soundContrGO.GetComponent<SoundController>().explosionS();
+        soundContrGO.GetComponent<SoundController>().Explosion();
     }
 
     public void LaserSound()
     {
-        soundContrGO.GetComponent<SoundController>().laserS();
+        soundContrGO.GetComponent<SoundController>().Laser();
     }
 
     public void DamageFromSicklerSound()
     {
-        soundContrGO.GetComponent<SoundController>().siHitS();
+        soundContrGO.GetComponent<SoundController>().SickleHit();
     }
 }

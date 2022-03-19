@@ -90,7 +90,7 @@ public class Star : MonoBehaviour
     {
         boxCollider.enabled = false;
         sr.enabled = false;
-        SoundController.Instance.bonusS();
+        SoundController.Instance.StarBonus();
         CharacterChangeCode.canChange = false;
     }
 

@@ -8,6 +8,10 @@ public class Sniper : Player
     void Start()
     {
         Instance = this;
+        plRB = GetComponent<Rigidbody2D>();
+        floorLayer = LayerMask.GetMask("Floor");
+        canMove = true;
+        isMovingForward = true;
 
         HPMax = 60;
         HP = HPMax;
@@ -24,6 +28,14 @@ public class Sniper : Player
 
     void Update()
     {
+        // Movement
+
+        if (!sniperIsDead)
+        {
+            Move(4);
+            Movement();
+        }
+
         // HP display
         GameManager.Instance.HPBarFill(HP, 1 / HPMax);
 
@@ -53,7 +65,7 @@ public class Sniper : Player
         {
             if (Input.GetKeyDown(InputManager.IM.attackKey) && canAttack && !reloading && !GameManager.Instance.isPaused)
             {
-                SoundController.Instance.svdShootS();
+                SoundController.Instance.SvdShoot();
 
                 StartCoroutine(FireRateControl(attackRate));
 

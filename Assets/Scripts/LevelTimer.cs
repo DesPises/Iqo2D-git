@@ -1,20 +1,18 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-
 public class LevelTimer : MonoBehaviour
 {
-    public Text timeText;
+    [SerializeField] private Text timeText;
 
     void Start()
     {
-        StartCoroutine(TheLevelTimer());   
+        StartCoroutine(LevelTimerCoroutine());   
     }
 
-    IEnumerator TheLevelTimer()
+    IEnumerator LevelTimerCoroutine()
     {
         for (int i = 100; i >= 0; i--)
         {

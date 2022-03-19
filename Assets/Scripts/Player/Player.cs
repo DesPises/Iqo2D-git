@@ -13,9 +13,9 @@ public class Player : MonoBehaviour
     [SerializeField] protected SpriteRenderer[] fireAnimationPics;
     [SerializeField] protected SpriteRenderer[] crouchFireAnimationPics;
 
-    private LayerMask floorLayer;
+    protected LayerMask floorLayer;
 
-    private Rigidbody2D plRB;
+    protected Rigidbody2D plRB;
 
     [SerializeField] private float gizmosY;
     [SerializeField] private float gizmosX;
@@ -31,10 +31,10 @@ public class Player : MonoBehaviour
 
     protected bool secJump;
     public bool isBonusActive;
-    private bool canMove;
+    protected bool canMove;
 
     public static string character;
-    public static float plCoordinateX;
+    public static float coordinateX;
 
     public static bool isMovingForward = true;
     public static bool onGround;
@@ -54,22 +54,12 @@ public class Player : MonoBehaviour
     protected readonly Color invisible = new(255, 255, 255, 0);
     protected readonly Color visible = new(255, 255, 255, 190);
 
-    private void Start()
-    {
-        floorLayer = LayerMask.GetMask("Floor");
-        plRB = GetComponent<Rigidbody2D>();
-        canMove = true;
-
-        isMovingForward = true;
-    }
-
-
-    void Update()
+    protected void Movement()
     {
         if (!GameManager.Instance.isPaused)
         {
             // Link player's pos to variable
-            plCoordinateX = transform.position.x;
+            coordinateX = transform.position.x;
 
             // Ground check
             onGround = Physics2D.Raycast(transform.position + Vector3.up * gizmosY + Vector3.right * gizmosX, Vector2.down, floorDist, floorLayer);
@@ -97,23 +87,6 @@ public class Player : MonoBehaviour
             {
                 Anim.CrouchOff();
             }
-
-            // Characters specifications
-
-            if (character == "Rifler" && !riflerIsDead)
-            {
-                Move(5);
-            }
-
-            if (character == "Sniper" && !sniperIsDead)
-            {
-                Move(4);
-            }
-
-            if (character == "Sickler" && !sicklerIsDead && canMove)
-            {
-                Move(6);
-            }
         }
     }
 
@@ -125,7 +98,7 @@ public class Player : MonoBehaviour
     public void HPBonus()
     {
         HP += 35;
-        SoundController.Instance.HPS();
+        SoundController.Instance.HPBonus();
     }
 
     public void GetDamage(int damage)
@@ -226,7 +199,7 @@ public class Player : MonoBehaviour
 
     //Movement methods
 
-    private void Move(int moveSpeed)
+    protected void Move(int moveSpeed)
     {
         if (!Input.GetKey(InputManager.IM.crouchKey))
         {
@@ -270,10 +243,10 @@ public class Player : MonoBehaviour
         plRB.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
 
-    void SecJump()
+    protected void SecJump()
     {
         SoundController.Instance.JumpS();
-
+        secJump = false;
         StartCoroutine(Anim.SecJump());
         plRB.velocity = new Vector2(plRB.velocity.x, 0);
         plRB.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
@@ -310,44 +283,49 @@ public class Player : MonoBehaviour
         }
     }
 
-    //Sounds methods
+    //Sounds methods for animations keys
 
     public void AkReloadSound()
     {
-        SoundController.Instance.akReloadS();
+        SoundController.Instance.AkReload();
+    }
+
+    public void SvdReloadSound()
+    {
+        SoundController.Instance.SvdReload();
     }
 
     public void RunSound()
     {
-        SoundController.Instance.RunS();
+        SoundController.Instance.Run();
     }
 
     public void SickleSound()
     {
-        SoundController.Instance.siVzmahS();
+        SoundController.Instance.Sickle();
     }
 
     public void SiHitSound()
     {
-        SoundController.Instance.siHitS();
+        SoundController.Instance.SickleHit();
     }
 
     protected IEnumerator EmptyMagSound()
     {
         emptySoundCooldown = true;
-        SoundController.Instance.emptyMagS();
+        SoundController.Instance.EmptyMag();
         yield return new WaitForSeconds(0.4f);
         emptySoundCooldown = false;
     }
 
     public void DmgSound()
     {
-        SoundController.Instance.dmgS();
+        SoundController.Instance.Damage();
     }
 
     public void AlienHitSound()
     {
-        SoundController.Instance.alienHitS();
+        SoundController.Instance.AlienHit();
     }
 
 

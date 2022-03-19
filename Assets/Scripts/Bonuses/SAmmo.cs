@@ -6,7 +6,7 @@ public class SAmmo : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            SoundController.Instance.ammoS();
+            SoundController.Instance.AmmoSniper();
             StartCoroutine(GameManager.Instance.AmmoBonus(5, 0));
             Destroy(gameObject);
         }

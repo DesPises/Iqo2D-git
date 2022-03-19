@@ -17,6 +17,10 @@ public class Sickler : Player
     {
         Instance = this;
         player = gameObject;
+        plRB = GetComponent<Rigidbody2D>();
+        floorLayer = LayerMask.GetMask("Floor");
+        canMove = true;
+        isMovingForward = true;
 
         HPMax = 140;
         HP = HPMax;
@@ -28,8 +32,18 @@ public class Sickler : Player
 
     void Update()
     {
+        // Movement
+
+        if (!sicklerIsDead && canMove)
+        {
+            Move(6);
+            Movement();
+        }
+
+        // HP display
         GameManager.Instance.HPBarFill(HP, 1 / HPMax);
 
+        // Death
         if (HP <= 0)
         {
             Death();

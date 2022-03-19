@@ -8,6 +8,10 @@ public class Rifler : Player
     {
         Instance = this;
         player = gameObject;
+        plRB = GetComponent<Rigidbody2D>();
+        floorLayer = LayerMask.GetMask("Floor");
+        canMove = true;
+        isMovingForward = true;
 
         HPMax = 100;
         HP = HPMax;
@@ -23,6 +27,14 @@ public class Rifler : Player
 
     void Update()
     {
+        // Movement
+
+        if (!riflerIsDead)
+        {
+            Move(5);
+            Movement();
+        }
+
         // HP display
         GameManager.Instance.HPBarFill(HP, 1 / HPMax);
 
@@ -52,7 +64,7 @@ public class Rifler : Player
         {
             if (Input.GetKey(InputManager.IM.attackKey) && canAttack && !reloading && !GameManager.Instance.isPaused)
             {
-                SoundController.Instance.akShootS();
+                SoundController.Instance.AkShoot();
 
                 StartCoroutine(FireRateControl(attackRate));
 

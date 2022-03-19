@@ -15,9 +15,9 @@ public class SoundController : MonoBehaviour
     public AudioSource svdShoot;
     public AudioSource siVzmah;
     public AudioSource siHit;
-    public AudioSource Run;
-    public AudioSource Jump;
-    public AudioSource Death;
+    public AudioSource run;
+    public AudioSource jump;
+    public AudioSource death;
     public AudioSource dmg;
     public AudioSource emptyMag;
 
@@ -46,9 +46,9 @@ public class SoundController : MonoBehaviour
             svdShoot.volume = 0.2f;
             siVzmah.volume = 0.1f;
             siHit.volume = 0.2f;
-            Run.volume = 0.2f;
-            Jump.volume = 0.2f;
-            Death.volume = 0.2f;
+            run.volume = 0.2f;
+            jump.volume = 0.2f;
+            death.volume = 0.2f;
             dmg.volume = 0.2f;
             emptyMag.volume = 0.2f;
             ammo.volume = 0.2f;
@@ -71,9 +71,9 @@ public class SoundController : MonoBehaviour
         svdShoot.volume = PlayerPrefs.GetFloat("volume");
         siVzmah.volume = PlayerPrefs.GetFloat("volume") * 0.5f;
         siHit.volume = PlayerPrefs.GetFloat("volume");
-        Run.volume = PlayerPrefs.GetFloat("volume");
-        Jump.volume = PlayerPrefs.GetFloat("volume");
-        Death.volume = PlayerPrefs.GetFloat("volume");
+        run.volume = PlayerPrefs.GetFloat("volume");
+        jump.volume = PlayerPrefs.GetFloat("volume");
+        death.volume = PlayerPrefs.GetFloat("volume");
         dmg.volume = PlayerPrefs.GetFloat("volume");
         emptyMag.volume = PlayerPrefs.GetFloat("volume");
         ammo.volume = PlayerPrefs.GetFloat("volume");
@@ -86,102 +86,102 @@ public class SoundController : MonoBehaviour
         alienHit.volume = PlayerPrefs.GetFloat("volume") * 0.5f;
     }
 
-    public void akReloadS()
+    public void AkReload()
     {
         akReload.Play();
     }
 
-    public void bulletHitS()
+    public void BulletHit()
     {
         bulletHit.Play();
     }
 
-    public void akShootS()
+    public void AkShoot()
     {
         akShoot.Play();
     }
 
-    public void svdReloadS()
+    public void SvdReload()
     {
         svdReload.Play();
     }
 
-    public void svdShootS()
+    public void SvdShoot()
     {
         svdShoot.Play();
     }
 
-    public void siVzmahS()
+    public void Sickle()
     {
         siVzmah.Play();
     }
 
-    public void siHitS()
+    public void SickleHit()
     {
         siHit.Play();
     }
 
-    public void RunS()
+    public void Run()
     {
-        Run.Play();
+        run.Play();
     }
 
     public void JumpS()
     {
-        Jump.Play();
+        jump.Play();
     }
 
     public void DeathS()
     {
-        Death.Play();
+        death.Play();
     }
 
-    public void dmgS()
+    public void Damage()
     {
         dmg.Play();
     }
 
-    public void emptyMagS()
+    public void EmptyMag()
     {
         emptyMag.Play();
     }
 
-    public void ammoS()
+    public void AmmoSniper()
     {
         ammo.Play();
     }
 
-    public void HPS()
+    public void HPBonus()
     {
         HP.Play();
     }
 
-    public void bonusS()
+    public void StarBonus()
     {
         bonus.Play();
     }
 
-    public void alienShootS()
+    public void AlienShoot()
     {
         alienShoot.Play();
     }
 
-    public void alienDeathS()
+    public void AlienDeath()
     {
         alienDeath.Play();
     }
 
-    public void explosionS()
+    public void Explosion()
     {
         explosion.Play();
     }
 
-    public void laserS()
+    public void Laser()
     {
         laser.Play();
     }
 
-    public void alienHitS()
+    public void AlienHit()
     {
         alienHit.Play();
     }
