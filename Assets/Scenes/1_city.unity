@@ -3352,12 +3352,12 @@ GameObject:
   - component: {fileID: 347675395}
   - component: {fileID: 347675396}
   m_Layer: 0
-  m_Name: Bonuses
+  m_Name: Bonus Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &347675395
 Transform:
   m_ObjectHideFlags: 0
@@ -3393,6 +3393,11 @@ MonoBehaviour:
   riflerAmmoBonusPrefab: {fileID: 8733858147733719966, guid: e7861979f4c5fb746abf81bdfb0fa369, type: 3}
   sniperAmmoBonusPrefab: {fileID: 4693944521150524650, guid: 133c7b0471b867b43b3fcdd0e3446c8f, type: 3}
   starBonusPrefab: {fileID: 5420123831757654504, guid: ccd34457768f5964cbb04e4224f74a02, type: 3}
+  infiniteAmmoIcon: {fileID: 177364226}
+  immortalityIcon: {fileID: 1609991555}
+  doubleDamageIcon: {fileID: 713752090}
+  timer: {fileID: 151139429}
+  timeText: {fileID: 1790524873}
 --- !u!1 &354066739
 GameObject:
   m_ObjectHideFlags: 0
@@ -18299,8 +18304,6 @@ MonoBehaviour:
   - {fileID: 2104597357147394533}
   - {fileID: 2104597357600986327}
   - {fileID: 2104597356158243097}
-  gizmosY: 2
-  gizmosX: 0
   isBonusActive: 0
   ammoInStock: 0
 --- !u!114 &812879073764450763
@@ -47951,8 +47954,6 @@ MonoBehaviour:
   - {fileID: 2071136718}
   - {fileID: 1513877215}
   - {fileID: 973455343}
-  gizmosY: 1.95
-  gizmosX: 0.3
   isBonusActive: 0
   ammoInStock: 0
 --- !u!114 &6229390993649034385
@@ -48404,8 +48405,6 @@ MonoBehaviour:
   player: {fileID: 0}
   fireAnimationPics: []
   crouchFireAnimationPics: []
-  gizmosY: 3.8
-  gizmosX: -0.45
   isBonusActive: 0
   ammoInStock: 0
   attackPos: {fileID: 878310108}
