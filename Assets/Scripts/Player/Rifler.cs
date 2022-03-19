@@ -17,8 +17,8 @@ public class Rifler : Player
 
         HPMax = 100;
         HP = HPMax;
-        ammoInMag = 30;
-        ammoInStock = 75;
+        ammoInMag = 0;
+        ammoInStock = 0;
         damage = 2;
         damageHS = 3;
         attackRate = 0.36f;
@@ -132,7 +132,7 @@ public class Rifler : Player
         {
             Destroy(col.gameObject);
             HPBonus();
-            HPlimit(100);
+            HPLimit(100);
         }
     }
 

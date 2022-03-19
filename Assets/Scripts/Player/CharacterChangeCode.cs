@@ -40,6 +40,7 @@ public class CharacterChangeCode : MonoBehaviour
             {
                 if (Player.character == "Sniper")
                 {
+                    Sniper.Instance.OnCharacterChange();
                     riflerGO.transform.position = plSCoordinates + new Vector3(0, 2, 0);
 
                 }
@@ -60,6 +61,7 @@ public class CharacterChangeCode : MonoBehaviour
             {
                 if (Player.character == "Rifler")
                 {
+                    Rifler.Instance.OnCharacterChange();
                     sniperGO.transform.position = plRCoordinates + new Vector3(0, 2, 0);
                 }
                 if (Player.character == "Sickler")
@@ -78,10 +80,12 @@ public class CharacterChangeCode : MonoBehaviour
             {
                 if (Player.character == "Rifler")
                 {
+                    Rifler.Instance.OnCharacterChange();
                     sicklerGO.transform.position = plRCoordinates;
                 }
                 if (Player.character == "Sniper")
                 {
+                    Sniper.Instance.OnCharacterChange();
                     sicklerGO.transform.position = plSCoordinates;
                 }
                 GameManager.Instance.SwitchToSickler();

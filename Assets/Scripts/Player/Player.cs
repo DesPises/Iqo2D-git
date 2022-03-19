@@ -108,7 +108,7 @@ public class Player : MonoBehaviour
         HP -= damage;
     }
 
-    protected void HPlimit(int limit)
+    protected void HPLimit(int limit)
     {
         if (HP > limit)
         {
@@ -123,13 +123,13 @@ public class Player : MonoBehaviour
         HP = full;
     }
 
- 
-
     public IEnumerator DoubleDamage()
     {
+        isBonusActive = true;
         damage = 5;
         damageHS = 7;
         yield return new WaitForSeconds(15);
+        isBonusActive = false;
         damage = 2;
         damageHS = 3;
     }
@@ -146,8 +146,10 @@ public class Player : MonoBehaviour
 
     public IEnumerator Immortality()
     {
+        isBonusActive = true;
         HP = 9999999;
         yield return new WaitForSeconds(15);
+        isBonusActive = false;
         HP = HPMax;
     }
 
@@ -171,6 +173,7 @@ public class Player : MonoBehaviour
             fireAnimationPics[i].color = invisible;
         }
     }
+
     protected IEnumerator CrouchFireAnimation()
     {
         for (int i = 0; i < crouchFireAnimationPics.Length; i++)
@@ -180,6 +183,23 @@ public class Player : MonoBehaviour
             crouchFireAnimationPics[i].color = invisible;
         }
     }
+
+    public void OnCharacterChange()
+    {
+        if (ammoInMag > 0 || ammoInStock > 0)
+        {
+            canAttack = true;
+        }
+        for (int i = 0; i < fireAnimationPics.Length; i++)
+        {
+            fireAnimationPics[i].color = invisible;
+        }
+        for (int i = 0; i < crouchFireAnimationPics.Length; i++)
+        {
+            crouchFireAnimationPics[i].color = invisible;
+        }
+    }
+
     protected IEnumerator Reload(int ammoMax, float reloadTime)
     {
         StartCoroutine(Anim.Reload());

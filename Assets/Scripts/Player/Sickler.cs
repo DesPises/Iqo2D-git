@@ -69,6 +69,16 @@ public class Sickler : Player
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.CompareTag("HPBonus"))
+        {
+            Destroy(col.gameObject);
+            HPBonus();
+            HPLimit(140);
+        }
+    }
+
     public override void Death()
     {
         base.Death();
@@ -87,15 +97,16 @@ public class Sickler : Player
         }
 
         secJump = false;
-        if (Player.isMovingForward)
+        if (isMovingForward)
         {
             rb.velocity = new Vector2(2, 0);
+            rb.AddForce(Vector2.down * 40 + Vector2.right * 50, ForceMode2D.Impulse);
         }
-        if (!Player.isMovingForward)
+        else
         {
             rb.velocity = new Vector2(-2, 0);
+            rb.AddForce(Vector2.down * 40 + Vector2.left * 50, ForceMode2D.Impulse);
         }
-        rb.AddForce(Vector2.down * 40 + Vector2.right * 50, ForceMode2D.Impulse);
 
         StartCoroutine(FireRateControl(fireRate));
         StartCoroutine(Anim.AttackOff());

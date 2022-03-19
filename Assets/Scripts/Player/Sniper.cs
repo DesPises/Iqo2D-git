@@ -129,7 +129,7 @@ public class Sniper : Player
         {
             Destroy(col.gameObject);
             HPBonus();
-            HPlimit(60);
+            HPLimit(60);
         }
     }
 

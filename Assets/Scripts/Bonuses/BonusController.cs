@@ -24,6 +24,7 @@ public class BonusController : MonoBehaviour
     private void Start()
     {
         Instance = this;
+        StartCoroutine(StarSpawn()); // DELETE AFTER TEST
     }
 
     void Update()
@@ -37,7 +38,7 @@ public class BonusController : MonoBehaviour
 
         if (!starCooldown)
         {
-            StartCoroutine(StarSpawn());
+            //StartCoroutine(StarSpawn());
         }
 
         // If bonus is active and character dies
@@ -47,6 +48,11 @@ public class BonusController : MonoBehaviour
             {
                 doubleDamageIcon.SetActive(false);
                 OnCharacterDeath();
+            }
+            // If player is rifler, bonus is active and player run out of ammo, give 30 bonus rifle ammo 
+            if (Rifler.Instance.isBonusActive && Rifler.Instance.ammoInStock <= 0 && Rifler.Instance.ammoInMag <= 0)
+            {
+                StartCoroutine(GameManager.Instance.AmmoBonus(30, 1));
             }
         }
         else if (Player.character == "Sniper")
@@ -64,12 +70,6 @@ public class BonusController : MonoBehaviour
                 immortalityIcon.SetActive(false);
                 OnCharacterDeath();
             }
-        }
-
-        // If player is rifler, bonus is active and player run out of ammo, give 30 bonus rifle ammo 
-        if (Rifler.Instance.isBonusActive && Rifler.Instance.ammoInStock == 0)
-        {
-            StartCoroutine(GameManager.Instance.AmmoBonus(30, 1));
         }
     }
 
@@ -106,15 +106,33 @@ public class BonusController : MonoBehaviour
     {
         // Set random delay (from 25 to 35 sec) between spawning bonuses
         starCooldown = true;
-        yield return new WaitForSeconds(Random.Range(25f, 35f));
+        //yield return new WaitForSeconds(Random.Range(25f, 35f));
+        yield return new WaitForSeconds(Random.Range(1f, 2f)); // DELETE AFTER TEST
         starCooldown = false;
         
         // Create new star bonus and destroy it in 9 sec if player doesn't pick it up
         GameObject starCopy = Instantiate(starBonusPrefab, new Vector2(Random.Range(4.5f, 22f), Random.Range(-1f, 3f)), Quaternion.identity);
         yield return new WaitForSeconds(9);
-        if (!Rifler.Instance.isBonusActive && !Sniper.Instance.isBonusActive && !Sickler.Instance.isBonusActive)
+        if (Player.character == "Rifler")
         {
-            Destroy(starCopy);
+            if (!Rifler.Instance.isBonusActive)
+            {
+                Destroy(starCopy);
+            }
+        }
+        else if (Player.character == "Sniper")
+        {
+            if (!Sniper.Instance.isBonusActive)
+            {
+                Destroy(starCopy);
+            }
+        }
+        else if (Player.character == "Sickler")
+        {
+            if (!Sickler.Instance.isBonusActive)
+            {
+                Destroy(starCopy);
+            }
         }
     }
 
