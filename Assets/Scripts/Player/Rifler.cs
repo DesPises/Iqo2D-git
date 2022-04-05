@@ -4,7 +4,7 @@ public class Rifler : Player
 {
     public static Rifler Instance { get; private set; }
 
-    void Start()
+    void Awake()
     {
         Instance = this;
         player = gameObject;
@@ -17,8 +17,8 @@ public class Rifler : Player
 
         HPMax = 100;
         HP = HPMax;
-        ammoInMag = 0;
-        ammoInStock = 0;
+        ammoInMag = 30;
+        ammoInStock = 60;
         damage = 2;
         damageHS = 3;
         attackRate = 0.36f;

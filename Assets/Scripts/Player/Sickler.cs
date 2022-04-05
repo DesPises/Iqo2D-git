@@ -12,8 +12,10 @@ public class Sickler : Player
     private LayerMask BossLayer;
     public GameObject BossGO;
 
+    private bool inEnemyHeadArea;
+    private GameObject enemyHead;
 
-    void Start()
+    void Awake()
     {
         Instance = this;
         player = gameObject;
@@ -66,6 +68,10 @@ public class Sickler : Player
         if (Input.GetKeyDown(InputManager.IM.attackKey) && canAttack && !GameManager.Instance.isPaused)
         {
             Attack();
+            if (inEnemyHeadArea)
+            {
+                enemyHead.GetComponentInParent<Enemy>().HeadOff();
+            }
         }
     }
 
@@ -77,6 +83,19 @@ public class Sickler : Player
             HPBonus();
             HPLimit(140);
         }
+        else if (col.gameObject.CompareTag("EnemyHead"))
+        {
+            inEnemyHeadArea = true;
+            enemyHead = col.gameObject;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.gameObject.CompareTag("EnemyHead"))
+        {
+            inEnemyHeadArea = false;
+        }
     }
 
     public override void Death()
@@ -85,16 +104,12 @@ public class Sickler : Player
         sicklerIsDead = true;
     }
 
-    void Attack()
+    private void Attack()
     {
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         Anim.Attack();
-
-        Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemy);
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            enemies[i].GetComponent<Enemy>().TakeDamage();
-        }
+        StartCoroutine(FireRateControl(fireRate));
+        StartCoroutine(Anim.AttackOff());
 
         secJump = false;
         if (isMovingForward)
@@ -107,17 +122,18 @@ public class Sickler : Player
             rb.velocity = new Vector2(-2, 0);
             rb.AddForce(Vector2.down * 40 + Vector2.left * 50, ForceMode2D.Impulse);
         }
-
-        StartCoroutine(FireRateControl(fireRate));
-        StartCoroutine(Anim.AttackOff());
     }
 
-    // If big enemy's head is in sickler attack area and player press attack key, chop enemy's head
-    void OnTriggerStay2D(Collider2D col)
+    public void DealDamage()
     {
-        if (col.gameObject.CompareTag("EnemyHead") && Input.GetKeyDown(InputManager.IM.attackKey) && canAttack)
+        Collider2D[] enemies = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemy);
+        if (enemies.Length > 0)
         {
-            col.gameObject.GetComponentInParent<Enemy>().HeadOff();
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                Enemy enemyScript = enemies[i].GetComponent<Enemy>();
+                StartCoroutine(enemyScript.GetDamage(damage));
+            }
         }
     }
 

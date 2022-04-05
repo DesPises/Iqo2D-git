@@ -43,12 +43,12 @@ public class Player : MonoBehaviour
 
     public int ammoInMag { get; protected set; }
     public int ammoInStock;
-    protected int damage;
-    protected int damageHS;
+    public int damage { get; protected set; }
+    public int damageHS { get; protected set; }
 
     // Static variables
     public static string character;
-    public static float coordinateX;
+    public static float posX;
 
     public static bool isMovingForward = true;
     public static bool onGround;
@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
         if (!GameManager.Instance.isPaused)
         {
             // Link player's pos to variable
-            coordinateX = transform.position.x;
+            posX = transform.position.x;
 
             // Ground check
             onGround = Physics2D.Raycast(transform.position + Vector3.up * gizmosY + Vector3.right * gizmosX, Vector2.down, floorDist, floorLayer);
@@ -106,6 +106,8 @@ public class Player : MonoBehaviour
     public void GetDamage(int damage)
     {
         HP -= damage;
+        StartCoroutine(Anim.Damaged());
+        SoundController.Instance.GetDamage();
     }
 
     protected void HPLimit(int limit)
@@ -157,6 +159,8 @@ public class Player : MonoBehaviour
 
     protected IEnumerator FireRateControl(float fireRate)
     {
+        yield return null;
+        yield return null;
         canAttack = false;
         yield return null;
         ammoInMag--;
@@ -344,7 +348,7 @@ public class Player : MonoBehaviour
 
     public void DmgSound()
     {
-        SoundController.Instance.Damage();
+        SoundController.Instance.GetDamage();
     }
 
     public void AlienHitSound()

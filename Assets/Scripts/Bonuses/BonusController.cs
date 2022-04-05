@@ -16,6 +16,7 @@ public class BonusController : MonoBehaviour
     [SerializeField] private GameObject immortalityIcon;
     [SerializeField] private GameObject doubleDamageIcon;
     [SerializeField] private GameObject timer;
+    [SerializeField] private GameObject indicator;
     [SerializeField] private Text timeText;
 
     private bool cooldown;
@@ -24,7 +25,6 @@ public class BonusController : MonoBehaviour
     private void Start()
     {
         Instance = this;
-        StartCoroutine(StarSpawn()); // DELETE AFTER TEST
     }
 
     void Update()
@@ -165,6 +165,7 @@ public class BonusController : MonoBehaviour
     private IEnumerator Timer()
     {
         timer.SetActive(true);
+        indicator.SetActive(true);
         for (int i = 15; i >= 0; i--)
         {
             timeText.text = i.ToString();
@@ -172,6 +173,7 @@ public class BonusController : MonoBehaviour
             if (i == 0)
             {
                 timer.SetActive(false);
+                indicator.SetActive(false);
                 infiniteAmmoIcon.SetActive(false);
                 immortalityIcon.SetActive(false);
                 doubleDamageIcon.SetActive(false);

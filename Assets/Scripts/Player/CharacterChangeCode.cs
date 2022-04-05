@@ -19,6 +19,9 @@ public class CharacterChangeCode : MonoBehaviour
     {
         // Set starting character to rifler
         Player.character = "Rifler";
+        riflerGO.SetActive(true);
+        sniperGO.SetActive(false);
+        sicklerGO.SetActive(false);
 
         change = false;
         canChange = true;
@@ -101,11 +104,13 @@ public class CharacterChangeCode : MonoBehaviour
             {
                 sicklerGO.transform.position = plRCoordinates;
                 PickSickler();
+                GameManager.Instance.SwitchToSickler();
             }
             if (Player.sicklerIsDead && !Player.sniperIsDead)
             {
                 sniperGO.transform.position = plRCoordinates + new Vector3(0, 2, 0);
                 PickSniper();
+                GameManager.Instance.SwitchToSniper();
             }
         }
 
@@ -117,11 +122,13 @@ public class CharacterChangeCode : MonoBehaviour
             {
                 sicklerGO.transform.position = plSCoordinates;
                 PickSickler();
+                GameManager.Instance.SwitchToSickler();
             }
             if (Player.sicklerIsDead && !Player.riflerIsDead)
             {
                 riflerGO.transform.position = plSCoordinates + new Vector3(0, 2, 0);
                 PickRifler();
+                GameManager.Instance.SwitchToRifler();
             }
         }
 
@@ -133,11 +140,13 @@ public class CharacterChangeCode : MonoBehaviour
             {
                 riflerGO.transform.position = plSiCoordinates;
                 PickSniper();
+                GameManager.Instance.SwitchToSniper();
             }
             if (Player.sniperIsDead && !Player.riflerIsDead)
             {
                 sniperGO.transform.position = plSiCoordinates;
                 PickRifler();
+                GameManager.Instance.SwitchToRifler();
             }
         }
     }
@@ -169,7 +178,7 @@ public class CharacterChangeCode : MonoBehaviour
         StartCoroutine(CooldownCoroutine());
     }
 
-    IEnumerator CooldownCoroutine()
+    private IEnumerator CooldownCoroutine()
     {
         yield return null;
         change = true;

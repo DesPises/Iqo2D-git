@@ -1,213 +1,215 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public Rigidbody2D rb;
-    public CapsuleCollider2D capsCollider;
-    public GameObject enemyGO, bloodGO, explosionGO, soundContrGO;
-    public GameObject Bloodclone;
-    public KeyCode attackKey;
-    public Transform pos;
-    public static bool doesHitPlayer, isDamaged, isNearPlayer;
-    public bool reverseRotation = false;
-    public int HPInt, speed;
-    public static int DamageInt, DamageIntHS; //Receive damage
-    public int DamageHitInt; //Deal damage
-    public Animator nmeAnim;
+    [Header("Parameters")]
+    [SerializeField] private GameObject blood;
+    [SerializeField] private GameObject explosion;
+    [SerializeField] private bool reverseRotation;
+    [SerializeField] private int HP;
+    [SerializeField] private int speed;
+    [SerializeField] private int damage;
 
-    public Vector2 size; //Near player check
-    public Transform posBox;
-    public LayerMask playerLayer;
+    private Rigidbody2D rb;
+    private Animator anim;
 
-    public static bool siNearHead; //Sickler headshot
+    [Header("Near Player Check")]
+    [SerializeField] private Vector2 size;
+    [SerializeField] private Transform pos;
+    private LayerMask playerLayer;
+    private bool isNearPlayer;
 
-
-    void Start()
+    private void Awake()
     {
-        isNearPlayer = false;
-        attackKey = InputManager.IM.attackKey;
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        playerLayer = LayerMask.GetMask("Player");
     }
 
     void Update()
-    {       
-        //Move
-        if (!reverseRotation)
-        {
-            if (transform.position.x > Player.coordinateX && !isNearPlayer && HPInt > 0)
-            {
-                rb.velocity = new Vector2(-speed, -1);
-                enemyGO.transform.eulerAngles = new Vector3(0, 0, 0);
-            }
-            if (transform.position.x < Player.coordinateX && !isNearPlayer && HPInt > 0)
-            {
-                rb.velocity = new Vector2(speed, -1);
-                enemyGO.transform.eulerAngles = new Vector3(0, 180, 0);
-            }
-        }
-        if (reverseRotation)
-        {
-            if (transform.position.x > Player.coordinateX && !isNearPlayer && HPInt > 0)
-            {
-                rb.velocity = new Vector2(-speed, -1);
-                enemyGO.transform.eulerAngles = new Vector3(0, 180, 0);
-            }
-            if (transform.position.x < Player.coordinateX && !isNearPlayer && HPInt > 0)
-            {
-                rb.velocity = new Vector2(speed, -1);
-                enemyGO.transform.eulerAngles = new Vector3(0, 0, 0);
-            }
-        }
-
+    {
         //Near player check
-        isNearPlayer = Physics2D.OverlapBox(posBox.position, size, 0f, playerLayer);
+        isNearPlayer = Physics2D.OverlapBox(pos.position, size, 0f, playerLayer);
+
+        //Move
+        if (!isNearPlayer && HP > 0)
+        {
+            float posX = transform.position.x;
+
+            if (reverseRotation)
+            {
+                if (posX > Player.posX)
+                {
+                    rb.velocity = new Vector2(-speed, -1);
+                    transform.eulerAngles = new Vector3(0, 180, 0);
+                }
+                else if (posX < Player.posX)
+                {
+                    rb.velocity = new Vector2(speed, -1);
+                    transform.eulerAngles = new Vector3(0, 0, 0);
+                }
+            }
+            else
+            {
+                if (posX > Player.posX)
+                {
+                    rb.velocity = new Vector2(-speed, -1);
+                    transform.eulerAngles = new Vector3(0, 0, 0);
+                }
+                else if (posX < Player.posX)
+                {
+                    rb.velocity = new Vector2(speed, -1);
+                    transform.eulerAngles = new Vector3(0, 180, 0);
+                }
+            }
+        }
 
         //Attack
         if (isNearPlayer)
         {
             rb.velocity = new Vector2(0, 0);
-            nmeAnim.SetBool("hit", true);
+            anim.SetBool("hit", true);
         }
-        if (!isNearPlayer)
+        else
         {
-            nmeAnim.SetBool("hit", false);
+            anim.SetBool("hit", false);
         }
 
         //Death
-        if (HPInt <= 0)
+        if (HP <= 0)
         {
-            nmeAnim.SetBool("die", true);
+            anim.SetBool("die", true);
             StartCoroutine(Death());
             rb.velocity = new Vector2(0, 0);
         }
     }
 
-    public void TakeDamage()
+    // Check if any bullet collides with Body
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        StartCoroutine(GetDamaged());
-    }
-
-  
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Bullet" || collision.gameObject.tag == "BulletS")
+        // Hit from rifler
+        if (collision.gameObject.CompareTag("Bullet"))
         {
-            StartCoroutine(GetDamaged());
+            StartCoroutine(GetDamage(Rifler.Instance.damage));
+            Destroy(collision.gameObject);
+        }
+        // Hit from sniper
+        else if (collision.gameObject.CompareTag("SniperBullet"))
+        {
+            StartCoroutine(GetDamage(Sniper.Instance.damage));
+            Destroy(collision.gameObject);
         }
     }
 
-    IEnumerator GetDamaged()
+    // Check if any bullet enters Headshot trigger zone
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        // Hit from rifler
+        if (col.gameObject.CompareTag("Bullet"))
+        {
+            StartCoroutine(GetDamage(Rifler.Instance.damageHS));
+            Destroy(col.gameObject);
+        }
+        // Hit from sniper
+        else if (col.gameObject.CompareTag("SniperBullet"))
+        {
+            StartCoroutine(GetDamage(Sniper.Instance.damageHS));
+            Destroy(col.gameObject);
+        }
+    }
+
+    // Damage and death
+
+    public IEnumerator GetDamage(int damage)
     {
         DmgSound();
         BloodOn();
-        nmeAnim.SetBool("dmg", true);
+        anim.SetBool("dmg", true);
         yield return null;
-        nmeAnim.SetBool("dmg", false);
-        HPInt -= DamageInt;
+        anim.SetBool("dmg", false);
+        HP -= damage;
     }
 
-    public void GetHeadDamage()
+    private IEnumerator Death()
     {
-        HPInt -= DamageIntHS;
-        StartCoroutine(HeadDMGAnim());
-    }
-
-    public IEnumerator HeadDMGAnim()
-    {
-        BloodOn();
-        nmeAnim.SetBool("dmg", true);
-        yield return null;
-        nmeAnim.SetBool("dmg", false);
-    }
-
-    IEnumerator Death()
-    {
-        capsCollider.enabled = false;
+        GetComponent<CapsuleCollider2D>().enabled = false;
         yield return new WaitForSeconds(1);
-        Destroy(enemyGO);
+        Destroy(gameObject);
     }
 
     public void BloodOn()
     {
-        Bloodclone = Instantiate(bloodGO, bloodGO.transform.position, Quaternion.identity);
-        StartCoroutine(DestroyBloodClone());
+        GameObject bloodClone = Instantiate(blood, blood.transform.position, Quaternion.identity);
+        Destroy(bloodClone, 0.25f);
     }
-    IEnumerator DestroyBloodClone()
+
+    public IEnumerator Explosion()
     {
-        yield return new WaitForSeconds(0.25f);
-        Destroy(Bloodclone);
+        if (explosion)
+        {
+            StartCoroutine(Death());
+            explosion.SetActive(true);
+            yield return new WaitForSeconds(0.3f);
+            explosion.SetActive(false);
+        }
     }
-    void Explosion()
+
+    public void HeadOff()
     {
-        explosionGO.SetActive(true);
-        StartCoroutine(ExplosionOff());
-    }
-    IEnumerator ExplosionOff()
-    {
-        yield return new WaitForSeconds(0.3f);
-        explosionGO.SetActive(false);
+        rb.velocity = new Vector2(0, 0);
+        anim.SetBool("die", false);
+        anim.SetBool("headOff", true);
+        StartCoroutine(Death());
     }
 
     public void DealDamage()
     {
         if (Player.character == "Rifler")
-            Rifler.Instance.GetDamage(DamageHitInt);
+        {
+            Rifler.Instance.GetDamage(damage);
+        }
         if (Player.character == "Sniper")
-            Sniper.Instance.GetDamage(DamageHitInt);
+        {
+            Sniper.Instance.GetDamage(damage);
+        }
         if (Player.character == "Sickler")
-            Sickler.Instance.GetDamage(DamageHitInt);
-        StartCoroutine(SignalToPlayerGetDamageAnim());
+        {
+            Sickler.Instance.GetDamage(damage);
+        }
     }
 
-    IEnumerator SignalToPlayerGetDamageAnim()
-    {
-        doesHitPlayer = true;
-        yield return null;
-        doesHitPlayer = false;
-    }
-
-    void OnDrawGizmosSelected()
+    // Near player check gizmos
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(posBox.position, size);
-    }
-
-    //Sickler headshot
-
-    public void HeadOff()
-    {
-        rb.velocity = new Vector2(0, 0);
-        nmeAnim.SetBool("die", false);
-        nmeAnim.SetBool("headOff", true);
-        StartCoroutine(Death());
+        Gizmos.DrawWireCube(pos.position, size);
     }
 
     //Sounds
 
     public void DmgSound()
     {
-        soundContrGO.GetComponent<SoundController>().AlienHit();
+        SoundController.Instance.AlienHit();
     }
 
     public void DeathSound()
     {
-        soundContrGO.GetComponent<SoundController>().AlienDeath();
+        SoundController.Instance.AlienDeath();
     }
 
     public void ExplosionSound()
     {
-        soundContrGO.GetComponent<SoundController>().Explosion();
+        SoundController.Instance.Explosion();
     }
 
     public void LaserSound()
     {
-        soundContrGO.GetComponent<SoundController>().Laser();
+        SoundController.Instance.Laser();
     }
 
     public void DamageFromSicklerSound()
     {
-        soundContrGO.GetComponent<SoundController>().SickleHit();
+        SoundController.Instance.SickleHit();
     }
 }

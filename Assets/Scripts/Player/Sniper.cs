@@ -5,7 +5,7 @@ public class Sniper : Player
 {
     public static Sniper Instance { get; private set; }
 
-    void Start()
+    void Awake()
     {
         Instance = this;
         plRB = GetComponent<Rigidbody2D>();

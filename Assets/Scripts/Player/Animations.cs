@@ -56,9 +56,10 @@ public class Animations : MonoBehaviour
         anim.SetBool("2jump", false);
     }
 
-    public IEnumerator Damage()
+    public IEnumerator Damaged()
     {
         anim.SetBool("dmg", true);
+        yield return null;
         yield return null;
         anim.SetBool("dmg", false);
     }

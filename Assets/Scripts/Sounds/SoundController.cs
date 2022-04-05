@@ -136,7 +136,7 @@ public class SoundController : MonoBehaviour
         death.Play();
     }
 
-    public void Damage()
+    public void GetDamage()
     {
         dmg.Play();
     }
