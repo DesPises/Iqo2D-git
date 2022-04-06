@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7501831832608618082
+--- !u!1 &4693944521150524650
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,40 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7501831832608618083}
-  - component: {fileID: 7501831832608618081}
-  - component: {fileID: 7501831832608618080}
-  - component: {fileID: 7501831832608618086}
-  - component: {fileID: 7501831832608618087}
+  - component: {fileID: 4693944521150524651}
+  - component: {fileID: 4693944521150524649}
+  - component: {fileID: 4693944521150524648}
+  - component: {fileID: 4693944521150524654}
+  - component: {fileID: 4693944521150524655}
   m_Layer: 0
   m_Name: sAmmo
-  m_TagString: Untagged
+  m_TagString: AmmoSniper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7501831832608618083
+--- !u!4 &4693944521150524651
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7501831832608618082}
-  m_LocalRotation: {x: 0, y: 0, z: 0.19667344, w: 0.9804691}
-  m_LocalPosition: {x: 9.69, y: -1.67, z: -2.457491}
+  m_GameObject: {fileID: 4693944521150524650}
+  m_LocalRotation: {x: -0, y: -0, z: 0.19667406, w: 0.9804689}
+  m_LocalPosition: {x: -23.010002, y: -8.75, z: -2.457491}
   m_LocalScale: {x: 0.8495838, y: 0.8495838, z: 0.8495838}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 22.685}
---- !u!212 &7501831832608618081
+--- !u!212 &4693944521150524649
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7501831832608618082}
+  m_GameObject: {fileID: 4693944521150524650}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -87,14 +87,14 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &7501831832608618080
+--- !u!95 &4693944521150524648
 Animator:
   serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7501831832608618082}
+  m_GameObject: {fileID: 4693944521150524650}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 4a147eeb3f722c74f8f38d82db0a88a4, type: 2}
@@ -107,27 +107,25 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &7501831832608618086
+--- !u!114 &4693944521150524654
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7501831832608618082}
+  m_GameObject: {fileID: 4693944521150524650}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6e682be40cd0e2d4b8301da6e938d459, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sAmmoGO: {fileID: 7501831832608618082}
-  soundContrGO: {fileID: 0}
---- !u!61 &7501831832608618087
+--- !u!61 &4693944521150524655
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7501831832608618082}
+  m_GameObject: {fileID: 4693944521150524650}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}

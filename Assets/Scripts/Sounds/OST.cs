@@ -1,21 +1,27 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class OST : MonoBehaviour
 {
-    public AudioSource ost;
-    public bool doesContinueFromPreviousScene;
-    public bool notPlayableScene;
-    public bool bossScene;
+    public static OST Instance { get; private set; }
+
+    [SerializeField] private AudioSource ost;
+    [SerializeField] private bool doesContinueFromPreviousScene;
+    [SerializeField] private bool notPlayableScene;
+    [SerializeField] private bool bossScene;
 
     void Start()
     {
+        Instance = this;
+
         if (PlayerPrefs.HasKey("volume"))
+        {
             ost.volume = PlayerPrefs.GetFloat("volume");
+        }
         else
+        {
             ost.volume = 0.1f;
+        }
 
         if (doesContinueFromPreviousScene)
         {
@@ -27,11 +33,22 @@ public class OST : MonoBehaviour
     void Update()
     {
         PlayerPrefs.SetFloat("timeAudioPrevious", ost.time);
-        if (ost.volume != PlayerPrefs.GetFloat("volume") * 0.5f && !bossScene && !PauseMenu.isPaused)
+        if (ost.volume != PlayerPrefs.GetFloat("volume") * 0.5f && !bossScene && GameManager.Instance)
+        {
+            if (!GameManager.Instance.isPaused)
+            {
+                StartCoroutine(WhenUnpaused());
+            }
+        }
+        if (notPlayableScene)
+        {
             StartCoroutine(WhenUnpaused());
+        }
 
-        if (bossScene && !PauseMenu.isPaused)
+        if (bossScene && !GameManager.Instance.isPaused)
+        {
             ost.volume = PlayerPrefs.GetFloat("volume");
+        }
     }
 
     public void WhenPaused()
@@ -39,10 +56,9 @@ public class OST : MonoBehaviour
         ost.volume = PlayerPrefs.GetFloat("volume") * 0.1f;
     }
 
-    IEnumerator WhenUnpaused()
+    private IEnumerator WhenUnpaused()
     {
         yield return null;
-        if (!PauseMenu.isPaused || notPlayableScene)
-            ost.volume = PlayerPrefs.GetFloat("volume") * 0.5f;
+        ost.volume = PlayerPrefs.GetFloat("volume") * 0.5f;
     }
 }

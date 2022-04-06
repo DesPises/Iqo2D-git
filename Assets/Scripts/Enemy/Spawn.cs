@@ -1,90 +1,109 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Spawn : MonoBehaviour
 {
-    public GameObject bigEnemy, medEnemy, smallEnemy;
-    public bool spawnBig, spawnMed, spawnSmall, canSpawn;
-    public Vector2 spawnPos, spawnPosBack;
-    private int spawnSide;
+    [SerializeField] private GameObject bigEnemyPrefab;
+    [SerializeField] private GameObject medEnemyPrefab;
+    [SerializeField] private GameObject smallEnemyPrefab;
+
+    private Vector2 spawnPosRight;
+    private Vector2 spawnPosLeft;
+
+    private bool bigSpawnCooldown;
+    private bool medSpawnCooldown;
+    private bool smallSpawnCooldown;
+    private bool levelInProcess;
 
     void Start()
     {
-        StartCoroutine(SpawnTimer());
-        spawnBig = false;
-        spawnMed = false;
-        spawnSmall = false;
-        canSpawn = true;
+        StartCoroutine(LevelTimer());
+        StartCoroutine(SpawnProgressTimer());
+        spawnPosLeft = new Vector2(50, -5f);
+        spawnPosRight = new Vector2(-19, -5f);
     }
 
     void Update()
     {
-        if (!spawnBig && canSpawn)
+        if (levelInProcess)
         {
-            StartCoroutine(SpawnBigFunction());
-        }
-        if (!spawnMed && canSpawn)
-        {
-            StartCoroutine(SpawnMedFunction());
-        }
-        if (!spawnSmall && canSpawn)
-        {
-            StartCoroutine(SpawnSmallFunction());
+            if (!bigSpawnCooldown)
+            {
+                StartCoroutine(SpawnBig());
+            }
+            if (!medSpawnCooldown)
+            {
+                StartCoroutine(SpawnMed());
+            }
+            if (!smallSpawnCooldown)
+            {
+                StartCoroutine(SpawnSmall());
+            }
         }
     }
 
-    IEnumerator SpawnBigFunction()
+    private IEnumerator SpawnProgressTimer()
     {
-        spawnSide = Random.Range(0, 2);
-        spawnBig = true;
-        if (spawnSide == 0)
+        medSpawnCooldown = true;
+        bigSpawnCooldown = true;
+        yield return new WaitForSeconds(10f);
+        medSpawnCooldown = false;
+        yield return new WaitForSeconds(10f);
+        bigSpawnCooldown = false;
+    }
+
+    IEnumerator SpawnBig()
+    {
+        int side = Random.Range(0, 2);
+        bigSpawnCooldown = true;
+        if (side == 0)
         {
-            Instantiate(bigEnemy, spawnPosBack, Quaternion.identity);
+            Instantiate(bigEnemyPrefab, spawnPosLeft, Quaternion.identity);
         }
-        if (spawnSide != 0)
+        else
         {
-            Instantiate(bigEnemy, spawnPos, Quaternion.identity);
+            Instantiate(bigEnemyPrefab, spawnPosRight, Quaternion.identity);
         }
         yield return new WaitForSeconds(Random.Range(10f, 12f));
-        spawnBig = false;
+        bigSpawnCooldown = false;
     }
 
-    IEnumerator SpawnMedFunction()
+    IEnumerator SpawnMed()
     {
-        spawnSide = Random.Range(0, 2);
-        spawnMed = true;
-        if (spawnSide == 0)
+        int side = Random.Range(0, 2);
+        medSpawnCooldown = true;
+        if (side == 0)
         {
-            Instantiate(medEnemy, spawnPosBack, Quaternion.identity);
+            Instantiate(medEnemyPrefab, spawnPosLeft, Quaternion.identity);
         }
-        if (spawnSide != 0)
+        else
         {
-            Instantiate(medEnemy, spawnPos, Quaternion.identity);
+            Instantiate(medEnemyPrefab, spawnPosRight, Quaternion.identity);
         }
         yield return new WaitForSeconds(Random.Range(1f, 8f));
-        spawnMed = false;
+        medSpawnCooldown = false;
     }
 
-    IEnumerator SpawnSmallFunction()
+    IEnumerator SpawnSmall()
     {
-        spawnSide = Random.Range(0, 2);
-        spawnSmall = true;
-        if (spawnSide == 0)
+        int side = Random.Range(0, 2);
+        smallSpawnCooldown = true;
+        if (side == 0)
         {
-            Instantiate(smallEnemy, spawnPosBack, Quaternion.identity);
+            Instantiate(smallEnemyPrefab, spawnPosLeft, Quaternion.identity);
         }
-        if (spawnSide != 0)
+        else
         {
-            Instantiate(smallEnemy, spawnPos, Quaternion.identity);
+            Instantiate(smallEnemyPrefab, spawnPosRight, Quaternion.identity);
         }
         yield return new WaitForSeconds(Random.Range(0.5f, 3f));
-        spawnSmall = false;
+        smallSpawnCooldown = false;
     }
 
-    IEnumerator SpawnTimer()
+    IEnumerator LevelTimer()
     {
-        yield return new WaitForSeconds(87);
-        canSpawn = false;
+        levelInProcess = true;
+        yield return new WaitForSeconds(87f);
+        levelInProcess = false;
     }
 }

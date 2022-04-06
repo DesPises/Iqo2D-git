@@ -1,610 +1,280 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    //Objects
-    public GameObject bulletRGO, bulletRBackGO, bulletSGO, bulletSBackGO, magRGO, magSGO, playerRGO, playerSGO, playerSiGO, cloneGO, bcloneGO, HUDrMagGO, HUDsMagGO, HUDrAmmoGO, HUDsAmmoGO, rIconGO, sIconGO, siIconGO,
-        sAnimGO, rAnimGO, siAnimGO, soundContrGO, DeathMenu, ostGO;
-    public SpriteRenderer rFireBigSR, rFireMedSR, rFireSmallSR, rFireBigSRCrouch, rFireMedSRCrouch, rFireSmallSRCrouch, sFireBigSR, sFireMedSR, sFireSmallSR, sFireBigSRCrouch, sFireMedSRCrouch, sFireSmallSRCrouch;
-    public Rigidbody2D rb;
+    public static GameManager Instance { get; private set; }
 
-    //HP
-    [SerializeField] private Image HPbarImage;
-    public static int riflerDamageInt, sniperDamageInt, sicklerDamageInt, sEnemyHPInt, mEnemyHPInt, bEnemyHPInt, bossHPInt, HPRInt, HPSInt, HPSiInt;
-    public Text brtext, bstext, bralltext, bsalltext;
+    // Different characters elements
+    [SerializeField] private GameObject[] riflerElements;
+    [SerializeField] private GameObject[] sniperElements;
+    [SerializeField] private GameObject[] sicklerElements;
 
-    //KeyCodes
-    public KeyCode reloadKey, attackKey, crouchKey;
+    // Pause menu
+    public bool isPaused;
 
-    //Variables
-    public static float x, y, z;
-    public static bool rCanReload, sCanReload, canAttackR, canAttackS, canAttackSi, canAttackSiAnim, rReloadCooldown, sReloadCooldown, canRAttackAfterReload, canSAttackAfterReload, rDavayReload, sDavayReload, canWalkSi, doesSiAttack,
-        rIsDead, sIsDead, siIsDead, emptySoundCooldown;
-    public static int inMagRInt, inMagSInt, bulletsRAtAllInt, bulletsSAtAllInt, lastRBulletsInt, lastSBulletsInt, leftInMagIntR, leftInMagIntS, comboSi, comboSiDelivery;
-    public static int damageRInt = 2, damageSInt = 18, damageSiInt = 12, damageRIntHS = 3, damageSIntHS = 25;
+    [SerializeField] private GameObject pauseElements;
+    [SerializeField] private GameObject[] engElements;
+    [SerializeField] private GameObject[] rusElements;
+
+    // Death menu
+    [SerializeField] private GameObject deathMenu;
+
+    // HP
+    [SerializeField] private Image HPBarImage;
+
+    // Ammo UI
+    [SerializeField] private Text ammoInRiflerMagText;
+    [SerializeField] private Text ammoInRiflerStockText;
+    [SerializeField] private Text ammoInSniperMagText;
+    [SerializeField] private Text ammoInSniperStockText;
+
+    // Attack cooldown
+    public static bool riflerCanAttack;
+    public static bool sniperCanAttack;
+    public static bool sicklerCanAttack;
 
     void Start()
     {
-        reloadKey = InputManager.IM.reloadKey;
-        attackKey = InputManager.IM.attackKey;
-        crouchKey = InputManager.IM.crouchKey;
-        x = 0;
-        y = 0;
-        z = 8;
-        HPRInt = 100;
-        HPSInt = 60;
-        HPSiInt = 140;
-        inMagRInt = 30;
-        inMagSInt = 5;
-        bulletsRAtAllInt = 75;
-        bulletsSAtAllInt = 17;
-        rCanReload = false;
-        sCanReload = false;
-        canAttackR = true;
-        canAttackS = true;
-        canAttackSi = true;
-        doesSiAttack = false;
-        canAttackSiAnim = true;
-        rReloadCooldown = false;
-        canRAttackAfterReload = true;
-        canSAttackAfterReload = true;
-        rDavayReload = false;
-        sDavayReload = false;
-        comboSi = 0;
-        canWalkSi = true;
-        emptySoundCooldown = false;
+        Instance = this;
+
+        isPaused = false;
         Time.timeScale = 1;
-        DeathMenu.SetActive(false);
+        deathMenu.SetActive(false);
+        pauseElements.SetActive(false);
+
+        riflerCanAttack = true;
+        sniperCanAttack = true;
+        sicklerCanAttack = true;
+
+        // Set default character to rifler
+        SwitchToRifler();
+
+        // Language
+        foreach (GameObject go in engElements)
+        {
+            go.SetActive(Language.eng);
+        }
+        foreach (GameObject go in rusElements)
+        {
+            go.SetActive(!Language.eng);
+        }
     }
 
     void Update()
     {
-        //Damage sound
-        if (Enemy.doesHitPlayer)
-        {
-            dmgSound();
-            alienHitSound();
-        }
-        //Death
-        if (HPRInt <= 0)
-        {
-            rIsDead = true;
-            CharacterChangeCode.CanChange = true;
-        }
-        else rIsDead = false;
-        if (HPSInt <= 0)
-        {
-            sIsDead = true;
-            CharacterChangeCode.CanChange = true;
-        }
-        else sIsDead = false;
-        if (HPSiInt <= 0)
-        {
-            siIsDead = true;
-            CharacterChangeCode.CanChange = true;
-        }
-        else siIsDead = false;
+        StartCoroutine(AmmoDisplayCoroutine());
 
-        if (rIsDead && sIsDead && siIsDead)
+        // Pause
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            DeathMenu.SetActive(true);
+            if (!isPaused)
+            {
+                StartCoroutine(IsPaused());
+                pauseElements.SetActive(true);
+                Time.timeScale = 0;
+                OST.Instance.WhenPaused();
+            }
+            else
+            {
+                Continue();
+            }
+        }
+
+        // Death
+        if (Player.riflerIsDead && Player.sniperIsDead && Player.sicklerIsDead)
+        {
+            deathMenu.SetActive(true);
             StartCoroutine(TimeStop());
         }
+    }
 
-        //Rifler
-        if (plMovement.character == "Rifler")
+    public void FireRateControlTransition(float fireRate, int character)
+    {
+        StartCoroutine(FireRateControl(fireRate, character));
+    }
+
+    private IEnumerator FireRateControl(float fireRate, int character)
+    {
+        if (character == 1)
         {
-            //HUD, HP and Bullets
-            HPbarImage.fillAmount = HPRInt * 0.01f;
-            brtext.text = inMagRInt.ToString();
-            bralltext.text = "/" + bulletsRAtAllInt.ToString();
-            HUDrMagGO.gameObject.SetActive(true);
-            HUDsMagGO.gameObject.SetActive(false);
-            HUDrAmmoGO.gameObject.SetActive(true);
-            HUDsAmmoGO.gameObject.SetActive(false);
-            rIconGO.gameObject.SetActive(true);
-            sIconGO.gameObject.SetActive(false);
-            siIconGO.gameObject.SetActive(false);
-            rAnimGO.gameObject.SetActive(true);
-            sAnimGO.gameObject.SetActive(false);
-            siAnimGO.gameObject.SetActive(false);
-
-            //Reload
-            if (Input.GetKeyDown(reloadKey) && rCanReload && !rReloadCooldown && !PauseMenu.isPaused)
-            {
-                StartCoroutine(magFadeRifler());
-                StartCoroutine(ReloadCooldownRifler());
-            }
-            if (inMagRInt == 0 && rCanReload)
-            {
-                StartCoroutine(magFadeRifler());
-                StartCoroutine(ReloadCooldownRifler());
-                StartCoroutine(ReloadRAnim());
-
-            }
-            if (inMagRInt < 30 && bulletsRAtAllInt > 0)
-                rCanReload = true;
-
-            if (bulletsRAtAllInt <= 0)
-                rCanReload = false;
-
-            if (inMagRInt <= 0 && bulletsRAtAllInt <= 0)
-                canAttackR = false;
-
-            //Attack
-
-            if (Input.GetKey(attackKey) && canAttackR && canRAttackAfterReload && !PauseMenu.isPaused)
-            {
-                Enemy.DamageInt = damageRInt;
-                Enemy.DamageIntHS = damageRIntHS;
-                akShootSound();
-                StartCoroutine(BulletRCounter());
-                if (!Input.GetKey(crouchKey) || (Input.GetKey(crouchKey) && !plMovement.onGround))
-                {
-                    StartCoroutine(RiflerFire());
-                    if (plMovement.isMovingFW)
-                        bcloneGO = Instantiate(bulletRGO, playerRGO.transform.position + new Vector3(0.5f, 4.75f, 0), Quaternion.identity);
-                    if (!plMovement.isMovingFW)
-                        bcloneGO = Instantiate(bulletRBackGO, playerRGO.transform.position + new Vector3(-0.5f, 4.75f, 0), Quaternion.identity);
-                    if (Input.GetKey(crouchKey))
-                    {
-                        rFireBigSRCrouch.color = new Color(255, 255, 255, 0);
-                        rFireMedSRCrouch.color = new Color(255, 255, 255, 0);
-                        rFireSmallSRCrouch.color = new Color(255, 255, 255, 0);
-                    }
-                }
-                if (Input.GetKey(crouchKey) && plMovement.onGround)
-                {
-                    StartCoroutine(RiflerFireCrouch());
-                    if (plMovement.isMovingFW)
-                        bcloneGO = Instantiate(bulletRGO, playerRGO.transform.position + new Vector3(0.5f, 4.0f, 0), Quaternion.identity);
-                    if (!plMovement.isMovingFW)
-                        bcloneGO = Instantiate(bulletRBackGO, playerRGO.transform.position + new Vector3(-0.5f, 4.0f, 0), Quaternion.identity);
-                    if (!Input.GetKey(crouchKey))
-                    {
-                        rFireBigSR.color = new Color(255, 255, 255, 0);
-                        rFireMedSR.color = new Color(255, 255, 255, 0);
-                        rFireSmallSR.color = new Color(255, 255, 255, 0);
-                    }
-                }
-
-            }
-            if (Bullet.doesBulletHit || BulletBack.doesBulletHit)
-            {
-                Bullet.doesBulletHit = false;
-                BulletBack.doesBulletHit = false;
-                Destroy(bcloneGO);
-            }
-
-            //Empty
-            if (Input.GetKey(attackKey) && bulletsRAtAllInt == 0 && inMagRInt == 0 && !emptySoundCooldown && !PauseMenu.isPaused)
-            {
-                StartCoroutine(emptyMagSound());
-            }
+            sniperCanAttack = false;
+            yield return new WaitForSeconds(fireRate);
+            sniperCanAttack = true;
         }
-
-
-
-
-        //Sniper
-        if (plMovement.character == "Sniper")
+        else if (character == 2)
         {
-            //HUD, HP and Bullets
-            HPbarImage.fillAmount = HPSInt * 0.0167f;
-            bstext.text = inMagSInt.ToString();
-            bsalltext.text = "/" + bulletsSAtAllInt.ToString();
-            HUDrMagGO.gameObject.SetActive(false);
-            HUDsMagGO.gameObject.SetActive(true);
-            HUDrAmmoGO.gameObject.SetActive(false);
-            HUDsAmmoGO.gameObject.SetActive(true);
-            rIconGO.gameObject.SetActive(false);
-            sIconGO.gameObject.SetActive(true);
-            siIconGO.gameObject.SetActive(false);
-            rAnimGO.gameObject.SetActive(false);
-            sAnimGO.gameObject.SetActive(true);
-            siAnimGO.gameObject.SetActive(false);
-
-            //Reload
-            if (Input.GetKeyDown(reloadKey) && sCanReload && !sReloadCooldown && bulletsSAtAllInt > 0 && !PauseMenu.isPaused)
-            {
-                StartCoroutine(magFadeSniper());
-                StartCoroutine(ReloadCooldownSniper());
-            }
-            if (inMagSInt == 0 && sCanReload)
-            {
-                StartCoroutine(magFadeSniper());
-                StartCoroutine(ReloadCooldownSniper());
-                sReloadCooldown = false;
-                StartCoroutine(ReloadSAnim());
-
-            }
-            if (inMagSInt < 5 && bulletsSAtAllInt > 0)
-                sCanReload = true;
-
-            if (bulletsSAtAllInt <= 0)
-                sCanReload = false;
-
-            if (inMagSInt <= 0 && bulletsSAtAllInt <= 0)
-                canAttackS = false;
-
-            //Attack
-
-            if (Input.GetKeyDown(attackKey) && canAttackS && canSAttackAfterReload && !PauseMenu.isPaused)
-            {
-                Enemy.DamageInt = damageSInt;
-                Enemy.DamageIntHS = damageSIntHS;
-                svdShootSound();
-                StartCoroutine(BulletSCounter());
-                if (!Input.GetKey(crouchKey) || (Input.GetKey(crouchKey) && !plMovement.onGround))
-                {
-                    StartCoroutine(SniperFire());
-                    if (plMovement.isMovingFW)
-                        bcloneGO = Instantiate(bulletSGO, playerSGO.transform.position + new Vector3(0.5f, 4.67f, 0), Quaternion.identity);
-                    if (!plMovement.isMovingFW)
-                        bcloneGO = Instantiate(bulletSBackGO, playerSGO.transform.position + new Vector3(-0.5f, 4.67f, 0), Quaternion.identity);
-                }
-                if (Input.GetKey(crouchKey) && plMovement.onGround)
-                {
-                    StartCoroutine(SniperFireCrouch());
-                    if (plMovement.isMovingFW)
-                        bcloneGO = Instantiate(bulletSGO, playerSGO.transform.position + new Vector3(0.5f, 4.0f, 0), Quaternion.identity);
-                    if (!plMovement.isMovingFW)
-                        bcloneGO = Instantiate(bulletSBackGO, playerSGO.transform.position + new Vector3(-0.5f, 4.0f, 0), Quaternion.identity);
-                }
-            }
-            if (Bullet.doesBulletHit || BulletBack.doesBulletHit)
-            {
-                Bullet.doesBulletHit = false;
-                BulletBack.doesBulletHit = false;
-                Destroy(bcloneGO);
-            }
-            //Empty
-
-            if (Input.GetKey(attackKey) && bulletsSAtAllInt == 0 && inMagSInt == 0 && !emptySoundCooldown && !PauseMenu.isPaused)
-            {
-                StartCoroutine(emptyMagSound());
-            }
+            riflerCanAttack = false;
+            yield return new WaitForSeconds(fireRate);
+            riflerCanAttack = true;
         }
-
-
-
-
-        //Sickler
-        if (plMovement.character == "Sickler")
+        else if (character == 3)
         {
-            //HUD and HP
-            HPbarImage.fillAmount = HPSiInt * 0.007f;
-            HUDrMagGO.gameObject.SetActive(false);
-            HUDsMagGO.gameObject.SetActive(false);
-            HUDrAmmoGO.gameObject.SetActive(false);
-            HUDsAmmoGO.gameObject.SetActive(false);
-            rIconGO.gameObject.SetActive(false);
-            sIconGO.gameObject.SetActive(false);
-            siIconGO.gameObject.SetActive(true);
-            rAnimGO.gameObject.SetActive(false);
-            sAnimGO.gameObject.SetActive(false);
-            siAnimGO.gameObject.SetActive(true);
-
-
-            //Attack
-            
-            if (Input.GetKeyDown(attackKey) && canAttackSi && !PauseMenu.isPaused)
-            {
-                Enemy.DamageInt = damageSiInt;
-                Enemy.DamageIntHS = damageSiInt;
-                StartCoroutine(siAttack());
-                StartCoroutine(canWalk());
-            }
+            sicklerCanAttack = false;
+            yield return new WaitForSeconds(fireRate);
+            sicklerCanAttack = true;
         }
     }
 
-    //Sounds functions
-    IEnumerator emptyMagSound()
+    private IEnumerator AmmoDisplayCoroutine()
     {
-        emptySoundCooldown = true;
-        soundContrGO.GetComponent<SoundController>().emptyMagS();
-        yield return new WaitForSeconds(0.4f);
-        emptySoundCooldown = false;
-    }
-
-    public void dmgSound()
-    {
-        soundContrGO.GetComponent<SoundController>().dmgS();
-    }
-
-    public void alienHitSound()
-    {
-        soundContrGO.GetComponent<SoundController>().alienHitS();
-    }
-    public void svdShootSound()
-    {
-        soundContrGO.GetComponent<SoundController>().svdShootS();
-    }
-    public void akShootSound() 
-    {
-        soundContrGO.GetComponent<SoundController>().akShootS();
-    }
-
-
-    //Rifler coroutines
-    IEnumerator BulletRCounter()
-    {
-        canAttackR = false;
-        yield return new WaitForSeconds(0.01f);
-        inMagRInt--;
-        yield return new WaitForSeconds(0.36f);
-        Destroy(bcloneGO);
-        canAttackR = true;
-    }
-    IEnumerator RiflerFire()
-    {
-        rFireBigSR.color = new Color(255, 255, 255, 190);
-        rFireMedSR.color = new Color(255, 255, 255, 0);
-        rFireSmallSR.color = new Color(255, 255, 255, 0);
-        yield return new WaitForSeconds(0.03f);
-        rFireBigSR.color = new Color(255, 255, 255, 0);
-        rFireMedSR.color = new Color(255, 255, 255, 190);
-        rFireSmallSR.color = new Color(255, 255, 255, 0);
-        yield return new WaitForSeconds(0.03f);
-        rFireBigSR.color = new Color(255, 255, 255, 0);
-        rFireMedSR.color = new Color(255, 255, 255, 0);
-        rFireSmallSR.color = new Color(255, 255, 255, 190);
-        yield return new WaitForSeconds(0.03f);
-        rFireSmallSR.color = new Color(255, 255, 255, 0);
-    }
-    IEnumerator RiflerFireCrouch()
-    {
-        rFireBigSRCrouch.color = new Color(255, 255, 255, 190);
-        rFireMedSRCrouch.color = new Color(255, 255, 255, 0);
-        rFireSmallSRCrouch.color = new Color(255, 255, 255, 0);
-        yield return new WaitForSeconds(0.03f);
-        rFireBigSRCrouch.color = new Color(255, 255, 255, 0);
-        rFireMedSRCrouch.color = new Color(255, 255, 255, 190);
-        rFireSmallSRCrouch.color = new Color(255, 255, 255, 0);
-        yield return new WaitForSeconds(0.03f);
-        rFireBigSRCrouch.color = new Color(255, 255, 255, 0);
-        rFireMedSRCrouch.color = new Color(255, 255, 255, 0);
-        rFireSmallSRCrouch.color = new Color(255, 255, 255, 190);
-        yield return new WaitForSeconds(0.03f);
-        rFireSmallSRCrouch.color = new Color(255, 255, 255, 0);
-    }
-    IEnumerator ReloadRAnim()
-    {
-        rDavayReload = true;
         yield return null;
-        rDavayReload = false;
-    }
-    IEnumerator ReloadCooldownRifler()
-    {
-        canRAttackAfterReload = false;
-        if (bulletsRAtAllInt > 29)
+
+        // Rifler ammo UI
+        if (Player.character == "Rifler")
         {
-            leftInMagIntR = inMagRInt;
-            inMagRInt = 30;
-            bulletsRAtAllInt -= (30 - leftInMagIntR);
+            ammoInRiflerMagText.text = Rifler.Instance.ammoInMag.ToString();
+            ammoInRiflerStockText.text = "/" + Rifler.Instance.ammoInStock.ToString();
         }
-        else
+
+        // Sniper ammo UI
+        if (Player.character == "Sniper")
         {
-            if (inMagRInt == 0)
+            ammoInSniperMagText.text = Sniper.Instance.ammoInMag.ToString();
+            ammoInSniperStockText.text = "/" + Sniper.Instance.ammoInStock.ToString();
+        }
+    }
+    public IEnumerator AmmoBonus(int ammo, int bulletType)
+    {
+        if (bulletType == 0)
+        {
+            if (Sniper.Instance.isBonusActive)
             {
-                inMagRInt = bulletsRAtAllInt;
-                bulletsRAtAllInt = 0;
+                while (Sniper.Instance.isBonusActive)
+                {
+                    yield return null;
+                }
+                Sniper.Instance.ammoInStock += ammo;
             }
             else
             {
-                leftInMagIntR = inMagRInt;
-                if (inMagRInt + bulletsRAtAllInt > 30)
-                {
-                    inMagRInt = 30;
-                    bulletsRAtAllInt -= (30 - leftInMagIntR);
-                }
-                else
-                {
-                    inMagRInt += bulletsRAtAllInt;
-                    bulletsRAtAllInt = 0;
-                }
+                Sniper.Instance.ammoInStock += ammo;
             }
-        }
-        yield return new WaitForSeconds(0.01f);
-        rReloadCooldown = true;
-        yield return new WaitForSeconds(0.6f);
-        canRAttackAfterReload = true;
-        yield return new WaitForSeconds(2f);
-        rReloadCooldown = false;
-    }
-    IEnumerator magFadeRifler()
-    {
-        if (plMovement.isMovingFW)
-        {
-            cloneGO = Instantiate(magRGO, playerRGO.transform.position + new Vector3(0.6f, 2.9f, 0), Quaternion.Euler(x, y, z));
-            cloneGO.gameObject.transform.eulerAngles = new Vector3(0, 0, 0);
-        }
-        if (!plMovement.isMovingFW)
-        {
-            cloneGO = Instantiate(magRGO, playerRGO.transform.position + new Vector3(-0.6f, 2.9f, 0), Quaternion.Euler(x, y, z));
-            cloneGO.gameObject.transform.eulerAngles = new Vector3(0, 180, 0);
-        }
-
-        yield return new WaitForSeconds(0.01f);
-        rCanReload = false;
-        yield return new WaitForSeconds(1);
-        Destroy(cloneGO);
-    }
-
-
-
-    //Sniper coroutines
-    IEnumerator BulletSCounter()
-    {
-        yield return new WaitForSeconds(0.01f);
-        inMagSInt--;
-        canAttackS = false;
-        yield return new WaitForSeconds(1f);
-        Destroy(bcloneGO);
-        canAttackS = true;
-    }
-    IEnumerator SniperFire()
-    {
-        sFireBigSR.color = new Color(255, 255, 255, 190);
-        sFireMedSR.color = new Color(255, 255, 255, 0);
-        sFireSmallSR.color = new Color(255, 255, 255, 0);
-        yield return new WaitForSeconds(0.03f);
-        sFireBigSR.color = new Color(255, 255, 255, 0);
-        sFireMedSR.color = new Color(255, 255, 255, 190);
-        sFireSmallSR.color = new Color(255, 255, 255, 0);
-        yield return new WaitForSeconds(0.03f);
-        sFireBigSR.color = new Color(255, 255, 255, 0);
-        sFireMedSR.color = new Color(255, 255, 255, 0);
-        sFireSmallSR.color = new Color(255, 255, 255, 190);
-        yield return new WaitForSeconds(0.03f);
-        sFireSmallSR.color = new Color(255, 255, 255, 0);
-
-    }
-    IEnumerator SniperFireCrouch()
-    {
-        sFireBigSRCrouch.color = new Color(255, 255, 255, 190);
-        sFireMedSRCrouch.color = new Color(255, 255, 255, 0);
-        sFireSmallSRCrouch.color = new Color(255, 255, 255, 0);
-        yield return new WaitForSeconds(0.03f);
-        sFireBigSRCrouch.color = new Color(255, 255, 255, 0);
-        sFireMedSRCrouch.color = new Color(255, 255, 255, 190);
-        sFireSmallSRCrouch.color = new Color(255, 255, 255, 0);
-        yield return new WaitForSeconds(0.03f);
-        sFireBigSRCrouch.color = new Color(255, 255, 255, 0);
-        sFireMedSRCrouch.color = new Color(255, 255, 255, 0);
-        sFireSmallSRCrouch.color = new Color(255, 255, 255, 190);
-        yield return new WaitForSeconds(0.03f);
-        sFireSmallSRCrouch.color = new Color(255, 255, 255, 0);
-
-    }
-    IEnumerator ReloadSAnim()
-    {
-        sDavayReload = true;
-        yield return null;
-        sDavayReload = false;
-    }
-    IEnumerator ReloadCooldownSniper()
-    {
-        canSAttackAfterReload = false;
-        if (bulletsSAtAllInt > 4)
-        {
-            leftInMagIntS = inMagSInt;
-            inMagSInt = 5;
-            bulletsSAtAllInt -= (5 - leftInMagIntS);
         }
         else
         {
-            if (inMagSInt == 0)
-            {
-                inMagSInt = bulletsSAtAllInt;
-                bulletsSAtAllInt = 0;
-            }
-            else
-            {
-                leftInMagIntS = inMagSInt;
-                if (inMagSInt + bulletsSAtAllInt > 5)
-                {
-                    inMagSInt = 5;
-                    bulletsSAtAllInt -= (5 - leftInMagIntS);
-                }
-                else
-                {
-                    inMagSInt += bulletsSAtAllInt;
-                    bulletsSAtAllInt = 0;
-                }
-            }
+            Rifler.Instance.ammoInStock += ammo;
         }
-        yield return new WaitForSeconds(0.6f);
-        canSAttackAfterReload = true;
-        yield return new WaitForSeconds(3f);
-        sReloadCooldown = false;
-    }
-    IEnumerator magFadeSniper()
-    {
-        yield return new WaitForSeconds(0.01f);
-        sCanReload = false;
-
-        yield return new WaitForSeconds(0.15f);
-        if (plMovement.isMovingFW && !Input.GetKey(crouchKey))
-        {
-            cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(0.4f, 3, 0), Quaternion.identity);
-        }
-        if (!plMovement.isMovingFW && !Input.GetKey(crouchKey))
-        {
-            cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(-0.4f, 3, 0), Quaternion.identity);
-        }
-        if (plMovement.isMovingFW && Input.GetKey(crouchKey))
-        {
-            cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(1, 2.5f, 0), Quaternion.identity);
-        }
-        if (!plMovement.isMovingFW && Input.GetKey(crouchKey))
-        {
-            cloneGO = Instantiate(magSGO, playerSGO.transform.position + new Vector3(-1, 2.5f, 0), Quaternion.identity);
-        }
-
-        yield return new WaitForSeconds(0.84f);
-        Destroy(cloneGO);
     }
 
 
-
-
-    //Sickler coroutines
-    IEnumerator siAttack()
+    // Display HP ammount
+    public void HPBarFill(int HP, float multiplier)
     {
-        plMovement.secJump = false;
-        if (plMovement.isMovingFW)
-        {
-            rb.velocity = new Vector2(2, 0);
-            rb.AddForce(Vector2.down * 40 + Vector2.right * 50, ForceMode2D.Impulse);
-        }
-        if (!plMovement.isMovingFW)
-        {
-            rb.velocity = new Vector2(-2, 0);
-            rb.AddForce(Vector2.down * 40 + Vector2.left * 50, ForceMode2D.Impulse);
-        }
-        canAttackSi = false;
-        doesSiAttack = true;
-        siAttackCombo();
+        HPBarImage.fillAmount = HP * multiplier;
+    }
+
+
+    // Pause and death menu
+
+    public void Continue()
+    {
+        Time.timeScale = 1;
+        isPaused = false;
+        pauseElements.SetActive(false);
+    }
+
+    public void Restart()
+    {
+        Time.timeScale = 1;
+        Player.riflerIsDead = false;
+        Player.sniperIsDead = false;
+        Player.sicklerIsDead = false;
+        CharacterChangeCode.canChange = true;
+        StartCoroutine(LoadActiveScene());
+    }
+
+    public void MainMenu()
+    {
+        Time.timeScale = 1;
+        isPaused = false;
+        Player.riflerIsDead = false;
+        Player.sniperIsDead = false;
+        Player.sicklerIsDead = false;
+        StartCoroutine(LoadMainMenuScene());
+    }
+
+    public IEnumerator LoadActiveScene()
+    {
         yield return null;
-        canAttackSiAnim = false;
-
-        comboSi = comboSiDelivery;
-        yield return new WaitForSeconds(0.4f);
-        doesSiAttack = false;
-        canAttackSi = true;
-        canAttackSiAnim = true;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-    IEnumerator canWalk()
-    {
-        canWalkSi = false;
-        yield return new WaitForSeconds(0.5f);
-        canWalkSi = true;
-    }
-    void siAttackCombo()
-    {
-        if (comboSi == 1)
-        {
-            comboSiDelivery = 0;
-        }
-        if (comboSi == 0)
-        {
-            comboSiDelivery = 0;
-        }
 
+    public IEnumerator LoadMainMenuScene()
+    {
+        yield return null;
+        SceneManager.LoadScene(0);
+    }
+
+    IEnumerator IsPaused()
+    {
+        yield return null;
+        isPaused = true;
     }
 
     IEnumerator TimeStop()
     {
-        PauseMenu.isPaused = true;
-        if (ostGO != null)
-            ostGO.GetComponent<OST>().WhenPaused();
-        yield return null;
         Time.timeScale = 0;
+        isPaused = true;
+        OST.Instance.WhenPaused();
+        yield return null;
+    }
+
+    // Characters elements control
+
+    public void SwitchToRifler()
+    {
+        foreach (GameObject go in riflerElements)
+        {
+            go.SetActive(true);
+        }
+
+        foreach (GameObject go in sniperElements)
+        {
+            go.SetActive(false);
+        }
+
+        foreach (GameObject go in sicklerElements)
+        {
+            go.SetActive(false);
+        }
+    }
+
+    public void SwitchToSniper()
+    {
+        foreach (GameObject go in riflerElements)
+        {
+            go.SetActive(false);
+        }
+
+        foreach (GameObject go in sniperElements)
+        {
+            go.SetActive(true);
+        }
+
+        foreach (GameObject go in sicklerElements)
+        {
+            go.SetActive(false);
+        }
+    }
+
+    public void SwitchToSickler()
+    {
+        foreach (GameObject go in riflerElements)
+        {
+            go.SetActive(false);
+        }
+
+        foreach (GameObject go in sniperElements)
+        {
+            go.SetActive(false);
+        }
+
+        foreach (GameObject go in sicklerElements)
+        {
+            go.SetActive(true);
+        }
     }
 }

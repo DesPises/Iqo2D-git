@@ -4,191 +4,211 @@ using UnityEngine;
 
 public class CharacterChangeCode : MonoBehaviour
 {
-    public static KeyCode riflerKey, sniperKey, sicklerKey;
-    public GameObject riflerGO, sniperGO, sicklerGO;
-    private Transform plRPosition, plSPosition, plSiPosition;
-    public SpriteRenderer riffire;
-    public Vector3 plRCoordinates, plSCoordinates, plSiCoordinates;
-    public static bool Change, CanChange, isChanged;
+    [SerializeField] private GameObject riflerGO;
+    [SerializeField] private GameObject sniperGO;
+    [SerializeField] private GameObject sicklerGO;
+
+    private Vector3 plRCoordinates;
+    private Vector3 plSCoordinates;
+    private Vector3 plSiCoordinates;
+
+    public static bool canChange;
+    public static bool change;
 
     void Start()
     {
-        riflerKey = InputManager.IM.torKey;
-        sniperKey = InputManager.IM.tosKey;
-        sicklerKey = InputManager.IM.tosiKey;
-        plMovement.character = "Rifler";
-        riflerKey = KeyCode.Alpha2;
-        sniperKey = KeyCode.Alpha1;
-        sicklerKey = KeyCode.Alpha3;
-        Change = false;
-        CanChange = true;
-        isChanged = false;
+        // Set starting character to rifler
+        Player.character = "Rifler";
+        riflerGO.SetActive(true);
+        sniperGO.SetActive(false);
+        sicklerGO.SetActive(false);
+
+        change = false;
+        canChange = true;
     }
 
     void Update()
-    { 
-        //Coordinates
-        if (plMovement.character == "Rifler")
-        {
-            plRPosition = riflerGO.transform;
-            plRCoordinates = new Vector3(plRPosition.position.x, plRPosition.position.y - 2, plRPosition.position.z);
-        }
-        if (plMovement.character == "Sniper")
-        {
-            plSPosition = sniperGO.transform;
-            plSCoordinates = new Vector3(plSPosition.position.x, plSPosition.position.y - 2, plSPosition.position.z);
-        }
-        if (plMovement.character == "Sickler")
-        {
-            plSiPosition = sicklerGO.transform;
-            plSiCoordinates = new Vector3(plSiPosition.position.x, plSiPosition.position.y + 2, plSiPosition.position.z);
-        }
+    {
+        // Save coordinates
+        plRCoordinates = riflerGO.transform.position + new Vector3(0, -2);
+        plSCoordinates = sniperGO.transform.position + new Vector3(0, -2);
+        plSiCoordinates = sicklerGO.transform.position + new Vector3(0, 2);
 
+        // Characters pick
 
-        //Characters pick
-
-        //Pick rifler
-        if (CanChange && Input.GetKeyDown(riflerKey) && plMovement.character == "Sniper" && !GameManager.rIsDead)
+        // Pick rifler
+        if (Player.character != "Rifler")
         {
-            riflerGO.gameObject.SetActive(true);
-            sniperGO.gameObject.SetActive(false);
-            sicklerGO.gameObject.SetActive(false);
-            plMovement.character = "Rifler";
-            riflerGO.transform.position = plSCoordinates + new Vector3(0, 2, 0);
-            StartCoroutine(ChangeVoid());
-
-        }
-        if (CanChange && Input.GetKeyDown(riflerKey) && plMovement.character == "Sickler" && !GameManager.rIsDead)
-        {
-            riflerGO.gameObject.SetActive(true);
-            sniperGO.gameObject.SetActive(false);
-            sicklerGO.gameObject.SetActive(false);
-            plMovement.character = "Rifler";
-            riflerGO.transform.position = plSiCoordinates;
-            StartCoroutine(ChangeVoid());
-        }
-        //Pick sniper
-        if (CanChange && Input.GetKeyDown(sniperKey) && plMovement.character == "Rifler" && !GameManager.sIsDead)
-        {
-            riflerGO.gameObject.SetActive(false);
-            sniperGO.gameObject.SetActive(true);
-            sicklerGO.gameObject.SetActive(false);
-            plMovement.character = "Sniper";
-            sniperGO.transform.position = plRCoordinates + new Vector3(0, 2, 0);
-            StartCoroutine(ChangeVoid());
-        }
-        if (CanChange && Input.GetKeyDown(sniperKey) && plMovement.character == "Sickler" && !GameManager.sIsDead)
-        {
-            riflerGO.gameObject.SetActive(false);
-            sniperGO.gameObject.SetActive(true);
-            sicklerGO.gameObject.SetActive(false);
-            plMovement.character = "Sniper";
-            sniperGO.transform.position = plSiCoordinates;
-            StartCoroutine(ChangeVoid());
-        }
-        //Pick sickler
-        if (CanChange && Input.GetKeyDown(sicklerKey) && plMovement.character == "Rifler" && !GameManager.siIsDead)
-        {
-            riflerGO.gameObject.SetActive(false);
-            sniperGO.gameObject.SetActive(false);
-            sicklerGO.gameObject.SetActive(true);
-            plMovement.character = "Sickler";
-            sicklerGO.transform.position = plRCoordinates;
-            StartCoroutine(ChangeVoid());
-        }
-        if (CanChange && Input.GetKeyDown(sicklerKey) && plMovement.character == "Sniper" && !GameManager.siIsDead)
-        {
-            riflerGO.gameObject.SetActive(false);
-            sniperGO.gameObject.SetActive(false);
-            sicklerGO.gameObject.SetActive(true);
-            plMovement.character = "Sickler";
-            sicklerGO.transform.position = plSCoordinates;
-            StartCoroutine(ChangeVoid());
-        }
-
-        //Rifler dies
-
-        if (plMovement.character == "Rifler" && GameManager.rIsDead)
-        {
-            if ((!GameManager.siIsDead && !GameManager.sIsDead) || (!GameManager.siIsDead && GameManager.sIsDead))
+            if (canChange && Input.GetKeyDown(InputManager.IM.torKey) && !Player.riflerIsDead)
             {
-                riflerGO.gameObject.SetActive(false);
-                sniperGO.gameObject.SetActive(false);
-                sicklerGO.gameObject.SetActive(true);
-                plMovement.character = "Sickler";
+                if (Player.character == "Sniper")
+                {
+                    Sniper.Instance.OnCharacterChange();
+                    riflerGO.transform.position = plSCoordinates + new Vector3(0, 2, 0);
+
+                }
+                if (Player.character == "Sickler")
+                {
+                    riflerGO.transform.position = plSiCoordinates;
+
+                }
+                GameManager.Instance.SwitchToRifler();
+                PickRifler();
+            }
+        }
+
+        // Pick sniper
+        if (Player.character != "Sniper")
+        {
+            if (canChange && Input.GetKeyDown(InputManager.IM.tosKey) && !Player.sniperIsDead)
+            {
+                if (Player.character == "Rifler")
+                {
+                    Rifler.Instance.OnCharacterChange();
+                    sniperGO.transform.position = plRCoordinates + new Vector3(0, 2, 0);
+                }
+                if (Player.character == "Sickler")
+                {
+                    sniperGO.transform.position = plSiCoordinates;
+                }
+                GameManager.Instance.SwitchToSniper();
+                PickSniper();
+            }
+        }
+
+        // Pick sickler
+        if (Player.character != "Sickler")
+        {
+            if (canChange && Input.GetKeyDown(InputManager.IM.tosiKey) && !Player.sicklerIsDead)
+            {
+                if (Player.character == "Rifler")
+                {
+                    Rifler.Instance.OnCharacterChange();
+                    sicklerGO.transform.position = plRCoordinates;
+                }
+                if (Player.character == "Sniper")
+                {
+                    Sniper.Instance.OnCharacterChange();
+                    sicklerGO.transform.position = plSCoordinates;
+                }
+                GameManager.Instance.SwitchToSickler();
+                PickSickler();
+            }
+        }
+        
+        // Rifler dies
+
+        if (Player.character == "Rifler" && Player.riflerIsDead)
+        {
+            if (!Player.sicklerIsDead)
+            {
                 sicklerGO.transform.position = plRCoordinates;
-                StartCoroutine(ChangeVoid());
+                PickSickler();
+                GameManager.Instance.SwitchToSickler();
             }
-            if (GameManager.siIsDead && !GameManager.sIsDead)
+            if (Player.sicklerIsDead && !Player.sniperIsDead)
             {
-                riflerGO.gameObject.SetActive(false);
-                sniperGO.gameObject.SetActive(true);
-                sicklerGO.gameObject.SetActive(false);
-                plMovement.character = "Sniper";
                 sniperGO.transform.position = plRCoordinates + new Vector3(0, 2, 0);
-                StartCoroutine(ChangeVoid());
+                PickSniper();
+                GameManager.Instance.SwitchToSniper();
             }
         }
 
-        //Sniper dies
+        // Sniper dies
 
-        if (plMovement.character == "Sniper" && GameManager.sIsDead)
+        if (Player.character == "Sniper" && Player.sniperIsDead)
         {
-            if ((!GameManager.siIsDead && !GameManager.rIsDead) || (!GameManager.siIsDead && GameManager.rIsDead))
+            if (!Player.sicklerIsDead)
             {
-                riflerGO.gameObject.SetActive(false);
-                sniperGO.gameObject.SetActive(false);
-                sicklerGO.gameObject.SetActive(true);
-                plMovement.character = "Sickler";
                 sicklerGO.transform.position = plSCoordinates;
-                StartCoroutine(ChangeVoid());
+                PickSickler();
+                GameManager.Instance.SwitchToSickler();
             }
-            if (GameManager.siIsDead && !GameManager.rIsDead)
+            if (Player.sicklerIsDead && !Player.riflerIsDead)
             {
-                riflerGO.gameObject.SetActive(true);
-                sniperGO.gameObject.SetActive(false);
-                sicklerGO.gameObject.SetActive(false);
-                plMovement.character = "Rifler";
                 riflerGO.transform.position = plSCoordinates + new Vector3(0, 2, 0);
-                StartCoroutine(ChangeVoid());
+                PickRifler();
+                GameManager.Instance.SwitchToRifler();
             }
         }
 
-        //Sickler dies
+        // Sickler dies
 
-        if (plMovement.character == "Sickler" && GameManager.siIsDead)
+        if (Player.character == "Sickler" && Player.sicklerIsDead)
         {
-            if ((!GameManager.sIsDead && !GameManager.rIsDead) || (GameManager.sIsDead && !GameManager.rIsDead))
+            if (!Player.sniperIsDead)
             {
-                riflerGO.gameObject.SetActive(true);
-                sniperGO.gameObject.SetActive(false);
-                sicklerGO.gameObject.SetActive(false);
-                plMovement.character = "Rifler";
                 riflerGO.transform.position = plSiCoordinates;
-                StartCoroutine(ChangeVoid());
+                PickSniper();
+                GameManager.Instance.SwitchToSniper();
             }
-            if (!GameManager.sIsDead && GameManager.rIsDead)
+            if (Player.sniperIsDead && !Player.riflerIsDead)
             {
-                riflerGO.gameObject.SetActive(false);
-                sniperGO.gameObject.SetActive(true);
-                sicklerGO.gameObject.SetActive(false);
-                plMovement.character = "Sniper";
                 sniperGO.transform.position = plSiCoordinates;
-                StartCoroutine(ChangeVoid());
+                PickRifler();
+                GameManager.Instance.SwitchToRifler();
             }
         }
     }
 
-    IEnumerator ChangeVoid()
+    private void PickRifler()
+    {
+        Rifler.Instance.reloading = false;
+        riflerGO.SetActive(true);
+        sniperGO.SetActive(false);
+        sicklerGO.SetActive(false);
+        Player.character = "Rifler";
+        StartCoroutine(CooldownCoroutine());
+    }
+
+    private void PickSniper()
+    {
+        Sniper.Instance.reloading = false;
+        riflerGO.SetActive(false);
+        sniperGO.SetActive(true);
+        sicklerGO.SetActive(false);
+        Player.character = "Sniper";
+        StartCoroutine(CooldownCoroutine());
+    }
+
+    private void PickSickler()
+    {
+        riflerGO.SetActive(false);
+        sniperGO.SetActive(false);
+        sicklerGO.SetActive(true);
+        Player.character = "Sickler";
+        StartCoroutine(CooldownCoroutine());
+    }
+
+    private IEnumerator CooldownCoroutine()
     {
         yield return null;
-        Change = true;
+        change = true;
         yield return null;
-        Change = false;
-        CanChange = false;
+        change = false;
+        canChange = false;
         yield return new WaitForSeconds(0.25f);
-        if (!STAR.isDDOn && !STAR.isInfAmmoOn && !STAR.isInfHPOn)
-            CanChange = true;
+        if (Player.character == "Rifler")
+        {
+            if (!Rifler.Instance.isBonusActive)
+            {
+                canChange = true;
+            }
+        }
+        else if (Player.character == "Sniper")
+        {
+            if (!Sniper.Instance.isBonusActive)
+            {
+                canChange = true;
+            }
+        }
+        else if (Player.character == "Sickler")
+        {
+            if (!Sickler.Instance.isBonusActive)
+            {
+                canChange = true;
+            }
+        }
     }
 
 }

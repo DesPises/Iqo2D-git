@@ -1,19 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RAmmo : MonoBehaviour
 {
-    public GameObject rAmmoGO, soundContrGO;
-
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Player")
+        if (col.gameObject.CompareTag("Player"))
         {
-            GameManager.canAttackR = true;
-            soundContrGO.GetComponent<SoundController>().ammoS();
-            GameManager.bulletsRAtAllInt += 30;
-            Destroy(rAmmoGO);
+            SoundController.Instance.AmmoSniper();
+            StartCoroutine(GameManager.Instance.AmmoBonus(30, 1));
+            Destroy(gameObject);
         }
     }
 }

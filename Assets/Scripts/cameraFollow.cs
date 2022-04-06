@@ -2,109 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class cameraFollow : MonoBehaviour
+public class CameraFollow : MonoBehaviour
 {
-    [Header("Parameters")]
-    [SerializeField] private Transform playerTransform, playerSniperTransform, playerSicklerTransform;
-    [SerializeField] private string PlayerTag;
-    [SerializeField] private float movingSpeed;
-    public static Camera cam;
+    [SerializeField] private Transform playerRifler;
+    [SerializeField] private Transform playerSniper;
+    [SerializeField] private Transform playerSickler;
 
+    private readonly float movingSpeed = 3f;
+    private Camera cam;
+    private Vector3 target;
 
     void Awake()
     {
         cam = GetComponent<Camera>();
-
-        if (this.playerTransform == null)
-        {
-            if (this.PlayerTag == "")
-            {
-                this.PlayerTag = "Player";
-            }
-            this.playerTransform = GameObject.FindGameObjectWithTag(this.PlayerTag).transform;
-        }
-        this.transform.position = new Vector3()
-        {
-            x = this.playerTransform.position.x,
-            y = 1,
-            z = this.playerTransform.position.z - 10,
-        };
     }
-    void Update()
-    {
 
-        if (plMovement.character == "Rifler")
+    private void FixedUpdate()
+    {
+        // Set target point and FOV depending of character
+
+        if (Player.character == "Rifler" && playerRifler)
         {
             cam.orthographicSize = 6;
+            target = new Vector3(playerRifler.position.x, 1, -10);
         }
-        if (plMovement.character == "Sniper")
+
+        else if (Player.character == "Sniper" && playerSniper)
         {
             cam.orthographicSize = 6.8f;
+            if (Player.isMovingForward)
+            {
+                target = new Vector3(playerSniper.position.x + 1, 1.5f, -10);
+            }
+            else
+            {
+                target = new Vector3(playerSniper.position.x - 1, 1.5f, -10);
+            }
         }
-        if (plMovement.character == "Sickler")
+
+        else if (Player.character == "Sickler" && playerSickler)
         {
             cam.orthographicSize = 5.2f;
+            target = new Vector3(playerSickler.position.x, 0, -10);
         }
-    }
 
-    void FixedUpdate()
-    {
-        if (plMovement.character == "Rifler")
-        {
-            if (this.playerTransform)
-            {
-                Vector3 target = new Vector3()
-                {
-                    x = this.playerTransform.position.x,
-                    y = 1,
-                    z = this.playerTransform.position.z - 10,
-                };
-                Vector3 pos = Vector3.Lerp(this.transform.position, target, this.movingSpeed * Time.deltaTime);
-                this.transform.position = pos;
-            }
-        }
-        if (plMovement.character == "Sniper")
-        {
-            if (this.playerSniperTransform)
-            {
-                if (plMovement.isMovingFW)
-                {
-                    Vector3 target = new Vector3()
-                    {
-                        x = this.playerSniperTransform.position.x + 1,
-                        y = 1.5f,
-                        z = this.playerSniperTransform.position.z - 10,
-                    };
-                    Vector3 pos = Vector3.Lerp(this.transform.position, target, this.movingSpeed * Time.deltaTime);
-                    this.transform.position = pos;
-                }
-                if (!plMovement.isMovingFW)
-                {
-                    Vector3 target = new Vector3()
-                    {
-                        x = this.playerSniperTransform.position.x - 1,
-                        y = 1.5f,
-                        z = this.playerSniperTransform.position.z - 10,
-                    };
-                    Vector3 pos = Vector3.Lerp(this.transform.position, target, this.movingSpeed * Time.deltaTime);
-                    this.transform.position = pos;
-                }
-
-            }
-        }
-        if (plMovement.character == "Sickler")
-        {
-            if (this.playerSicklerTransform)
-            {
-                Vector3 target = new Vector3()
-                {
-                    x = this.playerSicklerTransform.position.x,
-                    y = 0f,
-                    z = this.playerSicklerTransform.position.z - 10,
-                };
-                Vector3 pos = Vector3.Lerp(this.transform.position, target, this.movingSpeed * Time.deltaTime);
-                this.transform.position = pos;
-            }
-        }
+        // Camera following player
+        transform.position = Vector3.Lerp(transform.position, target, movingSpeed * Time.deltaTime);
     }
 }
