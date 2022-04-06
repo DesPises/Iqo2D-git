@@ -22,7 +22,6 @@ public class Sickler : Player
         plRB = GetComponent<Rigidbody2D>();
         floorLayer = LayerMask.GetMask("Floor");
         canMove = true;
-        canAttack = true;
         isMovingForward = true;
 
         HPMax = 140;
@@ -59,13 +58,13 @@ public class Sickler : Player
         }
 
         // Attack Boss
-        if (BossGO != null && Physics2D.OverlapCircle(attackPos.position, attackRange, BossLayer) && Input.GetKeyDown(InputManager.IM.attackKey) && canAttack)
+        if (BossGO != null && Physics2D.OverlapCircle(attackPos.position, attackRange, BossLayer) && Input.GetKeyDown(InputManager.IM.attackKey) && GameManager.sicklerCanAttack)
         {
             BossGO.GetComponent<Boss>().DamageFromSickler();
         }
 
         // Attack
-        if (Input.GetKeyDown(InputManager.IM.attackKey) && canAttack && !GameManager.Instance.isPaused)
+        if (Input.GetKeyDown(InputManager.IM.attackKey) && GameManager.sicklerCanAttack && !GameManager.Instance.isPaused)
         {
             Attack();
             if (inEnemyHeadArea)
@@ -106,9 +105,9 @@ public class Sickler : Player
 
     private void Attack()
     {
+        GameManager.Instance.FireRateControlTransition(fireRate, 3);
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         Anim.Attack();
-        StartCoroutine(FireRateControl(fireRate));
         StartCoroutine(Anim.AttackOff());
 
         secJump = false;

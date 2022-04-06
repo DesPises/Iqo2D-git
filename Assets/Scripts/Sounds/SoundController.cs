@@ -1,89 +1,69 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class SoundController : MonoBehaviour
 {
     public static SoundController Instance { get; private set; }
 
     [Header("Player")]
-    public AudioSource bulletHit;
-    public AudioSource akReload;
-    public AudioSource akShoot;
-    public AudioSource svdReload;
-    public AudioSource svdShoot;
-    public AudioSource siVzmah;
-    public AudioSource siHit;
-    public AudioSource run;
-    public AudioSource jump;
-    public AudioSource death;
-    public AudioSource dmg;
-    public AudioSource emptyMag;
+    [SerializeField] private AudioSource bulletHit;
+    [SerializeField] private AudioSource akReload;
+    [SerializeField] private AudioSource akShoot;
+    [SerializeField] private AudioSource svdReload;
+    [SerializeField] private AudioSource svdShoot;
+    [SerializeField] private AudioSource siVzmah;
+    [SerializeField] private AudioSource siHit;
+    [SerializeField] private AudioSource run;
+    [SerializeField] private AudioSource jump;
+    [SerializeField] private AudioSource death;
+    [SerializeField] private AudioSource dmg;
+    [SerializeField] private AudioSource emptyMag;
 
     [Header("Bonuses")]
-    public AudioSource ammo;
-    public AudioSource HP;
-    public AudioSource bonus;
+    [SerializeField] private AudioSource ammo;
+    [SerializeField] private AudioSource HP;
+    [SerializeField] private AudioSource bonus;
 
     [Header("Aliens")]
-    public AudioSource alienShoot;
-    public AudioSource alienDeath;
-    public AudioSource explosion;
-    public AudioSource laser;
-    public AudioSource alienHit;
+    [SerializeField] private AudioSource alienShoot;
+    [SerializeField] private AudioSource alienDeath;
+    [SerializeField] private AudioSource explosion;
+    [SerializeField] private AudioSource laser;
+    [SerializeField] private AudioSource alienHit;
 
     private void Start()
     {
         Instance = this;
-
-        if (!PlayerPrefs.HasKey("volume"))
-        {
-            bulletHit.volume = 0.2f;
-            akReload.volume = 0.2f;
-            akShoot.volume = 0.2f;
-            svdReload.volume = 0.2f;
-            svdShoot.volume = 0.2f;
-            siVzmah.volume = 0.1f;
-            siHit.volume = 0.2f;
-            run.volume = 0.2f;
-            jump.volume = 0.2f;
-            death.volume = 0.2f;
-            dmg.volume = 0.2f;
-            emptyMag.volume = 0.2f;
-            ammo.volume = 0.2f;
-            HP.volume = 0.2f;
-            bonus.volume = 0.2f;
-            alienShoot.volume = 0.2f;
-            alienDeath.volume = 0.2f;
-            explosion.volume = 0.2f;
-            laser.volume = 0.2f;
-            alienHit.volume = 0.1f;
-        }
     }
 
     private void Update()
     {
-        bulletHit.volume = PlayerPrefs.GetFloat("volume");
-        akReload.volume = PlayerPrefs.GetFloat("volume");
-        akShoot.volume = PlayerPrefs.GetFloat("volume");
-        svdReload.volume = PlayerPrefs.GetFloat("volume");
-        svdShoot.volume = PlayerPrefs.GetFloat("volume");
-        siVzmah.volume = PlayerPrefs.GetFloat("volume") * 0.5f;
-        siHit.volume = PlayerPrefs.GetFloat("volume");
-        run.volume = PlayerPrefs.GetFloat("volume");
-        jump.volume = PlayerPrefs.GetFloat("volume");
-        death.volume = PlayerPrefs.GetFloat("volume");
-        dmg.volume = PlayerPrefs.GetFloat("volume");
-        emptyMag.volume = PlayerPrefs.GetFloat("volume");
-        ammo.volume = PlayerPrefs.GetFloat("volume");
-        HP.volume = PlayerPrefs.GetFloat("volume");
-        bonus.volume = PlayerPrefs.GetFloat("volume");
-        alienShoot.volume = PlayerPrefs.GetFloat("volume");
-        alienDeath.volume = PlayerPrefs.GetFloat("volume");
-        explosion.volume = PlayerPrefs.GetFloat("volume");
-        laser.volume = PlayerPrefs.GetFloat("volume");
-        alienHit.volume = PlayerPrefs.GetFloat("volume") * 0.5f;
+        if (PlayerPrefs.HasKey("volume"))
+        {
+            bulletHit.volume = PlayerPrefs.GetFloat("volume");
+            akReload.volume = PlayerPrefs.GetFloat("volume");
+            akShoot.volume = PlayerPrefs.GetFloat("volume");
+            svdReload.volume = PlayerPrefs.GetFloat("volume");
+            svdShoot.volume = PlayerPrefs.GetFloat("volume");
+            siVzmah.volume = PlayerPrefs.GetFloat("volume") * 0.5f;
+            siHit.volume = PlayerPrefs.GetFloat("volume");
+            run.volume = PlayerPrefs.GetFloat("volume");
+            jump.volume = PlayerPrefs.GetFloat("volume");
+            death.volume = PlayerPrefs.GetFloat("volume");
+            dmg.volume = PlayerPrefs.GetFloat("volume");
+            emptyMag.volume = PlayerPrefs.GetFloat("volume");
+            ammo.volume = PlayerPrefs.GetFloat("volume");
+            HP.volume = PlayerPrefs.GetFloat("volume");
+            bonus.volume = PlayerPrefs.GetFloat("volume");
+            alienShoot.volume = PlayerPrefs.GetFloat("volume");
+            alienDeath.volume = PlayerPrefs.GetFloat("volume");
+            explosion.volume = PlayerPrefs.GetFloat("volume");
+            laser.volume = PlayerPrefs.GetFloat("volume");
+            alienHit.volume = PlayerPrefs.GetFloat("volume") * 0.5f;
+        }
+        else
+        {
+            PlayerPrefs.SetFloat("volume", 0.2f);
+        }
     }
 
     public void AkReload()

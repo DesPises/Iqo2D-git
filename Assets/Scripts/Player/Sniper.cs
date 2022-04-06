@@ -13,13 +13,11 @@ public class Sniper : Player
 
         canMove = true;
         isMovingForward = true;
-        canAttack = true;
 
         HPMax = 60;
         HP = HPMax;
         ammoInMag = 5;
         ammoInStock = 17;
-        canAttack = true;
         damage = 18;
         damageHS = 25;
         attackRate = 1f;
@@ -66,13 +64,14 @@ public class Sniper : Player
 
         if (ammoInMag > 0)
         {
-            if (Input.GetKeyDown(InputManager.IM.attackKey) && canAttack && !reloading && !GameManager.Instance.isPaused)
+            if (Input.GetKeyDown(InputManager.IM.attackKey) && GameManager.sniperCanAttack && !reloading && !GameManager.Instance.isPaused)
             {
                 SoundController.Instance.SvdShoot();
                 Anim.Attack();
                 StartCoroutine(Anim.AttackOff());
 
-                StartCoroutine(FireRateControl(attackRate));
+                GameManager.Instance.FireRateControlTransition(attackRate, 1);
+                ammoInMag--;
 
                 // Set bullet spawn position and direction
 

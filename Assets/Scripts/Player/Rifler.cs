@@ -13,7 +13,6 @@ public class Rifler : Player
 
         canMove = true;
         isMovingForward = true;
-        canAttack = true;
 
         HPMax = 100;
         HP = HPMax;
@@ -65,12 +64,13 @@ public class Rifler : Player
 
         if (ammoInMag > 0)
         {
-            if (Input.GetKey(InputManager.IM.attackKey) && canAttack && !reloading && !GameManager.Instance.isPaused)
+            if (Input.GetKey(InputManager.IM.attackKey) && GameManager.riflerCanAttack && !reloading && !GameManager.Instance.isPaused)
             {
                 SoundController.Instance.AkShoot();
                 Anim.Attack();
 
-                StartCoroutine(FireRateControl(attackRate));
+                GameManager.Instance.FireRateControlTransition(attackRate, 2);
+                ammoInMag--;
 
                 // Set bullet spawn position and direction
 

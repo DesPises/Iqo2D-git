@@ -153,6 +153,7 @@ public class CharacterChangeCode : MonoBehaviour
 
     private void PickRifler()
     {
+        Rifler.Instance.reloading = false;
         riflerGO.SetActive(true);
         sniperGO.SetActive(false);
         sicklerGO.SetActive(false);
@@ -162,6 +163,7 @@ public class CharacterChangeCode : MonoBehaviour
 
     private void PickSniper()
     {
+        Sniper.Instance.reloading = false;
         riflerGO.SetActive(false);
         sniperGO.SetActive(true);
         sicklerGO.SetActive(false);

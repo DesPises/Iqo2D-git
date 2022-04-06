@@ -37,8 +37,7 @@ public class Player : MonoBehaviour
     protected bool canMove;
     public bool isBonusActive;
 
-    protected bool canAttack;
-    protected bool reloading;
+    public bool reloading;
     protected bool emptySoundCooldown;
 
     public int ammoInMag { get; protected set; }
@@ -157,17 +156,6 @@ public class Player : MonoBehaviour
 
     // Shoot methods
 
-    protected IEnumerator FireRateControl(float fireRate)
-    {
-        yield return null;
-        yield return null;
-        canAttack = false;
-        yield return null;
-        ammoInMag--;
-        yield return new WaitForSeconds(fireRate);
-        canAttack = true;
-    }
-
     protected IEnumerator FireAnimation()
     {
         for (int i = 0; i < fireAnimationPics.Length; i++)
@@ -190,10 +178,6 @@ public class Player : MonoBehaviour
 
     public void OnCharacterChange()
     {
-        if (ammoInMag > 0 || ammoInStock > 0)
-        {
-            canAttack = true;
-        }
         for (int i = 0; i < fireAnimationPics.Length; i++)
         {
             fireAnimationPics[i].color = invisible;

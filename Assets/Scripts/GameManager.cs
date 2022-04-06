@@ -31,6 +31,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text ammoInSniperMagText;
     [SerializeField] private Text ammoInSniperStockText;
 
+    // Attack cooldown
+    public static bool riflerCanAttack;
+    public static bool sniperCanAttack;
+    public static bool sicklerCanAttack;
+
     void Start()
     {
         Instance = this;
@@ -39,6 +44,10 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         deathMenu.SetActive(false);
         pauseElements.SetActive(false);
+
+        riflerCanAttack = true;
+        sniperCanAttack = true;
+        sicklerCanAttack = true;
 
         // Set default character to rifler
         SwitchToRifler();
@@ -79,6 +88,33 @@ public class GameManager : MonoBehaviour
         {
             deathMenu.SetActive(true);
             StartCoroutine(TimeStop());
+        }
+    }
+
+    public void FireRateControlTransition(float fireRate, int character)
+    {
+        StartCoroutine(FireRateControl(fireRate, character));
+    }
+
+    private IEnumerator FireRateControl(float fireRate, int character)
+    {
+        if (character == 1)
+        {
+            sniperCanAttack = false;
+            yield return new WaitForSeconds(fireRate);
+            sniperCanAttack = true;
+        }
+        else if (character == 2)
+        {
+            riflerCanAttack = false;
+            yield return new WaitForSeconds(fireRate);
+            riflerCanAttack = true;
+        }
+        else if (character == 3)
+        {
+            sicklerCanAttack = false;
+            yield return new WaitForSeconds(fireRate);
+            sicklerCanAttack = true;
         }
     }
 

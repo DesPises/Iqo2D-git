@@ -1,55 +1,54 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Prologue : MonoBehaviour
 {
-    public GameObject s1, s2, s3, s4, s5, s6, s7, s8, space, sr1, sr2, sr3, sr4, sr5, sr6, sr7, sr8, spacer, cameraGO;
-    public int i = 0;
-    public Animator rAnim, sAnim, siAnim;
-    public Camera cam;
+    [SerializeField] private GameObject[] dialogueElementsEng;
+    [SerializeField] private GameObject[] dialogueElementsRus;
 
-    void Start()
-    {
+    [SerializeField] private Animator riflerAnim;
+    [SerializeField] private Animator sniperAnim;
+    [SerializeField] private Animator sicklerAnim;
+    [SerializeField] private GameObject cameraObject;
 
-    }
+    private int index = 0;
 
     void Update()
     {
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            i++;
+            index++;
         }
 
         if (Language.eng)
         {
-            switch (i)
+            switch (index)
             {
                 case 0:
-                    { s1.SetActive(true); space.SetActive(true); }
+                    { dialogueElementsEng[0].SetActive(true); dialogueElementsEng[1].SetActive(true); }
                     break;
                 case 1:
-                    { s1.SetActive(false); s2.SetActive(true); StartCoroutine(CameraMoveToSickler()); }
+                    { dialogueElementsEng[1].SetActive(false); dialogueElementsEng[2].SetActive(true); StartCoroutine(CameraMoveToSickler()); }
                     break;
                 case 2:
-                    { s2.SetActive(false); s3.SetActive(true); siAnim.SetBool("talk", true); }
+                    { dialogueElementsEng[2].SetActive(false); dialogueElementsEng[3].SetActive(true); sicklerAnim.SetBool("talk", true); }
                     break;
                 case 3:
-                    { s3.SetActive(false); s4.SetActive(true); siAnim.SetBool("talk", false); StartCoroutine(CameraMoveToRifler()); rAnim.SetBool("talk", true); }
+                    { dialogueElementsEng[3].SetActive(false); dialogueElementsEng[4].SetActive(true); sicklerAnim.SetBool("talk", false); StartCoroutine(CameraMoveToRifler()); riflerAnim.SetBool("talk", true); }
                     break;
                 case 4:
-                    { s4.SetActive(false); s5.SetActive(true); StartCoroutine(CameraMoveToSicklerAgain()); siAnim.SetBool("talk", true); rAnim.SetBool("talk", false); }
+                    { dialogueElementsEng[4].SetActive(false); dialogueElementsEng[5].SetActive(true); StartCoroutine(CameraMoveToSicklerAgain()); sicklerAnim.SetBool("talk", true); riflerAnim.SetBool("talk", false); }
                     break;
                 case 5:
-                    { s5.SetActive(false); s6.SetActive(true); StartCoroutine(CameraMoveToRifler()); rAnim.SetBool("talk", true); }
+                    { dialogueElementsEng[5].SetActive(false); dialogueElementsEng[6].SetActive(true); StartCoroutine(CameraMoveToRifler()); riflerAnim.SetBool("talk", true); }
                     break;
                 case 6:
-                    { s6.SetActive(false); s7.SetActive(true); rAnim.SetBool("talk", false); }
+                    { dialogueElementsEng[6].SetActive(false); dialogueElementsEng[7].SetActive(true); riflerAnim.SetBool("talk", false); }
                     break;
                 case 7:
-                    { s7.SetActive(false); s8.SetActive(true); sAnim.SetBool("talk", true); }
+                    { dialogueElementsEng[7].SetActive(false); dialogueElementsEng[8].SetActive(true); sniperAnim.SetBool("talk", true); }
                     break;
                 case 8:
                     SceneManager.LoadScene(2);
@@ -57,34 +56,33 @@ public class Prologue : MonoBehaviour
 
             }
         }
-       
-        if (!Language.eng)
+        else
         {
-            switch (i)
+            switch (index)
             {
                 case 0:
-                    { sr1.SetActive(true); spacer.SetActive(true); }
+                    { dialogueElementsRus[0].SetActive(true); dialogueElementsRus[1].SetActive(true); }
                     break;
                 case 1:
-                    { sr1.SetActive(false); sr2.SetActive(true); StartCoroutine(CameraMoveToSickler()); }
+                    { dialogueElementsRus[1].SetActive(false); dialogueElementsRus[2].SetActive(true); StartCoroutine(CameraMoveToSickler()); }
                     break;
                 case 2:
-                    { sr2.SetActive(false); sr3.SetActive(true); siAnim.SetBool("talk", true); }
+                    { dialogueElementsRus[2].SetActive(false); dialogueElementsRus[3].SetActive(true); sicklerAnim.SetBool("talk", true); }
                     break;
                 case 3:
-                    { sr3.SetActive(false); sr4.SetActive(true); siAnim.SetBool("talk", false); StartCoroutine(CameraMoveToRifler()); rAnim.SetBool("talk", true); }
+                    { dialogueElementsRus[3].SetActive(false); dialogueElementsRus[4].SetActive(true); sicklerAnim.SetBool("talk", false); StartCoroutine(CameraMoveToRifler()); riflerAnim.SetBool("talk", true); }
                     break;
                 case 4:
-                    { sr4.SetActive(false); sr5.SetActive(true); StartCoroutine(CameraMoveToSicklerAgain()); siAnim.SetBool("talk", true); rAnim.SetBool("talk", false); }
+                    { dialogueElementsRus[4].SetActive(false); dialogueElementsRus[5].SetActive(true); StartCoroutine(CameraMoveToSicklerAgain()); sicklerAnim.SetBool("talk", true); riflerAnim.SetBool("talk", false); }
                     break;
                 case 5:
-                    { sr5.SetActive(false); sr6.SetActive(true); StartCoroutine(CameraMoveToRifler()); rAnim.SetBool("talk", true); }
+                    { dialogueElementsRus[5].SetActive(false); dialogueElementsRus[6].SetActive(true); StartCoroutine(CameraMoveToRifler()); riflerAnim.SetBool("talk", true); }
                     break;
                 case 6:
-                    { sr6.SetActive(false); sr7.SetActive(true); rAnim.SetBool("talk", false); }
+                    { dialogueElementsRus[6].SetActive(false); dialogueElementsRus[7].SetActive(true); riflerAnim.SetBool("talk", false); }
                     break;
                 case 7:
-                    { sr7.SetActive(false); sr8.SetActive(true); sAnim.SetBool("talk", true); }
+                    { dialogueElementsRus[7].SetActive(false); dialogueElementsRus[8].SetActive(true); sniperAnim.SetBool("talk", true); }
                     break;
                 case 8:
                     SceneManager.LoadScene(2);
@@ -94,28 +92,29 @@ public class Prologue : MonoBehaviour
         }
     }
 
-    IEnumerator CameraMoveToSickler()
+    private IEnumerator CameraMoveToSickler()
     {
-        while (cameraGO.transform.position.x < 8)
+        while (cameraObject.transform.position.x < 8)
         {
-            cameraGO.transform.position += new Vector3(0.1f, 0, 0) * Time.deltaTime;
+            cameraObject.transform.position += new Vector3(0.1f, 0, 0) * Time.deltaTime;
             yield return null;
         }
     }
 
-    IEnumerator CameraMoveToRifler()
+    private IEnumerator CameraMoveToRifler()
     {
-        while (cameraGO.transform.position.x > -2)
+        while (cameraObject.transform.position.x > -2)
         {
-            cameraGO.transform.position -= new Vector3(2, 0, 0) * Time.deltaTime;
+            cameraObject.transform.position -= new Vector3(2, 0, 0) * Time.deltaTime;
             yield return null;
         }
     }
-    IEnumerator CameraMoveToSicklerAgain()
+
+    private IEnumerator CameraMoveToSicklerAgain()
     {
-        while(cameraGO.transform.position.x < 10)
+        while (cameraObject.transform.position.x < 10)
         {
-            cameraGO.transform.position += new Vector3(2, 0, 0) * Time.deltaTime;
+            cameraObject.transform.position += new Vector3(2, 0, 0) * Time.deltaTime;
             yield return null;
         }
     }

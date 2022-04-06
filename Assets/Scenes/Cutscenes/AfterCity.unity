@@ -1367,7 +1367,7 @@ GameObject:
   - component: {fileID: 210659517}
   - component: {fileID: 210659516}
   m_Layer: 5
-  m_Name: R.3
+  m_Name: R.4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1741,7 +1741,7 @@ Transform:
   - {fileID: 816721301}
   - {fileID: 692497118}
   m_Father: {fileID: 1024757478}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &344377923
 GameObject:
@@ -1835,7 +1835,7 @@ GameObject:
   - component: {fileID: 383417305}
   - component: {fileID: 383417304}
   m_Layer: 5
-  m_Name: R.2
+  m_Name: R.3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2404,7 +2404,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1024757478}
-  - {fileID: 2119581518}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2499,7 +2498,7 @@ GameObject:
   - component: {fileID: 610228077}
   - component: {fileID: 610228076}
   m_Layer: 0
-  m_Name: TEXT BACKGROUND (1)
+  m_Name: '"Press space" background'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2912,7 +2911,7 @@ GameObject:
   - component: {fileID: 641091479}
   - component: {fileID: 641091478}
   m_Layer: 5
-  m_Name: R.3
+  m_Name: R.4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3162,7 +3161,7 @@ GameObject:
   - component: {fileID: 676556870}
   - component: {fileID: 676556869}
   m_Layer: 5
-  m_Name: R.4
+  m_Name: R.5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3246,7 +3245,7 @@ GameObject:
   - component: {fileID: 692187467}
   - component: {fileID: 692187466}
   m_Layer: 5
-  m_Name: R.5
+  m_Name: R.6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4101,7 +4100,7 @@ GameObject:
   - component: {fileID: 816721303}
   - component: {fileID: 816721302}
   m_Layer: 5
-  m_Name: R.6
+  m_Name: R.7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4630,7 +4629,7 @@ GameObject:
   - component: {fileID: 1024757477}
   - component: {fileID: 1024757479}
   m_Layer: 0
-  m_Name: Dialogues
+  m_Name: Dialogue controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4669,6 +4668,7 @@ RectTransform:
   m_LocalScale: {x: 1.00043, y: 1.00043, z: 1.00043}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2119581518}
   - {fileID: 338846986}
   - {fileID: 1358616466}
   m_Father: {fileID: 519420032}
@@ -4691,48 +4691,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 971f039391e4f5f4684551dd7d25c5a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  s1: {fileID: 1518609832}
-  s2: {fileID: 1295671183}
-  s3: {fileID: 1890373635}
-  s4: {fileID: 1449349618}
-  s5: {fileID: 1624478163}
-  s6: {fileID: 1486183167}
-  s7: {fileID: 383417302}
-  s8: {fileID: 906340669}
-  s9: {fileID: 641091476}
-  s10: {fileID: 1482422036}
-  s11: {fileID: 1520989493}
-  s12: {fileID: 692187464}
-  s13: {fileID: 649738614}
-  s14: {fileID: 1365684592}
-  s15: {fileID: 816721300}
-  s16: {fileID: 692497117}
-  space: {fileID: 2006599285}
-  sr1: {fileID: 13081679}
-  sr2: {fileID: 696545658}
-  sr3: {fileID: 168766724}
-  sr4: {fileID: 1249985768}
-  sr5: {fileID: 636248274}
-  sr6: {fileID: 69027820}
-  sr7: {fileID: 1209139917}
-  sr8: {fileID: 1693125647}
-  sr9: {fileID: 210659514}
-  sr10: {fileID: 676556867}
-  sr11: {fileID: 1958189213}
-  sr12: {fileID: 1564502812}
-  sr13: {fileID: 1332216091}
-  sr14: {fileID: 657535475}
-  sr15: {fileID: 1185218582}
-  sr16: {fileID: 317169537}
-  spacer: {fileID: 172106380}
-  cameraGO: {fileID: 519420028}
-  sicklerGO: {fileID: 5090913522678549645}
+  dialogueElementsEng:
+  - {fileID: 2006599285}
+  - {fileID: 1518609832}
+  - {fileID: 1295671183}
+  - {fileID: 1890373635}
+  - {fileID: 1449349618}
+  - {fileID: 1624478163}
+  - {fileID: 1486183167}
+  - {fileID: 383417302}
+  - {fileID: 906340669}
+  - {fileID: 641091476}
+  - {fileID: 1482422036}
+  - {fileID: 1520989493}
+  - {fileID: 692187464}
+  - {fileID: 649738614}
+  - {fileID: 1365684592}
+  - {fileID: 816721300}
+  - {fileID: 692497117}
+  dialogueElementsRus:
+  - {fileID: 172106380}
+  - {fileID: 13081679}
+  - {fileID: 696545658}
+  - {fileID: 168766724}
+  - {fileID: 1249985768}
+  - {fileID: 636248274}
+  - {fileID: 69027820}
+  - {fileID: 1209139917}
+  - {fileID: 1693125647}
+  - {fileID: 210659514}
+  - {fileID: 676556867}
+  - {fileID: 1958189213}
+  - {fileID: 1564502812}
+  - {fileID: 1332216091}
+  - {fileID: 657535475}
+  - {fileID: 1185218582}
+  - {fileID: 317169537}
   sniperGO: {fileID: 1897533123}
-  i: 0
-  rAnim: {fileID: 6185889726980061180}
-  sAnim: {fileID: 6342501573141594851}
-  siAnim: {fileID: 6228081586742990063}
-  cam: {fileID: 519420031}
+  sicklerGO: {fileID: 5090913522678549645}
+  riflerAnim: {fileID: 6185889726980061180}
+  sniperAnim: {fileID: 6342501573141594851}
+  sicklerAnim: {fileID: 6228081586742990063}
 --- !u!1 &1037220345
 GameObject:
   m_ObjectHideFlags: 0
@@ -5321,7 +5320,7 @@ GameObject:
   - component: {fileID: 1185218585}
   - component: {fileID: 1185218584}
   m_Layer: 5
-  m_Name: R.6
+  m_Name: R.7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5404,7 +5403,7 @@ GameObject:
   - component: {fileID: 1209139920}
   - component: {fileID: 1209139919}
   m_Layer: 5
-  m_Name: R.2
+  m_Name: R.3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6109,7 +6108,7 @@ Transform:
   - {fileID: 1185218583}
   - {fileID: 317169538}
   m_Father: {fileID: 1024757478}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1365684592
 GameObject:
@@ -6532,7 +6531,7 @@ GameObject:
   - component: {fileID: 1482422039}
   - component: {fileID: 1482422038}
   m_Layer: 5
-  m_Name: R.4
+  m_Name: R.5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7190,7 +7189,7 @@ GameObject:
   - component: {fileID: 1564502815}
   - component: {fileID: 1564502814}
   m_Layer: 5
-  m_Name: R.5
+  m_Name: R.6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7801,7 +7800,7 @@ GameObject:
   - component: {fileID: 1710683549}
   - component: {fileID: 1710683550}
   m_Layer: 0
-  m_Name: TEXT BACKGROUND (2)
+  m_Name: Name background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8557,6 +8556,7 @@ MonoBehaviour:
   ost: {fileID: 1932585527}
   doesContinueFromPreviousScene: 0
   notPlayableScene: 1
+  bossScene: 0
 --- !u!82 &1932585527
 AudioSource:
   m_ObjectHideFlags: 0
@@ -9693,7 +9693,7 @@ GameObject:
   - component: {fileID: 2119581518}
   - component: {fileID: 2119581517}
   m_Layer: 0
-  m_Name: TEXT BACKGROUND
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9759,14 +9759,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2119581516}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.87, z: 10}
-  m_LocalScale: {x: 19.39451, y: 3.2561064, z: 1}
+  m_LocalPosition: {x: -0.69571126, y: -3.3445728, z: -1.0225554}
+  m_LocalScale: {x: 19.386175, y: 3.254707, z: 0.99957025}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 610228077}
   - {fileID: 1710683549}
-  m_Father: {fileID: 519420032}
-  m_RootOrder: 1
+  m_Father: {fileID: 1024757478}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &127063400918553095
 MonoBehaviour:
