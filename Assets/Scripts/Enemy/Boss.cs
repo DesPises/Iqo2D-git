@@ -12,6 +12,7 @@ public class Boss : MonoBehaviour
     [SerializeField] private Image HPbar;
     [SerializeField] private SpriteRenderer bodysr;
     [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private ParticleSystem particles;
 
     private int HPmax;
     private int HP;
@@ -46,6 +47,8 @@ public class Boss : MonoBehaviour
     void Start()
     {
         Instance = this;
+        Rifler.Instance.ammoInStock = 200;
+        Sniper.Instance.ammoInStock = 50;
 
         anim = GetComponent<Animator>();
 

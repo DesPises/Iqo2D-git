@@ -24055,8 +24055,8 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 1, b: 1, a: 1}
+        key0: {r: 0.654902, g: 0.8705883, b: 1, a: 1}
+        key1: {r: 0.654902, g: 0.8705883, b: 1, a: 1}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -27522,6 +27522,7 @@ MonoBehaviour:
   HPbar: {fileID: 2068197198}
   bodysr: {fileID: 3959548618368374963}
   enemyPrefab: {fileID: 4082131723643169565, guid: 98a27e1d78d5bfa4196d05e3fba19499, type: 3}
+  particles: {fileID: 6550896960332468825}
   growl: {fileID: 278963461}
   stepOne: {fileID: 1952714838}
   stepTwo: {fileID: 1440815792}

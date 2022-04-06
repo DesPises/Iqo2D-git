@@ -54,15 +54,6 @@ public class Sickler : Player
             sicklerIsDead = false;
         }
 
-        // Attack Boss
-        if (Boss.Instance)
-        {
-            if (Physics2D.OverlapCircle(attackPos.position, attackRange, LayerMask.GetMask("Boss")) && Input.GetKeyDown(InputManager.IM.attackKey) && GameManager.sicklerCanAttack)
-            {
-                StartCoroutine(Boss.Instance.GetDamage(2));
-            }
-        }
-        
         // Attack
         if (Input.GetKeyDown(InputManager.IM.attackKey) && GameManager.sicklerCanAttack && !GameManager.Instance.isPaused)
         {
@@ -133,6 +124,12 @@ public class Sickler : Player
                 Enemy enemyScript = enemies[i].GetComponent<Enemy>();
                 StartCoroutine(enemyScript.GetDamage(damage));
             }
+        }
+
+        // Deal damage to boss
+        if (Boss.Instance && Physics2D.OverlapCircle(attackPos.position, attackRange, LayerMask.GetMask("Boss")))
+        {
+            StartCoroutine(Boss.Instance.GetDamage(2));
         }
     }
 

@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
@@ -32,7 +30,7 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         SettingsOKButton();
-
+        oldVolume = 0;
         // Set volume slider value to saved volume value (or set to default if no data saved)
         SetVolumeSliderValue();
     }

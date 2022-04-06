@@ -40,6 +40,10 @@ public class OST : MonoBehaviour
                 StartCoroutine(WhenUnpaused());
             }
         }
+        if (notPlayableScene)
+        {
+            StartCoroutine(WhenUnpaused());
+        }
 
         if (bossScene && !GameManager.Instance.isPaused)
         {
@@ -55,9 +59,6 @@ public class OST : MonoBehaviour
     private IEnumerator WhenUnpaused()
     {
         yield return null;
-        if (!GameManager.Instance.isPaused || notPlayableScene)
-        {
-            ost.volume = PlayerPrefs.GetFloat("volume") * 0.5f;
-        }
+        ost.volume = PlayerPrefs.GetFloat("volume") * 0.5f;
     }
 }
