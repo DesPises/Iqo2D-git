@@ -76,7 +76,8 @@ public class Sniper : Player
                 // Set bullet spawn position and direction
 
                 Vector3 pos = Vector3.zero;
-                float direction = 1;
+                float direction = 1f;
+                float angle = 0f;
 
                 if (Input.GetKey(InputManager.IM.crouchKey) && Player.onGround)
                 {
@@ -84,12 +85,14 @@ public class Sniper : Player
                     if (Player.isMovingForward)
                     {
                         pos = player.transform.position + new Vector3(0.5f, 4.0f, 0);
-                        direction = 1;
+                        direction = 1f;
+                        angle = 0f;
                     }
-                    if (!Player.isMovingForward)
+                    else
                     {
                         pos = player.transform.position + new Vector3(-0.5f, 4.0f, 0);
-                        direction = -1;
+                        direction = -1f;
+                        angle = 180f;
                     }
                 }
                 else
@@ -98,17 +101,19 @@ public class Sniper : Player
                     if (Player.isMovingForward)
                     {
                         pos = player.transform.position + new Vector3(0.5f, 4.67f, 0);
-                        direction = 1;
+                        direction = 1f;
+                        angle = 0f;
                     }
-                    if (!Player.isMovingForward)
+                    else
                     {
                         pos = player.transform.position + new Vector3(-0.5f, 4.67f, 0);
-                        direction = -1;
+                        direction = -1f;
+                        angle = 180f;
                     }
                 }
 
                 // Spawn bullet
-                GameObject bulletClone = Instantiate(bulletPrefab, pos, Quaternion.identity);
+                GameObject bulletClone = Instantiate(bulletPrefab, pos, Quaternion.Euler(0f, angle, 0f));
                 Rigidbody2D bulletRb = bulletClone.GetComponent<Rigidbody2D>();
                 bulletRb.velocity = 45 * direction * Vector3.right;
             }

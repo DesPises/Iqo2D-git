@@ -5,351 +5,192 @@ using UnityEngine.SceneManagement;
 
 public class Tutorial : MonoBehaviour
 {
+    [SerializeField] private Text[] hintsEng;
+    [SerializeField] private Text[] hintsRus;
+    [SerializeField] private GameObject hintsEngObject;
+    [SerializeField] private GameObject hintsRusObject;
 
-    public static KeyCode riflerKey, sniperKey, sicklerKey, fwKey, bwKey, attackKey, reloadKey;
-    public GameObject riflerGO, sniperGO, sicklerGO, h1, h2, h3, h4, h5, h6, h7, h8, hr1, hr2, hr3, hr4, hr5, hr6, hr7, hr8;
-    private Transform plRPosition, plSPosition, plSiPosition;
-    public Vector3 plRCoordinates, plSCoordinates, plSiCoordinates;
-    public static bool Change, CanChangeR, CanChangeS, CanChangeSi, isChanged;
-    public static int hint = 0, hintHelper = 0;
-    public Animator rAnim, sAnim, siAnim;
+    [SerializeField] private GameObject smallTarget;
+    [SerializeField] private GameObject medTarget;
+    [SerializeField] private GameObject bigTarget;
+
+    private int hintIndex;
+    private bool playerInTrigger;
 
     void Start()
     {
+        hintIndex = 0;
         Player.character = "Rifler";
-        riflerKey = InputManager.IM.torKey;
-        sniperKey = InputManager.IM.tosKey;
-        sicklerKey = InputManager.IM.tosiKey;
-        fwKey = InputManager.IM.fwKey;
-        bwKey = InputManager.IM.bwKey;
-        attackKey = InputManager.IM.attackKey;
-        reloadKey = InputManager.IM.reloadKey;
-        Change = false;
-        CanChangeR = false;
-        CanChangeS = false;
-        CanChangeSi = false;
-        isChanged = false;
+        smallTarget.SetActive(false);
+        medTarget.SetActive(false);
+        bigTarget.SetActive(false);
+
+        // Set text for all hints
+        hintsEng[0].text = InputManager.IM.bwKey.ToString() + " / " + InputManager.IM.fwKey.ToString() + " - move";
+        hintsRus[0].text = InputManager.IM.bwKey.ToString() + " / " + InputManager.IM.fwKey.ToString() + " - бег";
+        hintsEng[1].text = InputManager.IM.crouchKey.ToString() + " - crouch, " + InputManager.IM.attackKey.ToString() + " - attack";
+        hintsRus[1].text = InputManager.IM.crouchKey.ToString() + " - присесть, " + InputManager.IM.attackKey.ToString() + " - атака";
+        hintsEng[2].text = InputManager.IM.tosiKey.ToString() + " - change character";
+        hintsRus[2].text = InputManager.IM.tosiKey.ToString() + " - смена персонажа";
+
+        hintsEng[4].text = InputManager.IM.tosKey.ToString() + " - change character";
+        hintsRus[4].text = InputManager.IM.tosKey.ToString() + " - смена персонажа";
+        hintsEng[5].text = InputManager.IM.jumpKey.ToString() + " x2 - double jump \n Headshots deal more damage";
+        hintsRus[5].text = InputManager.IM.jumpKey.ToString() + " x2 - двойной прыжок \n Хедшоты наносят больше урона";
+        hintsEng[6].text = InputManager.IM.torKey.ToString() + " - change character";
+        hintsRus[6].text = InputManager.IM.torKey.ToString() + " - смена персонажа";
+        hintsEng[7].text = InputManager.IM.reloadKey.ToString() + " - reload";
+        hintsRus[7].text = InputManager.IM.reloadKey.ToString() + " - перезарядка";
+
+        // Activate/deactivate eng/rus elements
+        if (Language.eng)
+        {
+            hintsEngObject.SetActive(true);
+            hintsRusObject.SetActive(false);
+        }
+        else
+        {
+            hintsEngObject.SetActive(false);
+            hintsRusObject.SetActive(true);
+        }
     }
 
     void Update()
     {
+        // Give player infinite ammo
         StartCoroutine(Rifler.Instance.InfiniteAmmo(9999999));
         StartCoroutine(Sniper.Instance.InfiniteAmmo(9999999));
 
-        //English
-        if (Language.eng)
+        // Hints activation
+        if (hintIndex == 0)
         {
-            if (Input.GetKeyDown(fwKey) && hintHelper == 0)
-            {
-                hintHelper = 1;
-            }
-            if (hint == 0)
-            {
-                h1.GetComponent<Text>().text = InputManager.IM.bwKey.ToString() + " / " + InputManager.IM.fwKey.ToString() + " - move";
-                h1.SetActive(true);
-            }
-
-            if (Input.GetKeyDown(bwKey) && hintHelper == 1)
-            {
-                hint = 1;
-            }
-            if (hint == 1)
-            {
-                h2.GetComponent<Text>().text = InputManager.IM.crouchKey.ToString() + " - crouch, " + InputManager.IM.attackKey.ToString() + " - attack";
-                h1.SetActive(false);
-                h2.SetActive(true);
-                hintHelper = 2;
-            }
-
-            if (Hints.hint == 2)
-            {
-                hint = 2;
-            }
-            if (hint == 2)
-            {
-                h3.GetComponent<Text>().text = InputManager.IM.tosiKey.ToString() + " - change character";
-                h2.SetActive(false);
-                h3.SetActive(true);
-                CanChangeSi = true;
-            }
-
-            if (CanChangeSi && Input.GetKeyDown(sicklerKey))
-            {
-                StartCoroutine(Hint3());
-            }
-            if (hint == 3)
-            {
-                h3.SetActive(false);
-                h4.SetActive(true);
-            }
-
-            if (Player.character == "Sickler" && Input.GetKey(attackKey))
-            {
-                hint = 4;
-            }
-            if (hint == 4)
-            {
-                h5.GetComponent<Text>().text = InputManager.IM.tosKey.ToString() + " - change character";
-                h4.SetActive(false);
-                h5.SetActive(true);
-                CanChangeS = true;
-            }
-
-            if (hint == 4 && Input.GetKeyDown(sniperKey))
-            {
-                hint = 5;
-            }
-            if (hint == 5)
-            {
-                h6.GetComponent<Text>().text = InputManager.IM.jumpKey.ToString() + " x2 - double jump \n Headshots deal more damage";
-                h5.SetActive(false);
-                h6.SetActive(true);
-            }
-
-            if (Hints.hint == 6)
-            {
-                hint = 6;
-                CanChangeR = true;
-            }
-            if (hint == 6)
-            {
-                h7.GetComponent<Text>().text = InputManager.IM.torKey.ToString() + " - change character";
-                h6.SetActive(false);
-                h7.SetActive(true);
-            }
-
-            if (hint == 6 && Input.GetKeyDown(riflerKey))
-            {
-                hint = 7;
-                Hints.hint = 7;
-            }
-            if (hint == 7)
-            {
-                h8.GetComponent<Text>().text = InputManager.IM.reloadKey.ToString() + " - reload";
-                h7.SetActive(false);
-                h8.SetActive(true);
-            }
-            if (hint == 7 && Input.GetKeyDown(reloadKey))
-            {
-                StartCoroutine(TutorialEnd());
-            }
+            hintsEng[hintIndex].gameObject.SetActive(true);
+            hintsRus[hintIndex].gameObject.SetActive(true);
+        }
+        else
+        {
+            hintsEng[hintIndex - 1].gameObject.SetActive(false);
+            hintsRus[hintIndex - 1].gameObject.SetActive(false);
+            hintsEng[hintIndex].gameObject.SetActive(true);
+            hintsRus[hintIndex].gameObject.SetActive(true);
         }
 
-        //Russian
-        if (!Language.eng)
+        // Switching hints
+        switch (hintIndex)
         {
-            if (Input.GetKeyDown(fwKey) && hintHelper == 0)
-            {
-                hintHelper = 1;
-            }
-            if (hint == 0)
-            {
-                hr1.GetComponent<Text>().text = InputManager.IM.bwKey.ToString() + " / " + InputManager.IM.fwKey.ToString() + " - бег";
-                hr1.SetActive(true);
-            }
-
-            if (Input.GetKeyDown(bwKey) && hintHelper == 1)
-            {
-                hint = 1;
-            }
-            if (hint == 1)
-            {
-                hr2.GetComponent<Text>().text = InputManager.IM.crouchKey.ToString() + " - присесть, " + InputManager.IM.attackKey.ToString() + " - атака";
-                hr1.SetActive(false);
-                hr2.SetActive(true);
-                hintHelper = 2;
-            }
-
-            if (Hints.hint == 2)
-            {
-                hint = 2;
-            }
-            if (hint == 2)
-            {
-                hr3.GetComponent<Text>().text = InputManager.IM.tosiKey.ToString() + " - смена персонажа";
-                hr2.SetActive(false);
-                hr3.SetActive(true);
-                CanChangeSi = true;
-            }
-
-            if (CanChangeSi && Input.GetKeyDown(sicklerKey))
-            {
-                StartCoroutine(Hint3());
-            }
-            if (hint == 3)
-            {
-                hr3.SetActive(false);
-                hr4.SetActive(true);
-            }
-
-            if (Player.character == "Sickler" && Input.GetKey(attackKey))
-            {
-                hint = 4;
-            }
-            if (hint == 4)
-            {
-                hr5.GetComponent<Text>().text = InputManager.IM.tosKey.ToString() + " - смена персонажа";
-                hr4.SetActive(false);
-                hr5.SetActive(true);
-                CanChangeS = true;
-            }
-
-            if (hint == 4 && Input.GetKeyDown(sniperKey))
-            {
-                hint = 5;
-            }
-            if (hint == 5)
-            {
-                hr6.GetComponent<Text>().text = InputManager.IM.jumpKey.ToString() + " x2 - двойной прыжок \n Хедшоты наносят больше урона";
-                hr5.SetActive(false);
-                hr6.SetActive(true);
-            }
-
-            if (Hints.hint == 6)
-            {
-                hint = 6;
-                CanChangeR = true;
-            }
-            if (hint == 6)
-            {
-                hr7.GetComponent<Text>().text = InputManager.IM.torKey.ToString() + " - смена персонажа";
-                hr6.SetActive(false);
-                hr7.SetActive(true);
-            }
-
-            if (hint == 6 && Input.GetKeyDown(riflerKey))
-            {
-                hint = 7;
-                Hints.hint = 7;
-            }
-            if (hint == 7)
-            {
-                hr8.GetComponent<Text>().text = InputManager.IM.reloadKey.ToString() + " - перезарядка";
-                hr7.SetActive(false);
-                hr8.SetActive(true);
-            }
-            if (hint == 7 && Input.GetKeyDown(reloadKey))
-            {
-                StartCoroutine(TutorialEnd());
-            }
-        }
-
-
-        //Coordinates
-        if (Player.character == "Rifler")
-        {
-            plRPosition = riflerGO.transform;
-            plRCoordinates = new Vector3(plRPosition.position.x, plRPosition.position.y - 2, plRPosition.position.z);
-        }
-        if (Player.character == "Sniper")
-        {
-            plSPosition = sniperGO.transform;
-            plSCoordinates = new Vector3(plSPosition.position.x, plSPosition.position.y - 2, plSPosition.position.z);
-        }
-        if (Player.character == "Sickler")
-        {
-            plSiPosition = sicklerGO.transform;
-            plSiCoordinates = new Vector3(plSiPosition.position.x, plSiPosition.position.y + 2, plSiPosition.position.z);
-        }
-
-
-        //Characters pick
-
-        //Pick rifler
-        if (CanChangeR && Input.GetKeyDown(riflerKey) && Player.character == "Sniper")
-        {
-            riflerGO.gameObject.SetActive(true);
-            sniperGO.gameObject.SetActive(false);
-            sicklerGO.gameObject.SetActive(false);
-            Player.character = "Rifler";
-            riflerGO.transform.position = plSCoordinates + new Vector3(0, 2, 0);
-            StartCoroutine(ChangeVoid());
-
-        }
-        if (CanChangeR && Input.GetKeyDown(riflerKey) && Player.character == "Sickler")
-        {
-            riflerGO.gameObject.SetActive(true);
-            sniperGO.gameObject.SetActive(false);
-            sicklerGO.gameObject.SetActive(false);
-            Player.character = "Rifler";
-            riflerGO.transform.position = plSiCoordinates;
-            StartCoroutine(ChangeVoid());
-        }
-        //Pick sniper
-        if (CanChangeS && Input.GetKeyDown(sniperKey) && Player.character == "Rifler")
-        {
-            riflerGO.gameObject.SetActive(false);
-            sniperGO.gameObject.SetActive(true);
-            sicklerGO.gameObject.SetActive(false);
-            Player.character = "Sniper";
-            sniperGO.transform.position = plRCoordinates + new Vector3(0, 2, 0);
-            StartCoroutine(ChangeVoid());
-        }
-        if (CanChangeS && Input.GetKeyDown(sniperKey) && Player.character == "Sickler")
-        {
-            riflerGO.gameObject.SetActive(false);
-            sniperGO.gameObject.SetActive(true);
-            sicklerGO.gameObject.SetActive(false);
-            Player.character = "Sniper";
-            sniperGO.transform.position = plSiCoordinates;
-            StartCoroutine(ChangeVoid());
-        }
-        //Pick sickler
-        if (CanChangeSi && Input.GetKeyDown(sicklerKey) && Player.character == "Rifler")
-        {
-            riflerGO.gameObject.SetActive(false);
-            sniperGO.gameObject.SetActive(false);
-            sicklerGO.gameObject.SetActive(true);
-            Player.character = "Sickler";
-            sicklerGO.transform.position = plRCoordinates;
-            StartCoroutine(ChangeVoid());
-        }
-        if (CanChangeSi && Input.GetKeyDown(sicklerKey) && Player.character == "Sniper")
-        {
-            riflerGO.gameObject.SetActive(false);
-            sniperGO.gameObject.SetActive(false);
-            sicklerGO.gameObject.SetActive(true);
-            Player.character = "Sickler";
-            sicklerGO.transform.position = plSCoordinates;
-            StartCoroutine(ChangeVoid());
+            case 0:
+                {
+                    if (Input.GetKey(InputManager.IM.fwKey))
+                    {
+                        hintIndex = 1;
+                    }
+                    Player.sniperIsDead = true;
+                    Player.sicklerIsDead = true;
+                }
+                break;
+            case 1:
+                {
+                    smallTarget.SetActive(true);
+                    GetComponent<BoxCollider2D>().offset = new Vector2(5.3f, -2.8f);
+                    GetComponent<BoxCollider2D>().size = new Vector2(1.2f, 0.8f);
+                }
+                break;
+            case 2:
+                {
+                    smallTarget.SetActive(false);
+                    Player.sicklerIsDead = false;
+                    if (Input.GetKey(InputManager.IM.tosiKey))
+                    {
+                        hintIndex = 3;
+                        Player.riflerIsDead = true;
+                    }
+                }
+                break;
+            case 3:
+                {
+                    medTarget.SetActive(true);
+                    if (playerInTrigger)
+                    {
+                        if (Input.GetKeyDown(InputManager.IM.attackKey) && GameManager.sicklerCanAttack)
+                        {
+                            hintIndex = 4;
+                        }
+                    }
+                }
+                break;
+            case 4:
+                {
+                    medTarget.SetActive(false);
+                    Player.sniperIsDead = false;
+                    if (Input.GetKey(InputManager.IM.tosKey))
+                    {
+                        hintIndex = 5;
+                        Player.sicklerIsDead = true;
+                    }
+                }
+                break;
+            case 5:
+                {
+                    bigTarget.SetActive(true);
+                    GetComponent<BoxCollider2D>().offset = new Vector2(8.3f, 1.6f);
+                    GetComponent<BoxCollider2D>().size = new Vector2(1.6f, 1.3f);
+                }
+                break;
+            case 6:
+                {
+                    bigTarget.SetActive(false);
+                    Player.riflerIsDead = false;
+                    CharacterChangeCode.canChange = true;
+                    if (Input.GetKey(InputManager.IM.torKey))
+                    {
+                        hintIndex = 7;
+                        Player.sniperIsDead = true;
+                    }
+                }
+                break;
+            case 7:
+                {
+                    if (Input.GetKeyDown(InputManager.IM.reloadKey))
+                    {
+                        StartCoroutine(EndTutorial());
+                    }
+                }
+                break;
         }
     }
 
-    IEnumerator ChangeVoid()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        yield return null;
-        Change = true;
-        //Change animations
-        if (Player.character == "Rifler")
+        if (other.gameObject.CompareTag("Bullet") && hintIndex == 1)
         {
-            rAnim.SetBool("change", Change);
+            Destroy(other.gameObject);
+            hintIndex = 2;
         }
-        if (Player.character == "Sniper")
+        else if (other.gameObject.CompareTag("SniperBullet") && hintIndex == 5)
         {
-            sAnim.SetBool("change", Change);
+            Destroy(other.gameObject);
+            hintIndex = 6;
         }
-        if (Player.character == "Sickler")
+        else if (other.gameObject.CompareTag("Player"))
         {
-            siAnim.SetBool("change", Change);
+            playerInTrigger = true;
         }
-        yield return null;
-        Change = false;
-        CanChangeR = false;
-        CanChangeS = false;
-        CanChangeSi = false;
     }
 
-    IEnumerator Hint3()
+    private void OnTriggerExit2D(Collider2D other)
     {
-        Hints.hint = 3;
-        yield return null;
-        CanChangeSi = false;
-        hint = 3;
+        if (other.gameObject.CompareTag("Player"))
+        {
+            playerInTrigger = false;
+        }
     }
 
-    IEnumerator TutorialEnd()
+    private IEnumerator EndTutorial()
     {
-        yield return new WaitForSeconds(1.5f);
+        Player.sniperIsDead = false;
+        Player.riflerIsDead = false;
+        Player.sicklerIsDead = false;
+        yield return new WaitForSeconds(2.5f);
         SceneManager.LoadScene(3);
     }
 }

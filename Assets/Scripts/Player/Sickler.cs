@@ -9,8 +9,6 @@ public class Sickler : Player
 
     public Transform attackPos;
     private LayerMask enemy;
-    private LayerMask BossLayer;
-    public GameObject BossGO;
 
     private bool inEnemyHeadArea;
     private GameObject enemyHead;
@@ -31,7 +29,6 @@ public class Sickler : Player
         gizmosY = 3.8f;
 
         enemy = LayerMask.GetMask("Enemy");
-        BossLayer = LayerMask.GetMask("Boss");
     }
 
     void Update()
@@ -58,11 +55,14 @@ public class Sickler : Player
         }
 
         // Attack Boss
-        if (BossGO != null && Physics2D.OverlapCircle(attackPos.position, attackRange, BossLayer) && Input.GetKeyDown(InputManager.IM.attackKey) && GameManager.sicklerCanAttack)
+        if (Boss.Instance)
         {
-            BossGO.GetComponent<Boss>().DamageFromSickler();
+            if (Physics2D.OverlapCircle(attackPos.position, attackRange, LayerMask.GetMask("Boss")) && Input.GetKeyDown(InputManager.IM.attackKey) && GameManager.sicklerCanAttack)
+            {
+                StartCoroutine(Boss.Instance.GetDamage(2));
+            }
         }
-
+        
         // Attack
         if (Input.GetKeyDown(InputManager.IM.attackKey) && GameManager.sicklerCanAttack && !GameManager.Instance.isPaused)
         {
